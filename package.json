@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "vite build && git checkout --orphan gh-pages-temp && git rm -rf --cached . && cp -R dist/* . && touch .nojekyll && git add -f index.html assets games .nojekyll && git commit -m 'Deploy to GitHub Pages' && git push -f origin gh-pages-temp:gh-pages && git checkout -f main && git branch -D gh-pages-temp && git clean -fd"
   },
   "devDependencies": {
     "vite": "^6.4.4"
