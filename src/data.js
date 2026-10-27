@@ -272,7 +272,7 @@ export const MODERN_APPS = [
     folder: 'AI-JuiceSort',
     category: 'Liquid Physics Puzzle • React Native Skia & WebAudio',
     iconUrl: './assets/icons/juice-sort.png',
-    playUrl: './games/juice-sort/index.html',
+    playUrl: './games/juice-sort/index.html?v=2',
     playLabel: 'Play Juice Sort Live',
     tldr: 'A tactile liquid-pouring puzzle game featuring custom Skia shaders, straw transfer mechanics, celebratory floppy burst animations, and interactive WebAudio sound synthesis.',
     description:
