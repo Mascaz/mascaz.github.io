@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="BeeReady!" />
+  <meta name="theme-color" content="#F59E0B" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+  <link rel="apple-touch-icon" href="/icon.svg" />
+  <title>BeeReady! — 3rd Grade Spelling Bee Coach (EN / ES)</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <!-- Top App Bar -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand-lockup">
+        <img src="/icon.svg" alt="BeeReady mascot" class="brand-logo" width="48" height="48" />
+        <div>
+          <h1 id="appTitleText">BeeReady!</h1>
+          <p id="appSubtitleText" class="brand-subtitle pretty-text">3rd Grade Spelling Bee Coach</p>
+        </div>
+      </div>
+
+      <!-- Active Word Set Switcher -->
+      <div class="set-switcher-bar">
+        <label for="activeSetSelect" id="activeSetLabelText" class="set-label">Word Set:</label>
+        <select id="activeSetSelect" class="input-select set-select-dropdown"></select>
+        <button type="button" class="btn btn-secondary btn-sm" id="openSetsModalBtn">
+          🗂️ <span id="openSetsModalText">Manage Sets</span>
+        </button>
+      </div>
+
+      <!-- Right Controls: iPad Link, Backup, and EN/ES Toggle -->
+      <div class="header-right-controls">
+        <button type="button" class="btn btn-secondary btn-sm" id="openConnectModalBtn">
+          📱 <span id="openConnectModalText">iPad / Phone Link</span>
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm" id="openBackupModalBtn">
+          💾 <span id="openBackupModalText">Backup</span>
+        </button>
+
+        <div class="lang-toggle-pill" role="group" aria-label="Language Toggle">
+          <button type="button" id="langEnBtn" class="lang-btn active">🇺🇸 EN</button>
+          <button type="button" id="langEsBtn" class="lang-btn">🇲🇽 ES</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main 4-Phase Navigation Tabs -->
+    <nav class="main-nav-tabs" aria-label="Main Navigation">
+      <button type="button" class="nav-tab-btn active" data-tab="words">1. Words & Difficulty</button>
+      <button type="button" class="nav-tab-btn" data-tab="study">2. Study Phase</button>
+      <button type="button" class="nav-tab-btn" data-tab="test">3. Testing Phase</button>
+      <button type="button" class="nav-tab-btn" data-tab="scores">4. High Scores</button>
+    </nav>
+  </header>
+
+  <!-- Main Workspace -->
+  <main class="app-main">
+    <!-- Tab 1: Words & Difficulty Groups -->
+    <section id="panel-words" class="tab-panel"></section>
+
+    <!-- Tab 2: Study Phase (Strictly by Difficulty Group) -->
+    <section id="panel-study" class="tab-panel" hidden>
+      <div id="studyPickerView"></div>
+      <div id="studyStageContainer" hidden></div>
+    </section>
+
+    <!-- Tab 3: Testing Phase (Group Test + Official Mixed Mode) -->
+    <section id="panel-test" class="tab-panel" hidden>
+      <div id="testStageContainer"></div>
+    </section>
+
+    <!-- Tab 4: High Scores & History -->
+    <section id="panel-scores" class="tab-panel" hidden></section>
+  </main>
+
+  <!-- Toast Notification -->
+  <div id="appToast" class="app-toast" role="status" aria-live="polite"></div>
+
+  <!-- Modal 1: Manage Word Sets -->
+  <dialog id="setsDialog" closedby="any" aria-labelledby="setsModalTitle">
+    <div class="dialog-card">
+      <div class="dialog-header">
+        <h2 id="setsModalTitle">Create or Manage Word Sets</h2>
+        <form method="dialog">
+          <button type="submit" class="btn btn-secondary btn-sm close-dialog-btn">Close</button>
+        </form>
+      </div>
+      <div id="setsModalBody" class="dialog-body"></div>
+    </div>
+  </dialog>
+
+  <!-- Modal 2: Connect iPad / iPhone -->
+  <dialog id="connectDialog" closedby="any" aria-labelledby="connectModalTitle">
+    <div class="dialog-card">
+      <div class="dialog-header">
+        <h2 id="connectModalTitle">📱 Use on iPad or iPhone</h2>
+        <form method="dialog">
+          <button type="submit" class="btn btn-secondary btn-sm close-dialog-btn">Close</button>
+        </form>
+      </div>
+      <div class="dialog-body">
+        <p id="connectModalDesc" class="pretty-text"></p>
+        <div id="lanUrlsContainer" class="lan-urls-list"></div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Modal 3: Backup & Restore -->
+  <dialog id="backupDialog" closedby="any" aria-labelledby="backupModalTitle">
+    <div class="dialog-card">
+      <div class="dialog-header">
+        <h2 id="backupModalTitle">💾 Save / Restore Backup File</h2>
+        <form method="dialog">
+          <button type="submit" class="btn btn-secondary btn-sm close-dialog-btn">Close</button>
+        </form>
+      </div>
+      <div class="dialog-body">
+        <p id="backupModalDesc" class="pretty-text"></p>
+        <div class="backup-actions-row">
+          <button type="button" class="btn btn-primary" id="exportBackupBtn">⬇️ Download Backup (.json)</button>
+          <input type="file" id="importBackupInput" accept=".json,application/json" style="display:none;" />
+          <button type="button" class="btn btn-secondary" id="importBackupBtn">⬆️ Restore from Backup (.json)</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Scripts -->
+  <script src="/js/i18n.js"></script>
+  <script src="/js/data.js"></script>
+  <script src="/js/input-extract.js"></script>
+  <script src="/js/activities.js"></script>
+  <script src="/js/testing.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Aesthetic Juice Sort</title>
+    <style id="expo-reset">
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        overflow: hidden;
+      }
+      #root {
+        display: flex;
+        height: 100%;
+        flex: 1;
+      }
+    </style>
+    <link rel="icon" href="/games/juice-sort/favicon.ico" />
+  </head>
+
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script src="/games/juice-sort/canvaskit.js"></script>
+    <script>
+      (function () {
+        window.global = window;
+        var basePath = window.location.pathname.replace(/\/index\.html$/, '').replace(/\/$/, '');
+        if (!basePath.endsWith('/games/juice-sort')) {
+          basePath = '/games/juice-sort';
+        }
+
+        // Normalize route to '/' before Expo Router initializes so it matches src/app/index.tsx
+        try {
+          window.history.replaceState(null, '', '/');
+        } catch (e) {}
+
+        if (typeof window.CanvasKitInit === 'function') {
+          window.CanvasKitInit({
+            locateFile: function (file) {
+              return basePath + '/' + file;
+            }
+          })
+            .then(function (CanvasKit) {
+              window.CanvasKit = CanvasKit;
+              loadApp();
+            })
+            .catch(function (err) {
+              console.warn('CanvasKit initialization error:', err);
+              loadApp();
+            });
+        } else {
+          loadApp();
+        }
+
+        function loadApp() {
+          var s = document.createElement('script');
+          s.src = basePath + '/_expo/static/js/web/entry-023dbd6989f9dff80e3a0438b6f8f4f2.js';
+          document.body.appendChild(s);
+        }
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "name": "REDIAL",
+  "short_name": "REDIAL",
+  "description": "A neon-soaked one-hit-kill roguelike. Do you like starting over?",
+  "start_url": "./",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#0c0020",
+  "theme_color": "#0c0020",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

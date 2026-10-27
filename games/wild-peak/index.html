@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Wild Peak — N64 Low-Poly Survival Roguelite</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+    body, html { width: 100%; height: 100%; overflow: hidden; background: #120b22; font-family: 'Press Start 2P', monospace; color: #fff; }
+    #gameCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      image-rendering: pixelated;
+    }
+    .hud {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .bars {
+      background: rgba(15, 10, 28, 0.78);
+      border: 2px solid #7c5cbf;
+      padding: 10px 12px;
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      min-width: 210px;
+    }
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 9px;
+    }
+    .bar-track {
+      flex: 1;
+      height: 10px;
+      background: #23193d;
+      border: 1px solid #59448a;
+    }
+    .bar-fill { height: 100%; transition: width 0.12s; }
+    .hp-fill { background: #ff4d6d; }
+    .st-fill { background: #38e078; }
+    .compass {
+      background: rgba(15, 10, 28, 0.78);
+      border: 2px solid #ffb86c;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 10px;
+      line-height: 1.6;
+      text-align: right;
+    }
+    .compass strong { color: #ffcc00; }
+    .bottom-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 10px;
+    }
+    .controls-hint {
+      background: rgba(15, 10, 28, 0.78);
+      border: 2px solid #4c3b78;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 8px;
+      line-height: 1.7;
+      color: #d6ccf5;
+    }
+    .action-btns {
+      pointer-events: auto;
+      display: flex;
+      gap: 8px;
+    }
+    .n64-btn {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 9px;
+      padding: 9px 12px;
+      background: #362559;
+      color: #fff;
+      border: 2px solid #9678e0;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .n64-btn:hover { background: #4a3478; }
+    .banner {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(16, 9, 30, 0.92);
+      border: 3px solid #ffcc00;
+      padding: 22px 26px;
+      border-radius: 8px;
+      text-align: center;
+      display: none;
+      flex-direction: column;
+      gap: 14px;
+      pointer-events: auto;
+      z-index: 20;
+    }
+    .banner.visible { display: flex; }
+    .banner h2 { color: #ffcc00; font-size: 16px; }
+    .banner p { font-size: 10px; line-height: 1.7; color: #e2d9ff; max-width: 380px; }
+  </style>
+</head>
+<body>
+  <canvas id="gameCanvas"></canvas>
+  <div class="hud">
+    <div class="top-bar">
+      <div class="bars">
+        <div class="bar-row">
+          <span style="width:28px;color:#ff8fa3">HP</span>
+          <div class="bar-track"><div class="bar-fill hp-fill" id="hpBar" style="width:100%"></div></div>
+        </div>
+        <div class="bar-row">
+          <span style="width:28px;color:#80ffdb">STM</span>
+          <div class="bar-track"><div class="bar-fill st-fill" id="stBar" style="width:100%"></div></div>
+        </div>
+        <div class="bar-row" style="margin-top:2px;color:#70ffe8">
+          <span>WHISPERS: <strong id="whisperCount">0</strong></span>
+        </div>
+      </div>
+      <div class="compass">
+        <div>LANDMARK: <strong id="landmarkName">VOLCANO SUMMIT</strong></div>
+        <div>ALTITUDE: <strong id="altVal">12m</strong> / 85m</div>
+        <div>DISTANCE: <strong id="distVal">140m</strong></div>
+      </div>
+    </div>
+
+    <div class="bottom-bar">
+      <div class="controls-hint">
+        WASD / ARROWS: Move &bull; SHIFT: Sprint &bull; SPACE: Jump &bull; CLICK / F: Sword Swing<br>
+        Reach the glowing Beacon atop the Volcano Summit! Collect cyan Wild Whispers along the climb.
+      </div>
+      <div class="action-btns">
+        <button class="n64-btn" id="resBtn">N64 240p: ON</button>
+        <button class="n64-btn" id="newSeedBtn">NEW SEED</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="banner" id="summitBanner">
+    <h2>SUMMIT CONQUERED!</h2>
+    <p id="summitText">You scaled the Volcano Peak and claimed the Beacon!</p>
+    <button class="n64-btn" id="nextRunBtn">EXPEDITION AGAIN</button>
+  </div>
+
+  <script type="module">
+    import * as THREE from './three.module.js';
+
+    const canvas = document.getElementById('gameCanvas');
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: false });
+    let lowRes = true;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x281842);
+    scene.fog = new THREE.FogExp2(0x281842, 0.0085);
+
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.5, 320);
+
+    const hemi = new THREE.HemisphereLight(0xffcf96, 0x2a1a4a, 1.15);
+    scene.add(hemi);
+    const dir = new THREE.DirectionalLight(0xffae62, 1.2);
+    dir.position.set(50, 90, 40);
+    scene.add(dir);
+
+    function updateSize() {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      const scale = lowRes ? 0.38 : Math.min(window.devicePixelRatio, 2);
+      renderer.setPixelRatio(scale);
+      renderer.setSize(w, h, false);
+    }
+    window.addEventListener('resize', updateSize);
+    updateSize();
+
+    let seedOffset = 0;
+    function heightAt(x, z) {
+      // Volcano centered at (0, -90)
+      const dx = x;
+      const dz = z + 90;
+      const dist = Math.hypot(dx, dz);
+      const volcanoCone = Math.max(0, 88 - dist * 0.72);
+      const craterDip = dist < 9 ? (9 - dist) * 1.4 : 0;
+      const ridges = Math.sin((x + seedOffset) * 0.09) * Math.cos((z + seedOffset) * 0.09) * 3.8
+                   + Math.sin(x * 0.22 - z * 0.18) * 1.4;
+      return Math.max(0, volcanoCone - craterDip + ridges);
+    }
+
+    let worldGroup = new THREE.Group();
+    scene.add(worldGroup);
+
+    const whispers = [];
+    const enemies = [];
+    let beaconMesh = null;
+
+    function buildWorld() {
+      scene.remove(worldGroup);
+      worldGroup = new THREE.Group();
+      scene.add(worldGroup);
+      whispers.length = 0;
+      enemies.length = 0;
+
+      // Low-poly terrain mesh with vertex colors
+      const size = 240;
+      const segs = 72;
+      const geo = new THREE.PlaneGeometry(size, size, segs, segs);
+      geo.rotateX(-Math.PI / 2);
+      const pos = geo.attributes.position;
+      const colors = new Float32Array(pos.count * 3);
+      const c = new THREE.Color();
+
+      for (let i = 0; i < pos.count; i++) {
+        const vx = pos.getX(i);
+        const vz = pos.getZ(i) - 45;
+        pos.setZ(i, vz);
+        const y = heightAt(vx, vz);
+        pos.setY(i, y);
+
+        const distC = Math.hypot(vx, vz + 90);
+        if (distC < 10) {
+          c.setHex(0xff5412); // glowing lava crater rim
+        } else if (y > 52) {
+          c.setHex(0x5c2c45); // volcanic basalt
+        } else if (y > 24) {
+          c.setHex(0x4b3b5c); // rocky highland
+        } else if (y > 4) {
+          c.setHex(0x2d6e4e); // lush N64 grass
+        } else {
+          c.setHex(0x234f3b);
+        }
+        colors[i * 3] = c.r;
+        colors[i * 3 + 1] = c.g;
+        colors[i * 3 + 2] = c.b;
+      }
+      geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+      geo.computeVertexNormals();
+
+      const mat = new THREE.MeshLambertMaterial({ vertexColors: true, flatShading: true });
+      const terrain = new THREE.Mesh(geo, mat);
+      worldGroup.add(terrain);
+
+      // Scatter N64 low-poly pine trees & rocks
+      const trunkMat = new THREE.MeshLambertMaterial({ color: 0x5c3a21, flatShading: true });
+      const leafMat = new THREE.MeshLambertMaterial({ color: 0x38855a, flatShading: true });
+      const rockMat = new THREE.MeshLambertMaterial({ color: 0x6c5b7b, flatShading: true });
+
+      for (let i = 0; i < 65; i++) {
+        const tx = (Math.random() - 0.5) * 170;
+        const tz = 30 - Math.random() * 170;
+        const ty = heightAt(tx, tz);
+        if (ty < 42 && Math.hypot(tx, tz - 25) > 8) {
+          const tree = new THREE.Group();
+          const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.5, 2.2, 5), trunkMat);
+          trunk.position.y = 1.1;
+          const cone1 = new THREE.Mesh(new THREE.ConeGeometry(2.1, 4.2, 5), leafMat);
+          cone1.position.y = 3.4;
+          const cone2 = new THREE.Mesh(new THREE.ConeGeometry(1.5, 3.2, 5), leafMat);
+          cone2.position.y = 5.4;
+          tree.add(trunk, cone1, cone2);
+          tree.position.set(tx, ty, tz);
+          worldGroup.add(tree);
+        } else if (ty >= 28 && ty < 72) {
+          const rock = new THREE.Mesh(new THREE.DodecahedronGeometry(1.4 + Math.random() * 1.5, 0), rockMat);
+          rock.position.set(tx, ty + 0.6, tz);
+          worldGroup.add(rock);
+        }
+      }
+
+      // Wild Whispers collectibles
+      const wGeo = new THREE.OctahedronGeometry(0.9, 0);
+      const wMat = new THREE.MeshBasicMaterial({ color: 0x70ffe8, wireframe: false });
+      for (let i = 0; i < 18; i++) {
+        const t = i / 18;
+        const wx = Math.sin(t * Math.PI * 3 + seedOffset) * (24 * (1 - t * 0.6));
+        const wz = 20 - t * 102;
+        const wy = heightAt(wx, wz) + 1.8;
+        const mesh = new THREE.Mesh(wGeo, wMat);
+        mesh.position.set(wx, wy, wz);
+        worldGroup.add(mesh);
+        whispers.push(mesh);
+      }
+
+      // Low-poly enemies
+      const eGeo = new THREE.DodecahedronGeometry(1.1, 0);
+      const eMat = new THREE.MeshLambertMaterial({ color: 0xff3864, flatShading: true });
+      for (let i = 0; i < 8; i++) {
+        const ex = (Math.random() - 0.5) * 45;
+        const ez = -10 - i * 10;
+        const ey = heightAt(ex, ez) + 1.1;
+        const em = new THREE.Mesh(eGeo, eMat.clone());
+        em.position.set(ex, ey, ez);
+        em.userData = { baseX: ex, baseZ: ez, phase: Math.random() * 6.28, alive: true };
+        worldGroup.add(em);
+        enemies.push(em);
+      }
+
+      // Summit Beacon at (0, heightAt(0, -82), -82)
+      const by = heightAt(0, -82);
+      const bGeo = new THREE.OctahedronGeometry(2.4, 0);
+      const bMat = new THREE.MeshBasicMaterial({ color: 0xfff36b });
+      beaconMesh = new THREE.Mesh(bGeo, bMat);
+      beaconMesh.position.set(0, by + 3.2, -82);
+      worldGroup.add(beaconMesh);
+    }
+
+    // Player setup
+    const player = new THREE.Group();
+    const bodyMesh = new THREE.Mesh(
+      new THREE.ConeGeometry(0.75, 2.0, 6),
+      new THREE.MeshLambertMaterial({ color: 0x4deeea, flatShading: true })
+    );
+    bodyMesh.position.y = 1.0;
+    const headMesh = new THREE.Mesh(
+      new THREE.OctahedronGeometry(0.55, 0),
+      new THREE.MeshLambertMaterial({ color: 0xffe5b4, flatShading: true })
+    );
+    headMesh.position.y = 2.3;
+    const swordMesh = new THREE.Mesh(
+      new THREE.BoxGeometry(0.18, 1.7, 0.3),
+      new THREE.MeshBasicMaterial({ color: 0xffffff })
+    );
+    swordMesh.position.set(0.85, 1.3, -0.4);
+    swordMesh.rotation.x = Math.PI / 4;
+    player.add(bodyMesh, headMesh, swordMesh);
+    scene.add(player);
+
+    const state = {
+      x: 0, y: 0, z: 26,
+      vy: 0,
+      yaw: 0,
+      hp: 100,
+      stamina: 100,
+      whispers: 0,
+      swingTimer: 0,
+      won: false
+    };
+
+    const keys = {};
+    window.addEventListener('keydown', (e) => {
+      keys[e.code] = true;
+      if (e.code === 'KeyF') triggerSwing();
+    });
+    window.addEventListener('keyup', (e) => { keys[e.code] = false; });
+    canvas.addEventListener('pointerdown', () => triggerSwing());
+
+    function triggerSwing() {
+      if (state.swingTimer <= 0 && state.stamina >= 10) {
+        state.swingTimer = 0.28;
+        state.stamina = Math.max(0, state.stamina - 10);
+        // Check hit on nearby enemies
+        for (const en of enemies) {
+          if (en.userData.alive && en.position.distanceTo(player.position) < 4.8) {
+            en.userData.alive = false;
+            en.visible = false;
+            state.whispers += 2;
+          }
+        }
+      }
+    }
+
+    function resetRun() {
+      seedOffset = Math.floor(Math.random() * 500);
+      buildWorld();
+      state.x = 0;
+      state.z = 26;
+      state.y = heightAt(0, 26);
+      state.vy = 0;
+      state.yaw = 0;
+      state.hp = 100;
+      state.stamina = 100;
+      state.whispers = 0;
+      state.won = false;
+      document.getElementById('summitBanner').classList.remove('visible');
+    }
+
+    document.getElementById('resBtn').addEventListener('click', (e) => {
+      lowRes = !lowRes;
+      e.target.textContent = `N64 240p: ${lowRes ? 'ON' : 'OFF'}`;
+      updateSize();
+    });
+    document.getElementById('newSeedBtn').addEventListener('click', resetRun);
+    document.getElementById('nextRunBtn').addEventListener('click', resetRun);
+
+    resetRun();
+
+    let last = performance.now();
+    function animate(now) {
+      requestAnimationFrame(animate);
+      const dt = Math.min(0.05, (now - last) / 1000);
+      last = now;
+
+      if (!state.won) {
+        const turn = (keys['KeyA'] || keys['ArrowLeft'] ? 1 : 0) - (keys['KeyD'] || keys['ArrowRight'] ? 1 : 0);
+        state.yaw += turn * 2.4 * dt;
+
+        const fwd = (keys['KeyW'] || keys['ArrowUp'] ? 1 : 0) - (keys['KeyS'] || keys['ArrowDown'] ? 1 : 0);
+        const sprinting = (keys['ShiftLeft'] || keys['ShiftRight']) && state.stamina > 5 && fwd !== 0;
+        const speed = sprinting ? 14.5 : 8.5;
+
+        if (sprinting) state.stamina = Math.max(0, state.stamina - 22 * dt);
+        else state.stamina = Math.min(100, state.stamina + 16 * dt);
+
+        if (fwd !== 0) {
+          state.x -= Math.sin(state.yaw) * fwd * speed * dt;
+          state.z -= Math.cos(state.yaw) * fwd * speed * dt;
+        }
+
+        const groundY = heightAt(state.x, state.z);
+        if (keys['Space'] && Math.abs(state.y - groundY) < 0.25) {
+          state.vy = 11.5;
+        }
+        state.vy -= 26 * dt;
+        state.y += state.vy * dt;
+        if (state.y <= groundY) {
+          state.y = groundY;
+          state.vy = 0;
+        }
+
+        if (state.swingTimer > 0) {
+          state.swingTimer -= dt;
+          swordMesh.rotation.x = Math.PI / 4 + Math.sin(state.swingTimer * 22) * 1.4;
+        } else {
+          swordMesh.rotation.x = Math.PI / 4;
+        }
+
+        player.position.set(state.x, state.y, state.z);
+        player.rotation.y = state.yaw;
+
+        // Collect whispers
+        for (const w of whispers) {
+          w.rotation.y += 2.5 * dt;
+          if (w.visible && w.position.distanceTo(player.position) < 2.6) {
+            w.visible = false;
+            state.whispers++;
+            state.stamina = Math.min(100, state.stamina + 25);
+          }
+        }
+
+        // Update enemies
+        for (const en of enemies) {
+          if (!en.userData.alive) continue;
+          en.userData.phase += 2.2 * dt;
+          en.position.x = en.userData.baseX + Math.sin(en.userData.phase) * 4.5;
+          en.position.y = heightAt(en.position.x, en.position.z) + 1.1 + Math.abs(Math.cos(en.userData.phase * 2)) * 0.8;
+          if (en.position.distanceTo(player.position) < 2.0) {
+            state.hp = Math.max(10, state.hp - 15 * dt);
+          }
+        }
+
+        // Check summit beacon
+        if (beaconMesh) {
+          beaconMesh.rotation.y += 1.8 * dt;
+          const d = Math.hypot(state.x - beaconMesh.position.x, state.z - beaconMesh.position.z);
+          document.getElementById('distVal').textContent = Math.round(d) + 'm';
+          document.getElementById('altVal').textContent = Math.round(state.y) + 'm';
+          if (d < 4.5) {
+            state.won = true;
+            document.getElementById('summitText').textContent =
+              `You reached the Volcano Summit at ${Math.round(state.y)}m altitude and gathered ${state.whispers} Wild Whispers!`;
+            document.getElementById('summitBanner').classList.add('visible');
+          }
+        }
+
+        document.getElementById('hpBar').style.width = state.hp + '%';
+        document.getElementById('stBar').style.width = state.stamina + '%';
+        document.getElementById('whisperCount').textContent = state.whispers;
+      }
+
+      // Third-person follow camera
+      const camX = state.x + Math.sin(state.yaw) * 10.5;
+      const camZ = state.z + Math.cos(state.yaw) * 10.5;
+      const camY = Math.max(heightAt(camX, camZ) + 2.5, state.y + 5.8);
+      camera.position.lerp(new THREE.Vector3(camX, camY, camZ), 0.14);
+      camera.lookAt(state.x, state.y + 2.2, state.z);
+
+      renderer.render(scene, camera);
+    }
+    requestAnimationFrame(animate);
+  </script>
+</body>
+</html>

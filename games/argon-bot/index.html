@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Argon-Oanda-Bot — 3-Layer FX Strategy Simulator (Synthetic Sandbox)</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #070b14;
+      --panel: #0e1526;
+      --border: #1e2d4a;
+      --cyan: #38bdf8;
+      --emerald: #34d399;
+      --rose: #f43f5e;
+      --violet: #c084fc;
+      --amber: #fbbf24;
+      --muted: #64748b;
+      --text: #e2e8f0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 12px;
+      gap: 10px;
+      overflow-x: hidden;
+    }
+    .top-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 10px 14px;
+      border-radius: 8px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .pulse-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--emerald);
+      box-shadow: 0 0 10px var(--emerald);
+      animation: pulse 1s infinite alternate;
+    }
+    @keyframes pulse { from { opacity: 0.4; } to { opacity: 1; } }
+    .sim-badge {
+      background: rgba(56, 189, 248, 0.14);
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+    }
+    .kpis {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+    .kpi {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .kpi span { font-size: 9px; color: var(--muted); }
+    .kpi strong { font-size: 13px; }
+    .pos { color: var(--emerald); }
+    .neg { color: var(--rose); }
+
+    .controls-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    .btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 7px 11px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: #141e33;
+      color: var(--text);
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .btn:hover { background: #1d2b47; border-color: var(--cyan); }
+    .btn.violet { border-color: rgba(192, 132, 252, 0.5); color: #e9d5ff; background: rgba(124, 58, 237, 0.18); }
+    .btn.amber { border-color: rgba(251, 191, 36, 0.5); color: #fde68a; background: rgba(217, 119, 6, 0.18); }
+
+    .grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1.45fr 1fr;
+      gap: 10px;
+      min-height: 0;
+    }
+    @media (max-width: 780px) {
+      .grid { grid-template-columns: 1fr; }
+      body { height: auto; }
+    }
+    .col {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 0;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-height: 0;
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding-bottom: 6px;
+    }
+    .layer-tag {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+    .tag-micro { background: rgba(52, 211, 153, 0.15); color: var(--emerald); }
+    .tag-meso { background: rgba(56, 189, 248, 0.15); color: var(--cyan); }
+    .tag-macro { background: rgba(192, 132, 252, 0.15); color: var(--violet); }
+
+    canvas#chartCanvas {
+      width: 100%;
+      height: 170px;
+      background: #090e1a;
+      border-radius: 6px;
+      border: 1px solid #162238;
+    }
+    .strength-bars {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+    .ccy-box {
+      background: #090e1a;
+      border: 1px solid #17233b;
+      padding: 6px 8px;
+      border-radius: 5px;
+    }
+    .ccy-head {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      margin-bottom: 4px;
+    }
+    .ccy-track {
+      height: 5px;
+      background: #1e293b;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .ccy-fill { height: 100%; transition: width 0.3s; }
+
+    .log-box {
+      flex: 1;
+      background: #060911;
+      border: 1px solid #152036;
+      border-radius: 6px;
+      padding: 8px;
+      overflow-y: auto;
+      font-size: 10.5px;
+      line-height: 1.55;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-height: 110px;
+    }
+    .log-entry { color: #94a3b8; }
+    .log-entry .ts { color: #475569; margin-right: 6px; }
+    .log-entry.micro { color: #a7f3d0; }
+    .log-entry.meso { color: #bae6fd; }
+    .log-entry.macro { color: #e9d5ff; }
+    .log-entry.warn { color: #fde68a; }
+  </style>
+</head>
+<body>
+  <div class="top-header">
+    <div class="brand">
+      <div class="pulse-dot"></div>
+      <div>
+        <div style="font-weight:800;font-size:13px">ARGON-OANDA-BOT // 3-LAYER ARCHITECTURE</div>
+        <div style="font-size:10px;color:var(--muted)">Decoupled Ingestion (1s) &bull; Signal Matrix (1m) &bull; LLM Strategy Rethink</div>
+      </div>
+      <span class="sim-badge">100% SYNTHETIC DATA SIMULATION</span>
+    </div>
+    <div class="kpis">
+      <div class="kpi">
+        <span>SIMULATED Δ NAV</span>
+        <strong id="navDelta" class="pos">+$142.80 (+1.43%)</strong>
+      </div>
+      <div class="kpi">
+        <span>ACTIVE SESSION REGIME</span>
+        <strong id="regimeLabel" style="color:var(--cyan)">LONDON/NY BREAKOUT</strong>
+      </div>
+      <div class="kpi">
+        <span>SPREAD FRICTION FILTER</span>
+        <strong id="spreadFilter" class="pos">PASS (3.4x &ge; 2.5x)</strong>
+      </div>
+      <div class="kpi">
+        <span>TRAILING STOP</span>
+        <strong id="stopLabel" style="color:var(--amber)">ARMED @ 1.0842</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls-bar">
+    <button class="btn" id="sessionBtn">Switch Session (Asian Mean-Rev / London Breakout)</button>
+    <button class="btn amber" id="shockBtn">Inject Synthetic Volatility Spike (Test 1s Reflex)</button>
+    <button class="btn violet" id="macroBtn">Run Macro Gemini LLM Strategy Re-Optimization</button>
+  </div>
+
+  <div class="grid">
+    <div class="col">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <span class="layer-tag tag-micro">LAYER 1: MICRO (EVERY 1 SECOND)</span>
+            <strong style="margin-left:6px">Reflexes, Ring Buffer &amp; Trailing Stop Protection</strong>
+          </div>
+          <span id="tickPrice" style="color:var(--emerald);font-weight:800">EUR/USD 1.08564</span>
+        </div>
+        <canvas id="chartCanvas" width="600" height="170"></canvas>
+        <div style="font-size:10px;color:var(--muted)">
+          99% of 1-second tick movement is microstructure bid-ask noise. Layer 1 NEVER rethinks strategy—it acts purely on reflexes to guard trailing stops, monitor spread friction, and execute limit fills.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <span class="layer-tag tag-meso">LAYER 2: MESO (EVERY 1 MINUTE)</span>
+            <strong style="margin-left:6px">8-Major Currency Strength Divergence Matrix</strong>
+          </div>
+          <span style="font-size:10px;color:var(--muted)">Synthetic Cross-Sectional Z-Score</span>
+        </div>
+        <div class="strength-bars" id="strengthGrid"></div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card" style="flex:1">
+        <div class="card-header">
+          <div>
+            <span class="layer-tag tag-macro">LAYER 3: MACRO (EVENT / SESSION)</span>
+            <strong style="margin-left:6px">Gemini LLM Strategy &amp; Multi-Layer Telemetry</strong>
+          </div>
+        </div>
+        <div style="font-size:10.5px;background:#090e1a;border:1px solid #1e293b;padding:8px;border-radius:6px;line-height:1.5" id="hypothesisBox">
+          <strong style="color:var(--violet)">Active Hypothesis (STRATEGY.md):</strong><br>
+          Pair strongest G8 currency (<span id="topCcy" style="color:var(--emerald)">USD</span>) against weakest (<span id="botCcy" style="color:var(--rose)">JPY</span>) when ATR(14) reward-to-spread ratio &ge; 2.5&times;. Dynamic trailing stop locks 65% of unrealized excursion.
+        </div>
+        <div class="log-box" id="logBox"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const CCYS = ['USD', 'EUR', 'GBP', 'JPY', 'CHF', 'AUD', 'CAD', 'NZD'];
+    const strengths = { USD: 78, EUR: 64, GBP: 58, JPY: 22, CHF: 49, AUD: 41, CAD: 53, NZD: 35 };
+    let session = 'LONDON/NY BREAKOUT';
+    let price = 1.08560;
+    let trailingStop = 1.08420;
+    let navDelta = 142.80;
+    const history = [];
+    const stops = [];
+
+    for (let i = 0; i < 60; i++) {
+      price += (Math.random() - 0.48) * 0.00025;
+      trailingStop = Math.max(trailingStop, price - 0.0012);
+      history.push(price);
+      stops.push(trailingStop);
+    }
+
+    const strengthGrid = document.getElementById('strengthGrid');
+    function renderStrengths() {
+      strengthGrid.innerHTML = '';
+      const sorted = Object.entries(strengths).sort((a, b) => b[1] - a[1]);
+      document.getElementById('topCcy').textContent = sorted[0][0];
+      document.getElementById('botCcy').textContent = sorted[sorted.length - 1][0];
+
+      for (const ccy of CCYS) {
+        const val = Math.round(strengths[ccy]);
+        const color = val >= 60 ? '#34d399' : (val <= 35 ? '#f43f5e' : '#38bdf8');
+        const box = document.createElement('div');
+        box.className = 'ccy-box';
+        box.innerHTML = `
+          <div class="ccy-head"><strong>${ccy}</strong><span style="color:${color}">${val}</span></div>
+          <div class="ccy-track"><div class="ccy-fill" style="width:${val}%;background:${color}"></div></div>
+        `;
+        strengthGrid.appendChild(box);
+      }
+    }
+
+    const logBox = document.getElementById('logBox');
+    function addLog(cls, tag, msg) {
+      const now = new Date();
+      const ts = now.toTimeString().slice(0, 8);
+      const div = document.createElement('div');
+      div.className = `log-entry ${cls}`;
+      div.innerHTML = `<span class="ts">[${ts}]</span><strong>[${tag}]</strong> ${msg}`;
+      logBox.prepend(div);
+      while (logBox.children.length > 28) logBox.lastChild.remove();
+    }
+
+    const canvas = document.getElementById('chartCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function drawChart() {
+      const w = canvas.width;
+      const h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+
+      const min = Math.min(...history, ...stops) - 0.0004;
+      const max = Math.max(...history, ...stops) + 0.0004;
+      const range = Math.max(0.0005, max - min);
+
+      // Grid
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.08)';
+      ctx.lineWidth = 1;
+      for (let i = 1; i < 4; i++) {
+        const y = (h / 4) * i;
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+      }
+
+      // Trailing stop line (amber dashed)
+      ctx.strokeStyle = '#fbbf24';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([5, 4]);
+      ctx.beginPath();
+      stops.forEach((s, i) => {
+        const x = (i / (stops.length - 1)) * (w - 16) + 8;
+        const y = h - ((s - min) / range) * (h - 24) - 12;
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Price curve (cyan/emerald)
+      ctx.strokeStyle = '#34d399';
+      ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      history.forEach((p, i) => {
+        const x = (i / (history.length - 1)) * (w - 16) + 8;
+        const y = h - ((p - min) / range) * (h - 24) - 12;
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+    }
+
+    // 1-second synthetic tick loop
+    setInterval(() => {
+      const drift = session.includes('BREAKOUT') ? 0.00004 : (1.0855 - price) * 0.15;
+      const step = drift + (Math.random() - 0.49) * 0.00028;
+      price = Math.max(1.0750, price + step);
+
+      if (price - 0.0011 > trailingStop) {
+        trailingStop = price - 0.0011;
+      } else if (price <= trailingStop) {
+        addLog('warn', 'MICRO-1S', `Trailing stop hit @ ${trailingStop.toFixed(5)}! Profit locked; resetting bracket.`);
+        trailingStop = price - 0.0013;
+      }
+
+      history.push(price);
+      stops.push(trailingStop);
+      if (history.length > 60) { history.shift(); stops.shift(); }
+
+      navDelta += step * 18500;
+      const pct = (navDelta / 10000) * 100;
+      const navEl = document.getElementById('navDelta');
+      navEl.textContent = `${navDelta >= 0 ? '+' : '-'}$${Math.abs(navDelta).toFixed(2)} (${navDelta >= 0 ? '+' : ''}${pct.toFixed(2)}%)`;
+      navEl.className = navDelta >= 0 ? 'pos' : 'neg';
+
+      document.getElementById('tickPrice').textContent = `EUR/USD ${price.toFixed(5)}`;
+      document.getElementById('stopLabel').textContent = `ARMED @ ${trailingStop.toFixed(4)}`;
+
+      // Slight synthetic currency strength jitter
+      for (const c of CCYS) {
+        strengths[c] = Math.max(8, Math.min(96, strengths[c] + (Math.random() - 0.5) * 3.2));
+      }
+      renderStrengths();
+      drawChart();
+
+      if (Math.random() < 0.28) {
+        addLog('micro', 'MICRO-1S', `RingBuffer(60s) tick ingested (${price.toFixed(5)}). Spread 0.8p | No strategy rethink.`);
+      }
+    }, 1000);
+
+    document.getElementById('sessionBtn').addEventListener('click', () => {
+      session = session.includes('BREAKOUT') ? 'ASIAN MEAN-REVERSION' : 'LONDON/NY BREAKOUT';
+      document.getElementById('regimeLabel').textContent = session;
+      addLog('meso', 'MESO-1M', `Session regime switched to [${session}]. Recalibrating ATR(14) stop multipliers.`);
+    });
+
+    document.getElementById('shockBtn').addEventListener('click', () => {
+      const jump = (Math.random() > 0.5 ? 1 : -1) * 0.0014;
+      price += jump;
+      document.getElementById('spreadFilter').textContent = 'BLOCKED (Spread Spike 1.4x < 2.5x)';
+      document.getElementById('spreadFilter').className = 'neg';
+      addLog('warn', 'MICRO-1S', `Synthetic volatility shock detected (${jump > 0 ? '+' : ''}${(jump * 10000).toFixed(1)} pips)! Friction filter blocked new entry during spread widening.`);
+      setTimeout(() => {
+        document.getElementById('spreadFilter').textContent = 'PASS (3.4x ≥ 2.5x)';
+        document.getElementById('spreadFilter').className = 'pos';
+      }, 3500);
+    });
+
+    document.getElementById('macroBtn').addEventListener('click', () => {
+      const sorted = Object.entries(strengths).sort((a, b) => b[1] - a[1]);
+      const strong = sorted[0][0];
+      const weak = sorted[sorted.length - 1][0];
+      addLog('macro', 'MACRO-GEMINI', `Gemini Strategy Analyzer evaluated Meso matrix: High divergence ${strong} (${Math.round(sorted[0][1])}) vs ${weak} (${Math.round(sorted[sorted.length-1][1])}). Updated STRATEGY.md weights.`);
+    });
+
+    renderStrengths();
+    drawChart();
+    addLog('macro', 'BOOT', 'Synthetic Sandbox initialized. Zero live credentials or real account data loaded.');
+    addLog('meso', 'MESO-1M', 'Computed 8-major currency strength matrix and multi-timeframe ATR context.');
+    addLog('micro', 'MICRO-1S', 'Streaming 1-second synthetic ticks into bounded deque(maxlen=60).');
+  </script>
+</body>
+</html>

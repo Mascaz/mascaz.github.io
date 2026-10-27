@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1b1447"/>
+      <stop offset="50%" stop-color="#6b2d5c"/>
+      <stop offset="100%" stop-color="#f28549"/>
+    </linearGradient>
+    <linearGradient id="lava" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fff36b"/>
+      <stop offset="45%" stop-color="#ff6b1a"/>
+      <stop offset="100%" stop-color="#b81d13"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="56" fill="url(#sky)"/>
+  <!-- Retro N64 Sun -->
+  <circle cx="128" cy="86" r="44" fill="#ffcf56" opacity="0.88"/>
+  <!-- Far Low-Poly Mountains -->
+  <polygon points="16,208 68,124 114,208" fill="#3a2859"/>
+  <polygon points="68,124 94,168 114,208" fill="#2a1b42"/>
+  <polygon points="148,208 196,118 244,208" fill="#3d295c"/>
+  <polygon points="196,118 220,164 244,208" fill="#281840"/>
+  <!-- Central N64 Volcano Landmark (Faceted Vertex Colors) -->
+  <polygon points="40,224 106,74 128,158" fill="#5e314b"/>
+  <polygon points="106,74 150,74 128,158" fill="#7c3f58"/>
+  <polygon points="150,74 216,224 128,158" fill="#3d1e36"/>
+  <polygon points="40,224 128,158 216,224" fill="#4a243d"/>
+  <!-- Glowing Lava Crater & Plume -->
+  <polygon points="106,74 128,62 150,74 138,84 118,84" fill="url(#lava)"/>
+  <polygon points="122,84 134,84 140,136 128,148 116,128" fill="url(#lava)"/>
+  <!-- Low-poly Pine Trees Foreground -->
+  <polygon points="0,256 0,204 256,204 256,256" fill="#1e3c2f"/>
+  <polygon points="56,170 38,214 74,214" fill="#2d6e4e"/>
+  <polygon points="56,152 42,188 70,188" fill="#3f8f63"/>
+  <polygon points="202,166 184,214 220,214" fill="#25593f"/>
+  <polygon points="202,148 188,186 216,186" fill="#357a55"/>
+  <!-- N64 3D Diamond Beacon -->
+  <polygon points="128,24 140,42 128,56 116,42" fill="#70ffe8"/>
+  <polygon points="128,24 140,42 128,42" fill="#ffffff" opacity="0.6"/>
+</svg>

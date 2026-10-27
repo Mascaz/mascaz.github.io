@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Maxwell's Professional Life — Portfolio of Maxwell Montes Diaz</title>
+  <meta name="description" content="Interactive portfolio of Maxwell Montes Diaz — featuring a Classic Skeuomorphic OS (Mac OS X / iOS 1-6) and a Modern Apple Liquid Glass OS with playable games and software projects." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lucida+Grande&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
+  <script type="module" crossorigin src="./assets/index-MKt4H2r7.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-CkwVku9L.css">
+</head>
+<body data-view="hub">
+  <!-- =====================================================================
+       VIEW 1: DEVICE SELECTOR HUB ("Maxwell's Professional Life")
+       No text on the devices themselves — pure hardware selection + TLDR
+       ===================================================================== -->
+  <main id="hubView" class="hub-view" aria-labelledby="hubHeading">
+    <div class="hub-ambient-glow" aria-hidden="true"></div>
+
+    <header class="hub-header">
+      <h1 id="hubHeading" class="hub-title" tabindex="-1">Maxwell's Professional Life</h1>
+    </header>
+
+    <section class="devices-stage" aria-label="Select a device to inspect portfolio projects">
+      <!-- LEFT DEVICE: Classic Desktop (iMac G4 / Cinema Aqua) on Desktop, Classic iPhone (iOS 1-6) on Mobile -->
+      <button
+        type="button"
+        id="selectClassicBtn"
+        class="device-card device-classic"
+        aria-label="Inspect Classic Skeuomorphic Device (Legacy Projects)"
+      >
+        <!-- Desktop Hardware Illustration (Mac OS X Aqua CRT/Cinema Display + Pro Keyboard) -->
+        <div class="hw-desktop hw-classic-mac" aria-hidden="true">
+          <div class="imac-monitor">
+            <div class="imac-bezel">
+              <div class="imac-camera-dot"></div>
+              <div class="imac-screen device-screen-target" id="classicDesktopScreen">
+                <div class="mini-aqua-menubar"></div>
+                <div class="mini-aqua-wallpaper">
+                  <div class="mini-aqua-window">
+                    <div class="mini-aqua-dots">
+                      <span></span><span></span><span></span>
+                    </div>
+                  </div>
+                  <div class="mini-aqua-dock">
+                    <span></span><span></span><span></span><span></span><span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="imac-chin">
+              <div class="imac-apple-mark"></div>
+            </div>
+          </div>
+          <div class="imac-neck"></div>
+          <div class="imac-dome-base"></div>
+          <div class="imac-keyboard"></div>
+        </div>
+
+        <!-- Mobile Hardware Illustration (Classic iPhone 2G/4 with Home Button) -->
+        <div class="hw-mobile hw-classic-iphone" aria-hidden="true">
+          <div class="iphone-classic-body">
+            <div class="iphone-classic-earpiece"></div>
+            <div class="iphone-classic-screen">
+              <div class="mini-ios6-statusbar"></div>
+              <div class="mini-ios6-grid">
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+              </div>
+              <div class="mini-ios6-dock">
+                <span></span><span></span><span></span>
+              </div>
+            </div>
+            <div class="iphone-classic-home">
+              <div class="iphone-classic-home-square"></div>
+            </div>
+          </div>
+        </div>
+      </button>
+
+      <!-- RIGHT DEVICE: Modern Laptop (MacBook Liquid Glass) on Desktop, Modern iPhone on Mobile -->
+      <button
+        type="button"
+        id="selectModernBtn"
+        class="device-card device-modern"
+        aria-label="Inspect Modern Liquid Glass Device (New Playable Projects)"
+      >
+        <!-- Desktop Hardware Illustration (Modern Space Black MacBook Pro) -->
+        <div class="hw-desktop hw-modern-macbook" aria-hidden="true">
+          <div class="macbook-lid">
+            <div class="macbook-notch"></div>
+            <div class="macbook-screen device-screen-target" id="modernDesktopScreen">
+              <div class="mini-glass-wallpaper">
+                <div class="mini-glass-orb orb-1"></div>
+                <div class="mini-glass-orb orb-2"></div>
+                <div class="mini-glass-drawer">
+                  <span></span><span></span><span></span><span></span>
+                  <span></span><span></span><span></span><span></span>
+                </div>
+                <div class="mini-glass-dock">
+                  <span></span><span></span><span></span><span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="macbook-base">
+            <div class="macbook-lip"></div>
+          </div>
+        </div>
+
+        <!-- Mobile Hardware Illustration (Modern Edge-to-Edge Dynamic Island iPhone) -->
+        <div class="hw-mobile hw-modern-iphone" aria-hidden="true">
+          <div class="iphone-modern-body">
+            <div class="iphone-modern-screen">
+              <div class="iphone-dynamic-island"></div>
+              <div class="mini-glass-orb orb-1"></div>
+              <div class="mini-glass-orb orb-2"></div>
+              <div class="mini-modern-ios-grid">
+                <span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span>
+              </div>
+              <div class="mini-modern-ios-dock">
+                <span></span><span></span><span></span>
+              </div>
+              <div class="iphone-home-indicator"></div>
+            </div>
+          </div>
+        </div>
+      </button>
+    </section>
+
+    <!-- BENEATH THE DEVICES: Stack of Paper & Pen ("TLDR") -->
+    <footer class="hub-footer">
+      <button
+        type="button"
+        id="openTldrBtn"
+        class="tldr-paper-trigger"
+        aria-label="Open TLDR plain text portfolio summary"
+      >
+        <div class="paper-pen-illustration" aria-hidden="true">
+          <svg viewBox="0 0 110 86" width="84" height="66" xmlns="http://www.w3.org/2000/svg">
+            <!-- Bottom Paper Sheet 3 -->
+            <rect x="18" y="16" width="58" height="62" rx="4" transform="rotate(-8 47 47)" fill="#dcd6c8" stroke="#8c8270" stroke-width="1.5"/>
+            <!-- Middle Paper Sheet 2 -->
+            <rect x="20" y="13" width="58" height="62" rx="4" transform="rotate(5 49 44)" fill="#ece7db" stroke="#8c8270" stroke-width="1.5"/>
+            <!-- Top Crisp Paper Sheet 1 -->
+            <rect x="19" y="10" width="58" height="62" rx="4" fill="#fffdf7" stroke="#6e6555" stroke-width="1.8"/>
+            <!-- Ruled Lines on Top Paper -->
+            <line x1="27" y1="22" x2="56" y2="22" stroke="#3b4252" stroke-width="2.4" stroke-linecap="round"/>
+            <line x1="27" y1="31" x2="67" y2="31" stroke="#9aa2b1" stroke-width="1.8" stroke-linecap="round"/>
+            <line x1="27" y1="38" x2="65" y2="38" stroke="#9aa2b1" stroke-width="1.8" stroke-linecap="round"/>
+            <line x1="27" y1="45" x2="68" y2="45" stroke="#9aa2b1" stroke-width="1.8" stroke-linecap="round"/>
+            <line x1="27" y1="52" x2="61" y2="52" stroke="#9aa2b1" stroke-width="1.8" stroke-linecap="round"/>
+            <line x1="27" y1="59" x2="52" y2="59" stroke="#9aa2b1" stroke-width="1.8" stroke-linecap="round"/>
+            <!-- Classic Fountain / Rollerball Pen resting diagonally -->
+            <g transform="translate(68, 44) rotate(32)">
+              <rect x="-5" y="-30" width="10" height="46" rx="3" fill="#1e293b" stroke="#f8fafc" stroke-width="1.2"/>
+              <rect x="-5" y="-8" width="10" height="4" fill="#fbbf24"/>
+              <rect x="4" y="-24" width="2.5" height="16" rx="1" fill="#fbbf24"/>
+              <polygon points="-4,16 4,16 0,27" fill="#fbbf24" stroke="#1e293b" stroke-width="1"/>
+              <circle cx="0" cy="26" r="1.2" fill="#1e293b"/>
+            </g>
+          </svg>
+        </div>
+        <span class="tldr-label">TLDR</span>
+      </button>
+    </footer>
+  </main>
+
+  <!-- =====================================================================
+       VIEW 2: CLASSIC SKEUOMORPHIC OS (Mac OS X 10.0–10.9 & iOS 1–6)
+       ===================================================================== -->
+  <section id="classicOsView" class="os-view classic-os" aria-label="Classic Skeuomorphic Portfolio OS" hidden>
+    <!-- Desktop Mac OS X Top Menu Bar / Mobile iOS 1-6 Status Bar -->
+    <header class="classic-menubar">
+      <div class="classic-menubar-left">
+        <span class="aqua-apple-logo" aria-hidden="true">&#63743;</span>
+        <strong id="classicHeading" tabindex="-1" class="aqua-app-title">Maxwell OS X</strong>
+        <nav class="aqua-menus" aria-label="Classic Finder Menu">
+          <button type="button" class="aqua-menu-item" data-classic-open="about-me">About Maxwell</button>
+          <button type="button" class="aqua-menu-item" data-classic-open="contact-cv">Contact &amp; CV</button>
+          <button type="button" class="aqua-menu-item" id="classicTldrMenuBtn">TLDR Text</button>
+        </nav>
+      </div>
+      <div class="classic-menubar-right">
+        <button type="button" class="aqua-pill-btn" id="classicToModernBtn" title="Switch directly to Modern Liquid Glass OS">
+          &#10024; Modern Liquid Glass
+        </button>
+        <button type="button" class="aqua-pill-btn aqua-zoomout-btn" id="classicZoomOutBtn">
+          &#8689; Zoom Out
+        </button>
+        <span class="aqua-clock" id="classicClock">9:41 AM</span>
+      </div>
+    </header>
+
+    <!-- Classic Desktop / SpringBoard Area -->
+    <div class="classic-workspace" id="classicWorkspace">
+      <!-- App Icons Grid (Desktop icons on Mac OS X / SpringBoard icons on iOS 1-6) -->
+      <div class="classic-icons-grid" id="classicIconsGrid" role="list" aria-label="Classic Portfolio Applications"></div>
+
+      <!-- Classic Mac OS X Aqua / iOS 1-6 App Window -->
+      <article class="classic-window" id="classicWindow" aria-labelledby="classicWinTitle" hidden>
+        <!-- Mac OS X Pinstripe / Brushed Metal Titlebar + iOS 1-6 Beveled Nav Bar -->
+        <header class="classic-window-titlebar">
+          <div class="aqua-traffic-lights">
+            <button type="button" class="traffic-btn traffic-close" id="classicWinCloseBtn" aria-label="Close window">×</button>
+            <button type="button" class="traffic-btn traffic-min" id="classicWinMinBtn" aria-label="Minimize window">−</button>
+            <button type="button" class="traffic-btn traffic-max" id="classicWinMaxBtn" aria-label="Expand window">+</button>
+          </div>
+          <button type="button" class="ios6-back-btn" id="ios6BackBtn" aria-label="Back to Home Screen">
+            &#9664; Home
+          </button>
+          <h2 class="classic-window-title" id="classicWinTitle">Application</h2>
+          <div class="classic-window-spacer"></div>
+        </header>
+
+        <div class="classic-window-toolbar" id="classicWinCategory"></div>
+
+        <div class="classic-window-body" id="classicWinBody"></div>
+      </article>
+    </div>
+
+    <!-- Classic 3D Reflective Glass Dock -->
+    <footer class="classic-dock-wrap" aria-label="Classic Application Dock">
+      <div class="classic-dock-shelf"></div>
+      <div class="classic-dock" id="classicDock"></div>
+    </footer>
+  </section>
+
+  <!-- =====================================================================
+       VIEW 3: MODERN LIQUID GLASS OS (macOS Tahoe / visionOS / iOS 26)
+       ===================================================================== -->
+  <section id="modernOsView" class="os-view modern-os" aria-label="Modern Liquid Glass Portfolio OS" hidden>
+    <!-- Living Ambient Aurora Mesh Behind Liquid Glass -->
+    <div class="liquid-ambient-bg" aria-hidden="true">
+      <div class="aurora-blob blob-a"></div>
+      <div class="aurora-blob blob-b"></div>
+      <div class="aurora-blob blob-c"></div>
+    </div>
+
+    <!-- Floating Liquid Glass Top Control Bar -->
+    <header class="liquid-topbar">
+      <div class="liquid-topbar-left">
+        <span class="liquid-dot-indicator"></span>
+        <strong id="modernHeading" tabindex="-1" class="liquid-os-title">Maxwell Studio &bull; Liquid Glass</strong>
+      </div>
+      <div class="liquid-topbar-right">
+        <button type="button" class="liquid-pill-btn" id="modernTldrBtn">
+          &#128196; TLDR
+        </button>
+        <button type="button" class="liquid-pill-btn" id="modernToClassicBtn" title="Switch to Classic Skeuomorphic OS">
+          &#128187; Classic OS (2007)
+        </button>
+        <button type="button" class="liquid-pill-btn liquid-zoomout-btn" id="modernZoomOutBtn">
+          &#8689; Zoom Out
+        </button>
+        <span class="liquid-clock" id="modernClock">9:41 AM</span>
+      </div>
+    </header>
+
+    <!-- Liquid Glass Workspace: App Drawer + Active App Window -->
+    <div class="liquid-workspace" id="liquidWorkspace">
+      <!-- Refractive Liquid Glass App Drawer / Launchpad Container -->
+      <div class="liquid-app-drawer" id="liquidAppDrawer">
+        <div class="liquid-drawer-header">
+          <div>
+            <h2 class="liquid-drawer-title">New Projects &amp; Playable Builds</h2>
+            <p class="liquid-drawer-subtitle">Select an application icon to launch its interactive build or inspect screenshots</p>
+          </div>
+        </div>
+        <div class="liquid-icons-grid" id="modernIconsGrid" role="list" aria-label="Modern Portfolio Applications"></div>
+      </div>
+
+      <!-- Refractive Liquid Glass Application Window (Playable Game + Screenshots/Info) -->
+      <article class="liquid-window" id="modernWindow" aria-labelledby="modernWinTitle" hidden>
+        <header class="liquid-window-header">
+          <div class="liquid-window-controls">
+            <button type="button" class="liquid-win-dot dot-close" id="modernWinCloseBtn" aria-label="Close application">×</button>
+            <button type="button" class="liquid-win-dot dot-min" id="modernWinMinBtn" aria-label="Return to App Drawer">−</button>
+            <button type="button" class="liquid-win-dot dot-max" id="modernWinMaxBtn" aria-label="Toggle Fullscreen">⤢</button>
+            <button type="button" class="liquid-mobile-back" id="modernMobileBackBtn">&#9664; Apps</button>
+          </div>
+
+          <div class="liquid-window-title-group">
+            <img id="modernWinIcon" src="" alt="" width="24" height="24" class="liquid-win-mini-icon" />
+            <h2 id="modernWinTitle" class="liquid-window-title">Project</h2>
+          </div>
+
+          <!-- Segmented Glass Mode Switcher: Play Live vs Screenshots & Details -->
+          <div class="liquid-segmented-tabs" role="tablist" aria-label="Project View Mode">
+            <button type="button" role="tab" id="tabPlayBtn" class="seg-tab active" aria-selected="true">
+              &#9654; Play Live
+            </button>
+            <button type="button" role="tab" id="tabInfoBtn" class="seg-tab" aria-selected="false">
+              &#128444; Info &amp; Screenshots
+            </button>
+            <a id="openStandaloneLink" href="#" target="_blank" rel="noopener" class="seg-tab seg-external" title="Open playable build in a full browser tab">
+              &#8599; Full Tab
+            </a>
+          </div>
+        </header>
+
+        <div class="liquid-window-content">
+          <!-- Tab Panel 1: Embedded Playable Game / Interactive Simulator -->
+          <div id="panelPlay" class="liquid-panel panel-play">
+            <iframe
+              id="gameIframe"
+              title="Playable Project Build"
+              class="game-iframe"
+              allow="autoplay; fullscreen; gamepad"
+            ></iframe>
+          </div>
+
+          <!-- Tab Panel 2: Project Overview, Architecture & Screenshots -->
+          <div id="panelInfo" class="liquid-panel panel-info" hidden>
+            <div class="liquid-info-inner" id="modernInfoContent"></div>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <!-- Floating Liquid Glass Pill Dock -->
+    <footer class="liquid-dock-wrap" aria-label="Liquid Glass Application Dock">
+      <div class="liquid-dock" id="modernDock"></div>
+    </footer>
+  </section>
+
+  <!-- =====================================================================
+       MODAL: PLAIN-TEXT "TLDR" PAPER STACK SHEET (<dialog closedby="any">)
+       ===================================================================== -->
+  <dialog id="tldrDialog" class="tldr-dialog" closedby="any" aria-labelledby="tldrDialogTitle">
+    <div class="paper-sheet">
+      <header class="paper-header">
+        <div>
+          <span class="paper-stamp">TLDR // PLAIN TEXT PORTFOLIO</span>
+          <h2 id="tldrDialogTitle" class="paper-title">Maxwell Montes Diaz</h2>
+          <p class="paper-subtitle">Game &amp; Software Developer &bull; Unity / C# / TypeScript / Swift / Python</p>
+        </div>
+        <form method="dialog">
+          <button type="submit" class="paper-close-btn" aria-label="Close TLDR sheet">&#10005; Close</button>
+        </form>
+      </header>
+
+      <div class="paper-body" id="tldrBodyContent"></div>
+    </div>
+  </dialog>
+
+</body>
+</html>
