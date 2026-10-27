@@ -1,0 +1,15 @@
+{
+  "name": "maxwell-montes-diaz-portfolio",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Maxwell's Professional Life — Dual-Era Skeuomorphic (Mac OS X / iOS 1-6) & Modern Liquid Glass Portfolio",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^6.4.4"
+  }
+}
