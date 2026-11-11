@@ -1,0 +1,11 @@
+{
+  "id": "com.maxwell.worldstrikers",
+  "name": "World Strikers",
+  "short_name": "World Strikers",
+  "description": "World Strikers — 2.5D Walled Cage Arcade Soccer",
+  "start_url": "./",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#070b14",
+  "theme_color": "#ffcc00"
+}

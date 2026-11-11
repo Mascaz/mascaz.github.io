@@ -254,11 +254,33 @@ document.querySelectorAll('[data-classic-open]').forEach((btn) => {
 // ============================================================================
 // 3. Modern Liquid Glass OS (visionOS / macOS Tahoe / iOS 26)
 // ============================================================================
+const modernFilterPills = document.getElementById('modernFilterPills');
+let activeModernFilter = 'all';
+
+function updateFilterPillCounts() {
+  if (!modernFilterPills) return;
+  const gamesCount = MODERN_APPS.filter((a) => a.group === 'games').length;
+  const appsCount = MODERN_APPS.filter((a) => a.group === 'apps').length;
+  modernFilterPills.querySelectorAll('.liquid-filter-btn').forEach((btn) => {
+    const f = btn.dataset.filter;
+    if (f === 'all') btn.textContent = `All (${MODERN_APPS.length})`;
+    else if (f === 'games') btn.textContent = `Games & Demos (${gamesCount})`;
+    else if (f === 'apps') btn.textContent = `Apps & Web (${appsCount})`;
+    btn.classList.toggle('active', f === activeModernFilter);
+  });
+}
+
 function renderModernOS() {
   modernIconsGrid.innerHTML = '';
   modernDock.innerHTML = '';
+  updateFilterPillCounts();
 
-  MODERN_APPS.forEach((app, idx) => {
+  const visibleApps =
+    activeModernFilter === 'all'
+      ? MODERN_APPS
+      : MODERN_APPS.filter((app) => app.group === activeModernFilter);
+
+  visibleApps.forEach((app, idx) => {
     // App Drawer Card
     const card = document.createElement('button');
     card.type = 'button';
@@ -266,16 +288,27 @@ function renderModernOS() {
     card.setAttribute('role', 'listitem');
     // Elevate LCP image priority on the first app icon
     const priorityAttr = idx === 0 ? 'fetchpriority="high"' : '';
+    const badgeLabel = app.badge || 'Playable';
+    const badgeModifier =
+      badgeLabel.includes('Demo')
+        ? 'badge-demo'
+        : badgeLabel.includes('Sim')
+          ? 'badge-sim'
+          : badgeLabel.includes('Interactive')
+            ? 'badge-app'
+            : '';
     card.innerHTML = `
       <div class="liquid-icon-squircle">
         <img src="${app.iconUrl}" alt="${app.name} icon" width="72" height="72" ${priorityAttr} />
       </div>
       <span class="liquid-app-name">${app.name}</span>
-      <span class="liquid-app-badge">${app.id === 'argon-bot' ? 'Synthetic Sim' : 'Playable'}</span>
+      <span class="liquid-app-badge ${badgeModifier}">${badgeLabel}</span>
     `;
     card.addEventListener('click', () => openModernApp(app.id, 'play'));
     modernIconsGrid.appendChild(card);
+  });
 
+  MODERN_APPS.forEach((app) => {
     // Floating Glass Dock Button
     const dockBtn = document.createElement('button');
     dockBtn.type = 'button';
@@ -283,11 +316,19 @@ function renderModernOS() {
     dockBtn.dataset.appId = app.id;
     dockBtn.title = app.name;
     dockBtn.setAttribute('aria-label', app.name);
+    dockBtn.classList.toggle('active', app.id === activeModernAppId);
     dockBtn.innerHTML = `<img src="${app.iconUrl}" alt="${app.name}" width="42" height="42" />`;
     dockBtn.addEventListener('click', () => openModernApp(app.id, 'play'));
     modernDock.appendChild(dockBtn);
   });
 }
+
+modernFilterPills?.addEventListener('click', (e) => {
+  const btn = e.target.closest('.liquid-filter-btn');
+  if (!btn) return;
+  activeModernFilter = btn.dataset.filter || 'all';
+  renderModernOS();
+});
 
 function setModernTab(mode) {
   const isPlay = mode === 'play';
@@ -340,6 +381,20 @@ function openModernApp(appId, initialTab = 'play') {
     `;
   }
 
+  let linksHtml = '';
+  if (app.links && app.links.length > 0) {
+    linksHtml = `
+      <div class="tech-pills" style="margin-top:4px">
+        ${app.links
+          .map(
+            (l) =>
+              `<a href="${l.url}" target="_blank" rel="noopener noreferrer" class="liquid-pill-btn" style="text-decoration:none">${l.label} &#8599;</a>`
+          )
+          .join('')}
+      </div>
+    `;
+  }
+
   modernInfoContent.innerHTML = `
     <div class="info-hero-card">
       <div style="font-size:12px;color:#93c5fd;font-weight:600">${app.category}</div>
@@ -348,6 +403,7 @@ function openModernApp(appId, initialTab = 'play') {
       <div class="tech-pills">
         ${app.tech.map((t) => `<span class="tech-pill">${t}</span>`).join('')}
       </div>
+      ${linksHtml}
     </div>
     ${screenshotsHtml}
   `;

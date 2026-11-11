@@ -160,6 +160,18 @@ class SpellingBeeStore {
   }
 
   loadLocal() {
+    // 1. Prefer state injected by the native iOS/iPadOS wrapper from Application Support disk storage
+    try {
+      if (window.__NATIVE_INITIAL_STATE__ && Array.isArray(window.__NATIVE_INITIAL_STATE__.sets) && window.__NATIVE_INITIAL_STATE__.sets.length > 0) {
+        const nativeState = window.__NATIVE_INITIAL_STATE__;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(nativeState));
+        return nativeState;
+      }
+    } catch (e) {
+      console.warn('Could not read native initial state:', e);
+    }
+
+    // 2. Fallback to browser localStorage
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
@@ -182,6 +194,18 @@ class SpellingBeeStore {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(stateObj));
     } catch (e) {
       console.warn('Could not write to localStorage:', e);
+    }
+
+    // Persist directly to iOS/iPadOS Application Support directory when running in the Native Xcode Wrapper
+    try {
+      if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.easySpellingBee) {
+        window.webkit.messageHandlers.easySpellingBee.postMessage({
+          action: 'saveState',
+          state: stateObj
+        });
+      }
+    } catch (e) {
+      console.warn('Could not post state to native iOS bridge:', e);
     }
   }
 

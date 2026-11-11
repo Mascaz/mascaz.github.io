@@ -246,15 +246,60 @@ export const CLASSIC_APPS = [
 ];
 
 /**
- * Era 2: Modern Liquid Glass Projects (8 local repositories)
+ * Era 2: Modern Liquid Glass Projects (Playable Games, Official Demos & Interactive Apps)
  * Styled after Apple's Liquid Glass design system (visionOS / macOS Tahoe / iOS 26)
  */
 export const MODERN_APPS = [
+  {
+    id: 'world-strikers',
+    name: 'World Strikers',
+    shortName: 'World Strikers',
+    folder: 'AI-Mario-Strikers',
+    group: 'games',
+    badge: 'Playable Demo',
+    category: 'Arcade Cage Soccer • TypeScript, Canvas & WebRTC',
+    iconUrl: './assets/icons/world-strikers.png',
+    playUrl: './games/world-strikers/index.html',
+    playLabel: 'Play World Strikers Demo',
+    tldr: 'High-voltage walled-cage arcade soccer featuring 20,000V electric perimeter fences, X-ray shock skeletons, cultural chaos items, charged Super Shots, and a 9-track festival EDM soundtrack. (Hosted build is the official Spain vs. France Web Demo.)',
+    description:
+      'An arcade walled-cage soccer brawler inspired by Mario Strikers! Smash rivals into the 20,000V electric perimeter fence, unleash cultural chaos items (baguettes, bratwursts, espressos, siesta pillows), and charge slow-motion Super Shots.\n\n• Web Playable Demo: Features an exhibition showdown locking 🇪🇸 Spain vs. 🇫🇷 France, showcasing core cage physics, AI tactics, Super Shots, and post-match MVP box scores (while reserving full 4-nation rosters, custom rules, and 4-digit WebRTC online lobbies for the full release).',
+    tech: ['TypeScript', 'HTML5 Canvas', 'Custom Match Sim', '9-Track EDM Synth OST', 'Capacitor'],
+    screenshots: [
+      './assets/screenshots/world-strikers/01-gameplay-super-shot.png',
+      './assets/screenshots/world-strikers/02-electric-fence-shock.png',
+      './assets/screenshots/world-strikers/06-web-demo-main-menu.png',
+      './assets/screenshots/world-strikers/05-box-score-and-demo-banner.png'
+    ]
+  },
+  {
+    id: 'ai-pikmin',
+    name: 'Pikmin: PNF-404 Sim',
+    shortName: 'PNF-404 Sim',
+    folder: 'AI-Pikmin',
+    group: 'games',
+    badge: 'Playable',
+    category: 'Top-Down Squad RTS & 4P Co-op • TypeScript & PeerJS',
+    iconUrl: './assets/icons/ai-pikmin.png',
+    playUrl: './games/ai-pikmin/index.html',
+    playLabel: 'Play Pikmin Sim Live',
+    tldr: 'A top-down Pikmin 1 squad-tactics recreation across 5 sectors, 15 ship modules, boss encounters, Time Attack speed drills, 3 endings, and serverless 1–4 player WebRTC co-op.',
+    description:
+      'Help Captain Olimar pass his late-night Hocotate Freight Deep-Space Salvage Certification! Command Red, Yellow, and Blue squads with whistle/throw micro-controls across 5 distinct planetary sectors to recover 15 ship parts within a 30-cycle quota. Includes Normal Story Mode, 15-Cycle Executive Evaluation (Hard Mode), 4-minute Time Attack drills, and PeerJS WebRTC 1–4 player online co-op.',
+    tech: ['TypeScript', 'HTML5 Canvas', 'Squad AI & Pathing', 'PeerJS WebRTC Co-op', 'Procedural Audio'],
+    screenshots: [
+      './assets/screenshots/ai-pikmin/screenshot-1-gameplay-squad.png',
+      './assets/screenshots/ai-pikmin/screenshot-2-bosses-and-enemies.png',
+      './assets/screenshots/ai-pikmin/screenshot-3-sim-story-and-sectors.png'
+    ]
+  },
   {
     id: 'sumten',
     name: 'SumTen',
     shortName: 'SumTen',
     folder: 'AI-Sumten',
+    group: 'games',
+    badge: 'Playable',
     category: 'Retro Pixel-Art Number Puzzle • TypeScript & Expo',
     iconUrl: './assets/icons/sumten.png',
     playUrl: './games/sumten/index.html',
@@ -263,13 +308,20 @@ export const MODERN_APPS = [
     description:
       'Drag a rectangle over numbers that add up to 10 to clear them, and race to clear the entire 16×10 board before the timer runs out. Every board is constructed backwards from a guaranteed full solution—including nested moves where inner tiles must be cleared first. Built as a clean monorepo separating pure TypeScript rules (@sumten/core), mock/RevenueCat commerce (@sumten/commerce), bilingual EN/ES i18n, and procedural pixel-art & chiptune SFX generators.',
     tech: ['TypeScript', 'Expo / React Native', 'Procedural Chiptune SFX', 'Deterministic Solver'],
-    screenshots: ['./assets/screenshots/sumten/header.png']
+    screenshots: [
+      './assets/screenshots/sumten/header.png',
+      './assets/screenshots/sumten/ipad_1_gameplay.png',
+      './assets/screenshots/sumten/ipad_2_combo_and_hint.png',
+      './assets/screenshots/sumten/ipad_4_board_clear_shop.png'
+    ]
   },
   {
     id: 'juice-sort',
     name: 'Aesthetic Juice Sort',
     shortName: 'Juice Sort',
     folder: 'AI-JuiceSort',
+    group: 'games',
+    badge: 'Playable',
     category: 'Liquid Physics Puzzle • React Native Skia & WebAudio',
     iconUrl: './assets/icons/juice-sort.png',
     playUrl: './games/juice-sort/index.html?v=2',
@@ -291,14 +343,16 @@ export const MODERN_APPS = [
     name: 'NetWatch Anomaly Hotline',
     shortName: 'NetWatch',
     folder: 'AI-Creepypasta-Hotline',
+    group: 'games',
+    badge: 'Playable Demo',
     category: 'Found-Footage Forensic Triage Horror • React & Vite',
     iconUrl: './assets/icons/netwatch.png',
-    playUrl: './games/netwatch/index.html',
-    playLabel: 'Play NetWatch Live',
-    tldr: 'A late-1990s/mid-2000s "Doors XP" forensic desktop simulator where you inspect flash Polaroids, MiniDV camcorder frames, EVP audio, and trail-cam anomalies to triage hoaxes vs. lethal threats.',
+    playUrl: './games/netwatch/index.html?v=demo',
+    playLabel: 'Play NetWatch Demo',
+    tldr: 'A late-1990s/mid-2000s "Doors XP" forensic desktop simulator where you inspect flash Polaroids, MiniDV camcorder frames, EVP audio, and trail-cam anomalies to triage hoaxes vs. lethal threats. (Hosted build is the official Browser Demo.)',
     description:
-      'Step into the night shift at the NetWatch Anomaly Hotline inside a nostalgic CRT "Doors XP Service Pack 2" operating system. Answer dispatch calls, cross-reference the Field Encyclopedia, run forensic contrast/gamma/EVP spectral filters on photorealistic 1990s/2000s found-footage evidence, and survive system intrusions.',
-    tech: ['React 18', 'TypeScript', 'Vite', 'Capacitor (iOS/Android)', 'WebAudio EVP Synth'],
+      'Step into the night shift at the NetWatch Anomaly Hotline inside a nostalgic CRT "Doors XP Service Pack 2" operating system. Answer dispatch calls, cross-reference the Field Encyclopedia, run forensic contrast/gamma/EVP spectral filters on photorealistic 1990s/2000s found-footage evidence, and survive system intrusions.\n\n• Hosted Build: Official itch.io Browser Demo edition.',
+    tech: ['React 18', 'TypeScript', 'Vite', 'Capacitor & Electron', 'WebAudio EVP Synth'],
     screenshots: [
       './assets/screenshots/netwatch/01.png',
       './assets/screenshots/netwatch/02.png',
@@ -311,6 +365,8 @@ export const MODERN_APPS = [
     name: 'Cat Capsules',
     shortName: 'Cat Capsules',
     folder: 'AI-Cat-Merge',
+    group: 'games',
+    badge: 'Playable',
     category: '2D Reactive Physics Merge Game • PixiJS v8 & Rapier2D',
     iconUrl: './assets/icons/cat-capsules.png',
     playUrl: './games/cat-capsules/index.html',
@@ -332,6 +388,8 @@ export const MODERN_APPS = [
     name: 'REDIAL',
     shortName: 'REDIAL',
     folder: 'AI-Hotline-Miami',
+    group: 'games',
+    badge: 'Playable',
     category: 'Neon One-Hit-Kill Action Roguelike • HTML5 Canvas & Capacitor',
     iconUrl: './assets/icons/redial.png',
     playUrl: './games/redial/index.html',
@@ -353,21 +411,138 @@ export const MODERN_APPS = [
     name: 'Wild Peak',
     shortName: 'Wild Peak',
     folder: 'Wild-Peak',
+    group: 'games',
+    badge: 'Playable',
     category: 'N64 Low-Poly 3D Survival Roguelite • Three.js & TypeScript',
     iconUrl: './assets/icons/wild-peak.svg',
-    playUrl: './games/wild-peak/index.html',
+    playUrl: './games/wild-peak/index.html?v=2',
     playLabel: 'Play Wild Peak 3D Live',
-    tldr: 'An N64-style low-poly 3D survival roguelite built with Three.js where 100% of the geometry, vertex-colored terrain, landmarks, and audio are generated procedurally in code.',
+    tldr: 'An N64-style low-poly 3D survival roguelite built with Three.js where 100% of the geometry, vertex-colored terrain, landmarks, IK character poses, splitscreen race mode, and chiptune audio are generated procedurally in code.',
     description:
-      'Spawn in a procedurally generated low-poly wilderness with one towering landmark (Volcano, Castle, Snowy Peak, Waterfall, or Desert Pyramid) visible on the horizon. Scavenge weapons, gather Wild Whispers for permanent progression, battle scaling enemies, and climb to the summit—rendered at authentic nearest-neighbor N64 resolution.',
-    tech: ['Three.js', 'TypeScript', 'Simplex Noise Terrain', '100% Procedural Assets', 'N64 Shader'],
+      'Spawn in a procedurally generated low-poly wilderness with towering landmarks (Volcano, Castle, Snowy Peak, Waterfall, or Desert Pyramid) on the horizon. Scavenge weapons, unlock cosmetics & permanent upgrades in the Hub, battle scaling enemies, or race head-to-head in local splitscreen—rendered with a custom N64 shader and procedural synth sequencer.',
+    tech: ['Three.js', 'TypeScript', 'Procedural IK & Landmarks', 'Splitscreen Mode', 'N64 Shader'],
     screenshots: []
+  },
+  {
+    id: 'emoji-shield',
+    name: 'EmojiShield Studio',
+    shortName: 'EmojiShield',
+    folder: 'EmojiShield',
+    group: 'apps',
+    badge: 'Interactive App',
+    category: 'On-Device AI Auto-Censor Studio • ONNX Runtime Web WASM',
+    iconUrl: './assets/icons/emoji-shield.png',
+    playUrl: './games/emoji-shield/index.html',
+    playLabel: 'Launch EmojiShield Studio',
+    tldr: 'A 100% client-side privacy studio that runs YOLOv8 (320n.onnx) locally in the browser via ONNX Runtime Web WASM to detect sensitive regions or faces and composite customizable emoji stickers in batches—zero server uploads.',
+    description:
+      'Processes photos entirely on-device so private images never leave your browser. Uses ONNX Runtime Web SIMD WebAssembly to run a YOLOv8 detector locally, pairs detections with a customizable pool of 24 crisp vector emoji stickers, and includes an interactive Touch-Up canvas editor for manual sticker placement, scaling, rotation, and batch export.',
+    tech: ['React', 'TypeScript', 'ONNX Runtime Web (WASM)', 'YOLOv8 320n', 'Tailwind CSS'],
+    screenshots: []
+  },
+  {
+    id: 'med-study-guide',
+    name: '2026 NCLEX-RN Study Hub',
+    shortName: 'NCLEX QBank',
+    folder: 'Med Study Guide',
+    group: 'apps',
+    badge: 'Interactive App',
+    category: 'Medical EdTech & Offline QBank • 1,786 Clinical Questions',
+    iconUrl: './assets/icons/med-study-guide.svg',
+    playUrl: './games/med-study-guide/index.html',
+    playLabel: 'Launch NCLEX QBank (1,786 Qs)',
+    tldr: 'A self-contained, 100% offline-capable 2026 NCLEX-RN & Next Generation NCLEX (NGN) practice application packing 1,786 categorized clinical questions, step-by-step rationales, bookmarking, and a Normal Lab Values reference sidebar.',
+    description:
+      'Aligned with the April 2026 – March 2029 NCSBN NCLEX-RN Test Plan. Students can filter across 18 nursing categories (Prioritization/Delegation, Pharmacology, NGN Unfolding Case Studies, SATA, ABGs, Emergency Triage, Maternity, Pediatrics, and more), review full rationales for every option, reference Normal Lab Values & Therapeutic Drug Levels on the fly, and persist scores locally.',
+    tech: ['Self-Contained HTML5', 'Vanilla JS', 'Light/Dark Adaptive UI', '1,786-Item Clinical QBank'],
+    screenshots: []
+  },
+  {
+    id: 'dropshipping-made-easy',
+    name: 'Dropshipping Made Easy',
+    shortName: 'Dropship Guide',
+    folder: 'Dropshipping-Made-Easy',
+    group: 'apps',
+    badge: 'Interactive App',
+    category: 'Bilingual E-Commerce Launchpad & Profit Simulator • React & Gemini',
+    iconUrl: './assets/icons/dropshipping-made-easy.svg',
+    playUrl: './games/dropshipping-made-easy/index.html',
+    playLabel: 'Launch Dropshipping Playbook',
+    tldr: 'A plain-English & Spanish interactive e-commerce launchpad featuring curated product niches, real-margin calculators, store copy & brand builders, TikTok/Reels viral script generators, and printable launch blueprints.',
+    description:
+      'Guides beginners step-by-step through launching an organic or paid-ads e-commerce store in English or Español without hype or hidden traps. Includes a live unit-economics profit simulator, supplier vetting checklists, brand & boutique copywriter tools, short-form video hook generators, and shareable URL state. (Portfolio build runs 100% client-side using its built-in smart curation fallback with zero API keys exposed.)',
+    tech: ['React 19', 'Next.js Architecture', 'TypeScript', 'Bilingual EN/ES', 'Tailwind CSS'],
+    screenshots: []
+  },
+  {
+    id: 'relais-palais',
+    name: 'Relais Palais Rework',
+    shortName: 'Relais Palais',
+    folder: 'RelaisPalais Rework',
+    group: 'apps',
+    badge: 'Interactive Site',
+    category: 'Editorial Fashion Storefront & Custom Shopify Theme • Liquid & JS',
+    iconUrl: './assets/icons/relais-palais.svg',
+    playUrl: './games/relais-palais/index.html',
+    playLabel: 'Explore Storefront Rework',
+    tldr: 'A Rhode-inspired luxury minimalist storefront redesign and full Shopify OS 2.0 Liquid theme for independent fashion label Relais Palais, featuring framed video heroes, size & rise modals, lookbook tabs, and a slide-out shopping bag.',
+    description:
+      'Complete e-commerce UX/UI rework built both as an interactive standalone preview and a production-ready Shopify Online Store 2.0 theme (sections, snippets, JSON templates, and custom schema settings). Highlights small-batch made-to-order drops, the signature 6" rise editorial story, purple graphic tee capsules, interactive sizing modals, and stateful cart drawer.',
+    tech: ['Shopify Liquid (OS 2.0)', 'Vanilla JS', 'Editorial CSS', 'Interactive Cart Drawer'],
+    screenshots: [
+      './games/relais-palais/assets/karina-1.jpg',
+      './games/relais-palais/assets/purple-tees/capybaras-in-paris-purple.jpg',
+      './games/relais-palais/assets/purple-tees/tiramisu-t-purple.jpg'
+    ]
+  },
+  {
+    id: 'doctor-calendar',
+    name: 'Montes Orthopedics Portal',
+    shortName: 'Doctor Calendar',
+    folder: 'Doctor Calendar',
+    group: 'apps',
+    badge: 'Interactive App',
+    category: 'Bilingual Medical Booking & Clinic Roster • Accessible Web UI',
+    iconUrl: './assets/icons/doctor-calendar.svg',
+    playUrl: './games/doctor-calendar/index.html',
+    playLabel: 'Launch Clinic Scheduler',
+    tldr: 'A bilingual (English & Español) orthopedic surgery appointment booking wizard and staff roster portal featuring insurance filtering, interactive time-slot scheduling, deferred form validation, and container-responsive admin tables.',
+    description:
+      'Designed for an orthopedic & sports medicine clinic with instant EN/ES language switching, PPO/EPO/Medicare insurance verification badges, body-region visit triage, real-time calendar slot picking, and a toggleable Clinic Admin Roster view. Built with modern accessible web primitives (native <dialog>, :user-invalid validation, @container queries, and 100% synthetic demo data).',
+    tech: ['HTML5 <dialog>', 'CSS @container', 'Bilingual EN/ES', 'Tailwind CSS', 'Synthetic Mock Data'],
+    screenshots: []
+  },
+  {
+    id: 'ai-classes',
+    name: '1-on-1 AI Coaching Portal',
+    shortName: 'AI Classes',
+    folder: 'AI Classes Website',
+    group: 'apps',
+    badge: 'Interactive Site',
+    category: 'Bilingual Dual-Track Coaching Website & Print Kit • HTML/CSS/JS',
+    iconUrl: './assets/icons/ai-classes.svg',
+    playUrl: './games/ai-classes/index.html',
+    playLabel: 'Explore Coaching Portal',
+    tldr: 'A dual-edition bilingual (EN/ES) coaching website for 1-on-1 practical AI, app, and game development lessons—tailored separately for Busy Professionals & Daily Life vs. Students & Career Starters, complete with printable business cards.',
+    description:
+      'Splits visitors into two tailored curricula: Edition 1 (Daily Life & Busy Pros—automating workflows and saving hours each week) and Edition 2 (Students & Career Starters—building real apps, games, and standout portfolios). Features instant EN/ES localization, curriculum accordions, social-share discount flows, and a print-ready bilingual card studio.',
+    tech: ['Semantic HTML5', 'Custom Editorial CSS', 'Bilingual EN/ES i18n', 'Print-Ready Card Studio'],
+    links: [
+      { label: 'Live Coaching Site', url: 'https://mascaz.github.io/AI-Lessons-Website/' }
+    ],
+    screenshots: [
+      './games/ai-classes/assets/images/og-main.jpg',
+      './games/ai-classes/assets/cards/adults-front-en.png',
+      './games/ai-classes/assets/cards/youth-front-en.png'
+    ]
   },
   {
     id: 'spelling-bee',
     name: 'Spelling Bee Coach',
     shortName: 'Spelling Bee',
     folder: 'Spelling Bee tool',
+    group: 'apps',
+    badge: 'Interactive App',
     category: 'Bilingual (EN/ES) EdTech Study & Testing App • Web Speech API',
     iconUrl: './assets/icons/spelling-bee.svg',
     playUrl: './games/spelling-bee/index.html',
@@ -383,6 +558,8 @@ export const MODERN_APPS = [
     name: 'Argon OANDA Bot',
     shortName: 'Argon FX Bot',
     folder: 'Argon-Oanda-Bot',
+    group: 'apps',
+    badge: 'Synthetic Sim',
     category: '3-Layer Algorithmic FX & Gemini LLM Strategy Engine • Python',
     iconUrl: './assets/icons/argon-bot.svg',
     playUrl: './games/argon-bot/index.html',

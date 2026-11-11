@@ -3,7 +3,7 @@
 
 window.I18N = {
   en: {
-    appTitle: "BeeReady!",
+    appTitle: "Easy Spelling Bee",
     appSubtitle: "3rd Grade Spelling Bee Coach",
     langToggleLabel: "Idioma / Language",
     activeSetLabel: "Word Set:",
@@ -243,13 +243,14 @@ window.I18N = {
     connectModalDesc: "To open this app on an iPad or iPhone on the same Wi-Fi network, open Safari on the device and enter the address below (or add to Home Screen for a full-screen app):",
      backupModalTitle: "💾 Save / Restore Backup File",
     backupModalDesc: "Your words and high scores are saved automatically in your browser and on the local server. You can also export a backup file to move between devices.",
+    backupModalDescNative: "Your word sets and high scores are saved automatically on this device. You can also export a backup file to share or move your data to another device.",
     exportJsonBtn: "⬇️ Download Backup (.json)",
     importJsonBtn: "⬆️ Restore from Backup (.json)",
     closeModalBtn: "Close"
   },
 
   es: {
-    appTitle: "¡BeeReady!",
+    appTitle: "Easy Spelling Bee",
     appSubtitle: "Entrenador de Spelling Bee (3.º de Primaria)",
     langToggleLabel: "Language / Idioma",
     activeSetLabel: "Lista Activa:",
@@ -489,6 +490,7 @@ window.I18N = {
     connectModalDesc: "Para abrir esta app en un iPad o iPhone conectado al mismo Wi-Fi, abre Safari en el dispositivo y escribe la dirección de abajo (o agrégala a la Pantalla de Inicio):",
     backupModalTitle: "💾 Guardar o Restaurar Respaldo",
     backupModalDesc: "Tus listas de palabras y récords se guardan automáticamente en el navegador y en el servidor local. También puedes descargar un archivo de respaldo.",
+    backupModalDescNative: "Tus listas de palabras y récords se guardan automáticamente en este dispositivo. También puedes exportar un archivo de respaldo para compartir o mover tus datos a otro dispositivo.",
     exportJsonBtn: "⬇️ Descargar Respaldo (.json)",
     importJsonBtn: "⬆️ Restaurar desde Archivo (.json)",
     closeModalBtn: "Cerrar"

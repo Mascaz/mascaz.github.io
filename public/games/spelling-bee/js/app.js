@@ -76,7 +76,21 @@ class AppController {
     }, 3000);
   }
 
+  isMobileOrNative() {
+    if (window.IS_NATIVE_IOS_APP) return true;
+    if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.easySpellingBee) return true;
+    const ua = navigator.userAgent || '';
+    if (/iPhone|iPad|iPod|Android/i.test(ua)) return true;
+    // iPadOS Desktop-class User-Agent detection
+    if (/Macintosh/i.test(ua) && navigator.maxTouchPoints > 1) return true;
+    return false;
+  }
+
   bindGlobalEvents() {
+    if (this.isMobileOrNative()) {
+      document.body.classList.add('is-mobile-or-native');
+    }
+
     // Language Toggle
     document.getElementById('langEnBtn').addEventListener('click', () => {
       window.appStore.setLang('en');
@@ -107,9 +121,16 @@ class AppController {
       document.getElementById('setsDialog').showModal();
     });
 
-    document.getElementById('openConnectModalBtn').addEventListener('click', () => {
-      this.openConnectDeviceModal();
-    });
+    const connectBtn = document.getElementById('openConnectModalBtn');
+    const connectDialog = document.getElementById('connectDialog');
+    if (this.isMobileOrNative()) {
+      if (connectBtn) connectBtn.remove();
+      if (connectDialog) connectDialog.remove();
+    } else if (connectBtn) {
+      connectBtn.addEventListener('click', () => {
+        this.openConnectDeviceModal();
+      });
+    }
 
     document.getElementById('openBackupModalBtn').addEventListener('click', () => {
       document.getElementById('backupDialog').showModal();
@@ -118,11 +139,20 @@ class AppController {
     // Backup Export / Import
     document.getElementById('exportBackupBtn').addEventListener('click', () => {
       const jsonStr = window.appStore.exportJSON();
+      const filename = `easy-spelling-bee-backup-${new Date().toISOString().slice(0, 10)}.json`;
+      if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.easySpellingBee) {
+        window.webkit.messageHandlers.easySpellingBee.postMessage({
+          action: 'exportBackup',
+          filename,
+          content: jsonStr
+        });
+        return;
+      }
       const blob = new Blob([jsonStr], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `beeready-spelling-backup-${new Date().toISOString().slice(0, 10)}.json`;
+      a.download = filename;
       a.click();
       URL.revokeObjectURL(url);
     });
@@ -184,7 +214,10 @@ class AppController {
     document.getElementById('appSubtitleText').textContent = this.t('appSubtitle');
     document.getElementById('activeSetLabelText').textContent = this.t('activeSetLabel');
     document.getElementById('openSetsModalText').textContent = this.t('manageSetsBtn');
-    document.getElementById('openConnectModalText').textContent = this.t('connectDeviceBtn');
+    const connectModalTextEl = document.getElementById('openConnectModalText');
+    if (connectModalTextEl) {
+      connectModalTextEl.textContent = this.t('connectDeviceBtn');
+    }
     document.getElementById('openBackupModalText').textContent = this.t('backupBtn');
 
     document.getElementById('langEnBtn').classList.toggle('active', lang === 'en');
@@ -215,10 +248,14 @@ class AppController {
 
     // Update static modal strings
     document.getElementById('setsModalTitle').textContent = this.t('createSetModalTitle');
-    document.getElementById('connectModalTitle').textContent = this.t('connectModalTitle');
-    document.getElementById('connectModalDesc').textContent = this.t('connectModalDesc');
+    const connectTitleEl = document.getElementById('connectModalTitle');
+    if (connectTitleEl) connectTitleEl.textContent = this.t('connectModalTitle');
+    const connectDescEl = document.getElementById('connectModalDesc');
+    if (connectDescEl) connectDescEl.textContent = this.t('connectModalDesc');
     document.getElementById('backupModalTitle').textContent = this.t('backupModalTitle');
-    document.getElementById('backupModalDesc').textContent = this.t('backupModalDesc');
+    document.getElementById('backupModalDesc').textContent = this.isMobileOrNative()
+      ? this.t('backupModalDescNative')
+      : this.t('backupModalDesc');
     document.getElementById('exportBackupBtn').textContent = this.t('exportJsonBtn');
     document.getElementById('importBackupBtn').textContent = this.t('importJsonBtn');
     document.querySelectorAll('.close-dialog-btn').forEach((b) => {

@@ -30,6 +30,8 @@ All text, bio details, links, icons, and the `TLDR` paper sheet are driven from 
      name: 'My New Game',
      shortName: 'New Game',
      folder: 'My-New-Game-Folder',
+     group: 'games', // 'games' or 'apps'
+     badge: 'Playable', // e.g. 'Playable', 'Playable Demo', 'Interactive App', 'Interactive Site'
      category: 'Genre • Tech Stack',
      iconUrl: './assets/icons/my-new-game.png',
      playUrl: './games/my-new-game/index.html?v=1',

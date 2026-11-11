@@ -1286,7 +1286,7 @@ button {
 
 /* Refractive Liquid Glass App Drawer */
 .liquid-app-drawer {
-  width: min(920px, 96vw);
+  width: min(1060px, 96vw);
   max-height: 100%;
   overflow-y: auto;
   padding: clamp(20px, 3vw, 34px);
@@ -1309,9 +1309,40 @@ button {
 
 .liquid-drawer-header {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
+  gap: 14px;
   margin-bottom: 24px;
+}
+
+.liquid-filter-pills {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.liquid-filter-btn {
+  border: none;
+  background: transparent;
+  color: rgba(248, 250, 252, 0.75);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 13px;
+  border-radius: 999px;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+.liquid-filter-btn:hover {
+  color: #ffffff;
+}
+.liquid-filter-btn.active {
+  background: rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
 }
 
 .liquid-drawer-title {
@@ -1328,8 +1359,8 @@ button {
 
 .liquid-icons-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: clamp(16px, 2.5vw, 28px);
+  grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+  gap: clamp(14px, 2vw, 22px);
 }
 
 @media (max-width: 680px) {
@@ -1405,6 +1436,21 @@ button {
   background: rgba(56, 189, 248, 0.18);
   border: 1px solid rgba(56, 189, 248, 0.42);
   color: #bae6fd;
+}
+.liquid-app-badge.badge-demo {
+  background: rgba(251, 191, 36, 0.18);
+  border-color: rgba(251, 191, 36, 0.48);
+  color: #fde68a;
+}
+.liquid-app-badge.badge-app {
+  background: rgba(52, 211, 153, 0.18);
+  border-color: rgba(52, 211, 153, 0.45);
+  color: #a7f3d0;
+}
+.liquid-app-badge.badge-sim {
+  background: rgba(192, 132, 252, 0.18);
+  border-color: rgba(192, 132, 252, 0.45);
+  color: #e9d5ff;
 }
 
 /* Liquid Glass Active Application Window */

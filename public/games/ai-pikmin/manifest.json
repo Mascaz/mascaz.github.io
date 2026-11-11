@@ -1,0 +1,10 @@
+{
+  "name": "Pikmin Mobile: Top-Down Edition",
+  "short_name": "Pikmin Mobile",
+  "description": "Mobile-first top-down recreation of Pikmin 1 gameplay mechanics",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0f172a",
+  "theme_color": "#166534"
+}

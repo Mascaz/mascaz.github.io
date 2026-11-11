@@ -1,0 +1,1943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Business Cards Print Studio — Maxwell Montes Diaz (EN &amp; ES)</title>
+  <meta name="description" content="Print-ready 3.5 x 2 inch business cards for Maxwell Montes Diaz's 1-on-1 AI Classes. Includes Single-Sided and Double-Sided editions for Adults and Youth in English and Spanish." />
+
+  <!-- Google Fonts matching main website -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,600;0,6..72,700;1,6..72,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-serif: 'Newsreader', Georgia, serif;
+      --font-display: 'Space Grotesk', 'Plus Jakarta Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+      --studio-bg: #0B0F17;
+      --studio-surface: #151C2C;
+      --studio-border: #28354E;
+      --studio-text: #F8FAFC;
+      --studio-muted: #94A3B8;
+      --studio-accent: #38BDF8;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--studio-bg);
+      color: var(--studio-text);
+      font-family: var(--font-sans);
+      line-height: 1.5;
+      padding-bottom: 80px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ==========================================================================
+       Studio Controls Header (Hidden when printing)
+       ========================================================================== */
+    .studio-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(11, 15, 23, 0.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--studio-border);
+      padding: 14px 24px;
+    }
+
+    .studio-header-inner {
+      max-width: 1480px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .studio-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--studio-text);
+    }
+
+    .studio-brand img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #38BDF8;
+    }
+
+    .studio-brand-title {
+      font-weight: 800;
+      font-size: 1.02rem;
+      display: block;
+    }
+
+    .studio-brand-sub {
+      font-size: 0.78rem;
+      color: var(--studio-muted);
+    }
+
+    .studio-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .filter-group {
+      display: inline-flex;
+      background: var(--studio-surface);
+      border: 1px solid var(--studio-border);
+      border-radius: 999px;
+      padding: 3px;
+      gap: 2px;
+    }
+
+    .filter-btn {
+      font: inherit;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--studio-muted);
+      background: transparent;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .filter-btn:hover {
+      color: var(--studio-text);
+    }
+
+    .filter-btn.active {
+      background: var(--studio-text);
+      color: var(--studio-bg);
+    }
+
+    .btn-print {
+      font: inherit;
+      font-size: 0.85rem;
+      font-weight: 800;
+      background: #25D366;
+      color: #062010;
+      border: none;
+      padding: 9px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 6px 18px rgba(37, 211, 102, 0.3);
+    }
+
+    .btn-print:hover {
+      background: #20bd5a;
+    }
+
+    .studio-container {
+      max-width: 1480px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    .studio-section {
+      margin-bottom: 56px;
+    }
+
+    .studio-section-head {
+      margin-bottom: 24px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--studio-border);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .studio-section-head h2 {
+      font-family: var(--font-display);
+      font-size: 1.55rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .studio-section-head p {
+      color: var(--studio-muted);
+      font-size: 0.92rem;
+    }
+
+    .cards-showcase-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(700px, 1fr));
+      gap: 32px;
+      align-items: start;
+    }
+
+    .card-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .card-meta-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 0.84rem;
+      color: var(--studio-muted);
+      padding: 0 4px;
+    }
+
+    .card-meta-title {
+      font-weight: 700;
+      color: var(--studio-text);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-tag {
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-adults {
+      background: #C85A32;
+      color: #FFFFFF;
+    }
+
+    .badge-youth {
+      background: #A3E635;
+      color: #090C12;
+    }
+
+    .badge-lang {
+      background: #28354E;
+      color: #E2E8F0;
+    }
+
+    .download-link {
+      color: #38BDF8;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .download-link:hover {
+      text-decoration: underline;
+    }
+
+    /* ==========================================================================
+       Physical Business Card Canvas: Exact 3.5" x 2.0" (7:4 Aspect Ratio)
+       700px x 400px at 1x -> 2100px x 1200px at 3x (600 DPI)
+       ========================================================================== */
+    .bcard {
+      width: 700px;
+      height: 400px;
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 22px 48px rgba(0, 0, 0, 0.45);
+      user-select: none;
+      flex-shrink: 0;
+    }
+
+    /* --------------------------------------------------------------------------
+       ADULTS THEME (Warm Editorial & Calm — #FAF7F2 / #162A22 / #C85A32)
+       -------------------------------------------------------------------------- */
+    .bcard-adults {
+      background: #FAF7F2;
+      color: #162A22;
+      border: 2px solid #D8CBB8;
+    }
+
+    .bcard-adults::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #162A22 0%, #C85A32 65%, #E07A5F 100%);
+      z-index: 3;
+    }
+
+    /* --------------------------------------------------------------------------
+       YOUTH THEME (Modern Creator Studio — #090C12 / #A3E635 / #6366F1)
+       -------------------------------------------------------------------------- */
+    .bcard-youth {
+      background: #090C12;
+      color: #F8FAFC;
+      border: 2px solid #263147;
+    }
+
+    .bcard-youth::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #6366F1 0%, #38BDF8 50%, #A3E635 100%);
+      z-index: 3;
+    }
+
+    .bcard-youth-glow {
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.16) 0%, rgba(163, 230, 53, 0.05) 55%, transparent 75%);
+      top: -60px;
+      right: 120px;
+      pointer-events: none;
+    }
+
+    /* ==========================================================================
+       LAYOUT 1: SINGLE-SIDED COMPLETE CARD (All-in-One Face: 3 Columns)
+       Left: Photo + Name/Creds | Center: Hook + Bullets + Offer + Contact | Right: QR
+       ========================================================================== */
+    .bcard-single-inner {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      padding: 24px 22px 20px;
+      display: grid;
+      grid-template-columns: 162px 1fr 148px;
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    /* Left Column: Portrait + Identity */
+    .single-col-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .single-photo-box {
+      width: 162px;
+      height: 252px;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .bcard-adults .single-photo-box {
+      border: 2px solid #C85A32;
+      background: #E9E1D4;
+    }
+
+    .bcard-youth .single-photo-box {
+      border: 2px solid #A3E635;
+      background: #151B28;
+    }
+
+    .single-photo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .single-photo-adults img {
+      object-position: center 16%;
+    }
+
+    .single-photo-youth img {
+      object-position: center 20%;
+    }
+
+    .single-id-block {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .single-name {
+      font-size: 14.5px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+    }
+
+    .single-role {
+      font-size: 10.5px;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    .bcard-adults .single-role {
+      color: #C85A32;
+    }
+
+    .bcard-youth .single-role {
+      color: #A3E635;
+    }
+
+    .single-creds {
+      margin-top: 3px;
+      font-size: 9.1px;
+      line-height: 1.35;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .bcard-adults .single-creds {
+      color: #3E5249;
+    }
+
+    .bcard-youth .single-creds {
+      color: #CBD5E1;
+    }
+
+    /* Center Column: Eyebrow + Headline + Bullets + Offer + Contact */
+    .single-col-center {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-width: 0;
+    }
+
+    .eyebrow-pill {
+      display: inline-flex;
+      align-items: center;
+      align-self: flex-start;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .bcard-adults .eyebrow-pill {
+      background: #162A22;
+      color: #FAF7F2;
+    }
+
+    .bcard-youth .eyebrow-pill {
+      background: rgba(99, 102, 241, 0.22);
+      color: #C7D2FE;
+      border: 1px solid #6366F1;
+    }
+
+    .single-headline-adults {
+      font-family: var(--font-serif);
+      font-size: 21.5px;
+      font-weight: 700;
+      line-height: 1.12;
+      letter-spacing: -0.015em;
+      color: #162A22;
+      margin-bottom: 8px;
+    }
+
+    .single-headline-adults .accent {
+      color: #C85A32;
+      font-style: italic;
+    }
+
+    .single-headline-youth {
+      font-family: var(--font-display);
+      font-size: 20.5px;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      color: #FFFFFF;
+      margin-bottom: 8px;
+    }
+
+    .single-headline-youth .accent {
+      color: #A3E635;
+    }
+
+    .single-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4.5px;
+      margin-bottom: 9px;
+    }
+
+    .single-bullets li {
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 1.28;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+
+    .bcard-adults .single-bullets li {
+      color: #273B32;
+    }
+
+    .bcard-youth .single-bullets li {
+      color: #E2E8F0;
+    }
+
+    .bullet-check {
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .bcard-adults .bullet-check {
+      color: #C85A32;
+    }
+
+    .bcard-youth .bullet-check {
+      color: #A3E635;
+    }
+
+    .single-offer-box {
+      padding: 7px 10px;
+      border-radius: 9px;
+      font-size: 9.8px;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 8px;
+    }
+
+    .bcard-adults .single-offer-box {
+      background: #F6E7E0;
+      border: 1.5px solid #C85A32;
+      color: #162A22;
+    }
+
+    .bcard-youth .single-offer-box {
+      background: rgba(163, 230, 53, 0.12);
+      border: 1.5px solid #A3E635;
+      color: #F8FAFC;
+    }
+
+    .single-offer-sub {
+      display: block;
+      font-size: 9.5px;
+      font-weight: 600;
+      margin-top: 1px;
+    }
+
+    .bcard-adults .single-offer-sub {
+      color: #4A352B;
+    }
+
+    .bcard-youth .single-offer-sub {
+      color: #CBD5E1;
+    }
+
+    .single-contact-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      font-size: 10px;
+      font-weight: 700;
+      padding-top: 6px;
+    }
+
+    .bcard-adults .single-contact-bar {
+      border-top: 1px solid #DFD5C5;
+      color: #162A22;
+    }
+
+    .bcard-youth .single-contact-bar {
+      border-top: 1px solid #263147;
+      color: #F8FAFC;
+    }
+
+    .contact-muted {
+      font-weight: 500;
+      font-size: 9.3px;
+    }
+
+    .bcard-adults .contact-muted {
+      color: #4D6157;
+    }
+
+    .bcard-youth .contact-muted {
+      color: #94A3B8;
+    }
+
+    /* Right Column: QR Scan Panel */
+    .single-col-right {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      border-radius: 12px;
+      padding: 10px 8px;
+      text-align: center;
+    }
+
+    .bcard-adults .single-col-right {
+      background: #FFFFFF;
+      border: 1.5px solid #DFD5C5;
+    }
+
+    .bcard-youth .single-col-right {
+      background: #141B29;
+      border: 1.5px solid #2E3C56;
+    }
+
+    .qr-top-tag {
+      font-size: 9.5px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 999px;
+      width: 100%;
+    }
+
+    .bcard-adults .qr-top-tag {
+      background: #C85A32;
+      color: #FFFFFF;
+    }
+
+    .bcard-youth .qr-top-tag {
+      background: #A3E635;
+      color: #090C12;
+    }
+
+    .qr-svg-wrap {
+      width: 132px;
+      height: 132px;
+      background: #FFFFFF;
+      padding: 5px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #E2E8F0;
+    }
+
+    .qr-svg-wrap svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .qr-caption {
+      font-size: 9.5px;
+      font-weight: 800;
+      line-height: 1.25;
+    }
+
+    .bcard-adults .qr-caption {
+      color: #162A22;
+    }
+
+    .bcard-youth .qr-caption {
+      color: #F8FAFC;
+    }
+
+    .qr-url-short {
+      font-family: var(--font-mono);
+      font-size: 7.4px;
+      font-weight: 600;
+      line-height: 1.25;
+    }
+
+    .bcard-adults .qr-url-short {
+      color: #5C6F65;
+    }
+
+    .bcard-youth .qr-url-short {
+      color: #94A3B8;
+    }
+
+    /* ==========================================================================
+       LAYOUT 2A: DOUBLE-SIDED FRONT (Hero Hook, Credibility & Large Portrait)
+       ========================================================================== */
+    .bcard-front-inner {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      padding: 26px 26px 22px;
+      display: grid;
+      grid-template-columns: 1fr 224px;
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    .front-col-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .front-headline-adults {
+      font-family: var(--font-serif);
+      font-size: 29px;
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: #162A22;
+      margin-top: 4px;
+      margin-bottom: 10px;
+    }
+
+    .front-headline-adults .accent {
+      color: #C85A32;
+      font-style: italic;
+    }
+
+    .front-headline-youth {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -0.025em;
+      color: #FFFFFF;
+      margin-top: 4px;
+      margin-bottom: 10px;
+    }
+
+    .front-headline-youth .accent {
+      color: #A3E635;
+    }
+
+    .front-lead {
+      font-size: 12.2px;
+      font-weight: 500;
+      line-height: 1.42;
+      margin-bottom: 12px;
+    }
+
+    .bcard-adults .front-lead {
+      color: #3E5249;
+    }
+
+    .bcard-youth .front-lead {
+      color: #CBD5E1;
+    }
+
+    .front-offer-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 13px;
+      border-radius: 10px;
+      font-size: 11.5px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .bcard-adults .front-offer-pill {
+      background: #FFFFFF;
+      border: 2px solid #C85A32;
+      color: #162A22;
+    }
+
+    .bcard-youth .front-offer-pill {
+      background: #141B29;
+      border: 2px solid #A3E635;
+      color: #F8FAFC;
+    }
+
+    .front-footer-id {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding-top: 10px;
+    }
+
+    .bcard-adults .front-footer-id {
+      border-top: 1.5px solid #DFD5C5;
+    }
+
+    .bcard-youth .front-footer-id {
+      border-top: 1.5px solid #263147;
+    }
+
+    .front-id-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .front-name {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .front-role-tag {
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .bcard-adults .front-role-tag {
+      color: #C85A32;
+    }
+
+    .bcard-youth .front-role-tag {
+      color: #A3E635;
+    }
+
+    .front-cred-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .cred-mini-pill {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 3px 7px;
+      border-radius: 6px;
+    }
+
+    .bcard-adults .cred-mini-pill {
+      background: #EAE2D3;
+      color: #162A22;
+    }
+
+    .bcard-youth .cred-mini-pill {
+      background: #182235;
+      color: #CBD5E1;
+      border: 1px solid #2B3954;
+    }
+
+    .front-photo-frame {
+      width: 224px;
+      height: 100%;
+      border-radius: 14px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .bcard-adults .front-photo-frame {
+      border: 2.5px solid #C85A32;
+    }
+
+    .bcard-youth .front-photo-frame {
+      border: 2.5px solid #A3E635;
+    }
+
+    .front-photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .front-photo-badge {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      right: 10px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 10px;
+      font-weight: 800;
+      text-align: center;
+      backdrop-filter: blur(8px);
+    }
+
+    .bcard-adults .front-photo-badge {
+      background: rgba(22, 42, 34, 0.88);
+      color: #FAF7F2;
+    }
+
+    .bcard-youth .front-photo-badge {
+      background: rgba(9, 12, 18, 0.88);
+      color: #A3E635;
+      border: 1px solid rgba(163, 230, 53, 0.45);
+    }
+
+    /* ==========================================================================
+       LAYOUT 2B: DOUBLE-SIDED BACK (Use Cases, Contact Details & Giant QR Code)
+       ========================================================================== */
+    .bcard-back-inner {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      padding: 24px 26px 22px;
+      display: grid;
+      grid-template-columns: 1fr 220px;
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    .back-col-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .back-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 8px;
+    }
+
+    .bcard-adults .back-header {
+      border-bottom: 1.5px solid #DFD5C5;
+    }
+
+    .bcard-youth .back-header {
+      border-bottom: 1.5px solid #263147;
+    }
+
+    .back-title {
+      font-size: 14.5px;
+      font-weight: 800;
+    }
+
+    .back-subtitle {
+      font-size: 10.5px;
+      font-weight: 700;
+    }
+
+    .bcard-adults .back-subtitle {
+      color: #C85A32;
+    }
+
+    .bcard-youth .back-subtitle {
+      color: #A3E635;
+    }
+
+    .back-features-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin: 8px 0;
+    }
+
+    .back-feat-card {
+      padding: 8px 10px;
+      border-radius: 9px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .bcard-adults .back-feat-card {
+      background: #FFFFFF;
+      border: 1px solid #E2D9C8;
+    }
+
+    .bcard-youth .back-feat-card {
+      background: #141B29;
+      border: 1px solid #263147;
+    }
+
+    .back-feat-title {
+      font-size: 10.8px;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .bcard-adults .back-feat-title {
+      color: #162A22;
+    }
+
+    .bcard-youth .back-feat-title {
+      color: #F8FAFC;
+    }
+
+    .back-feat-desc {
+      font-size: 9.5px;
+      line-height: 1.3;
+    }
+
+    .bcard-adults .back-feat-desc {
+      color: #495E54;
+    }
+
+    .bcard-youth .back-feat-desc {
+      color: #94A3B8;
+    }
+
+    .back-discount-strip {
+      padding: 7px 11px;
+      border-radius: 8px;
+      font-size: 10.2px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .bcard-adults .back-discount-strip {
+      background: #F6E7E0;
+      color: #162A22;
+      border-left: 4px solid #C85A32;
+    }
+
+    .bcard-youth .back-discount-strip {
+      background: rgba(163, 230, 53, 0.12);
+      color: #F8FAFC;
+      border-left: 4px solid #A3E635;
+    }
+
+    .back-contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 12px;
+      padding-top: 8px;
+      font-size: 10.2px;
+      font-weight: 700;
+    }
+
+    .bcard-adults .back-contact-grid {
+      border-top: 1.5px solid #DFD5C5;
+    }
+
+    .bcard-youth .back-contact-grid {
+      border-top: 1.5px solid #263147;
+    }
+
+    .back-qr-panel {
+      border-radius: 14px;
+      padding: 14px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      text-align: center;
+    }
+
+    .bcard-adults .back-qr-panel {
+      background: #FFFFFF;
+      border: 2px solid #C85A32;
+    }
+
+    .bcard-youth .back-qr-panel {
+      background: #141B29;
+      border: 2px solid #A3E635;
+    }
+
+    .back-qr-svg-wrap {
+      width: 172px;
+      height: 172px;
+      background: #FFFFFF;
+      padding: 7px;
+      border-radius: 10px;
+      border: 1px solid #E2E8F0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-qr-svg-wrap svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* ==========================================================================
+       Print Stylesheet (Exact 3.5in x 2.0in Business Cards with Crop Borders)
+       ========================================================================== */
+    @media print {
+      @page {
+        size: letter portrait;
+        margin: 0.4in;
+      }
+
+      body {
+        background: #FFFFFF !important;
+        color: #000000 !important;
+        padding: 0 !important;
+      }
+
+      .studio-header,
+      .studio-section-head,
+      .card-meta-bar {
+        display: none !important;
+      }
+
+      .studio-container {
+        padding: 0 !important;
+        max-width: none !important;
+      }
+
+      .studio-section {
+        margin-bottom: 0 !important;
+      }
+
+      .cards-showcase-grid {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 0.18in !important;
+        justify-content: center !important;
+      }
+
+      .card-wrapper {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      .bcard {
+        zoom: 0.48;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Studio Controls -->
+  <header class="studio-header">
+    <div class="studio-header-inner">
+      <a href="../" class="studio-brand">
+        <img src="../assets/images/adults-04-outdoor.jpg" alt="Maxwell Montes Diaz" />
+        <div>
+          <span class="studio-brand-title">Maxwell Montes Diaz — Business Card Print Studio</span>
+          <span class="studio-brand-sub">Standard 3.5" × 2.0" • Single-Sided &amp; Double-Sided • English &amp; Spanish • High-Res 600 DPI PNGs</span>
+        </div>
+      </a>
+
+      <div class="studio-controls">
+        <div class="filter-group" role="group" aria-label="Layout Mode">
+          <button type="button" class="filter-btn active" data-filter-layout="all">All Layouts</button>
+          <button type="button" class="filter-btn" data-filter-layout="single">Single-Sided (Budget)</button>
+          <button type="button" class="filter-btn" data-filter-layout="double">Double-Sided (Front + Back)</button>
+        </div>
+
+        <div class="filter-group" role="group" aria-label="Language">
+          <button type="button" class="filter-btn active" data-filter-lang="all">EN + ES</button>
+          <button type="button" class="filter-btn" data-filter-lang="en">English Only</button>
+          <button type="button" class="filter-btn" data-filter-lang="es">Español Only</button>
+        </div>
+
+        <div class="filter-group" role="group" aria-label="Track">
+          <button type="button" class="filter-btn active" data-filter-track="all">All Tracks</button>
+          <button type="button" class="filter-btn" data-filter-track="adults">Adults (Tree Photo)</button>
+          <button type="button" class="filter-btn" data-filter-track="youth">Youth (Glasses Photo)</button>
+        </div>
+
+        <button type="button" class="btn-print" onclick="window.print()">
+          🖨️ Print Current View (3.5" × 2")
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="studio-container">
+
+    <!-- ======================================================================
+         OPTION 1: SINGLE-SIDED BUSINESS CARDS (4 CARDS: ADULTS & YOUTH, EN & ES)
+         ====================================================================== -->
+    <section class="studio-section" data-section-layout="single">
+      <div class="studio-section-head">
+        <div>
+          <h2>Option 1: Single-Sided Business Cards (All-in-One Face)</h2>
+          <p>Everything on one side (photo, hook, what you teach, Free 15-Min Intro Call + 20% Share Discount, contact info &amp; section QR code). Lowest printing cost.</p>
+        </div>
+      </div>
+
+      <div class="cards-showcase-grid">
+
+        <!-- 1. ADULTS — SINGLE-SIDED — ENGLISH -->
+        <div class="card-wrapper" data-card-layout="single" data-card-lang="en" data-card-track="adults">
+          <div class="card-meta-bar">
+            <span class="card-meta-title">
+              <span class="badge-tag badge-adults">Adults</span>
+              <span class="badge-tag badge-lang">English</span>
+              Single-Sided Card (Daily Life &amp; Busy Pros)
+            </span>
+            <a class="download-link" href="../assets/cards/adults-single-en.png" download="Maxwell-AI-Card-Adults-Single-EN.png">⬇️ Download 600 DPI PNG</a>
+          </div>
+
+          <article class="bcard bcard-adults" id="card-adults-single-en">
+            <div class="bcard-single-inner">
+              <div class="single-col-left">
+                <div class="single-photo-box single-photo-adults">
+                  <img src="../assets/images/adults-04-outdoor.jpg" alt="Maxwell Montes Diaz — Outdoor Portrait" />
+                </div>
+                <div class="single-id-block">
+                  <div class="single-name">Maxwell Montes Diaz</div>
+                  <div class="single-role">1-on-1 Practical AI Coach</div>
+                  <div class="single-creds">
+                    • Ex-Microsoft AR Engineer<br />
+                    • 500M+ Download Hit Dev
+                  </div>
+                </div>
+              </div>
+
+              <div class="single-col-center">
+                <div>
+                  <span class="eyebrow-pill">For Busy People, Work &amp; Daily Life</span>
+                  <h3 class="single-headline-adults">
+                    Spend Less Time at the Computer. <span class="accent">More Time Living.</span>
+                  </h3>
+                  <ul class="single-bullets">
+                    <li><span class="bullet-check">✓</span><span>Draft emails, letters &amp; summarize 50-page PDFs in seconds</span></li>
+                    <li><span class="bullet-check">✓</span><span>Build simple custom tools &amp; spreadsheets (zero formulas)</span></li>
+                    <li><span class="bullet-check">✓</span><span>Knock out daily admin by voice away from your desk</span></li>
+                  </ul>
+                </div>
+
+                <div>
+                  <div class="single-offer-box">
+                    🎁 Free 15-Min AI Intro Call • 20% Share Discount
+                    <span class="single-offer-sub">Plain, jargon-free language • 1-on-1 via Zoom or In-Person</span>
+                  </div>
+                  <div class="single-contact-bar">
+                    <div>💬 WhatsApp / SMS: +1 (619) 634-7772</div>
+                    <div class="contact-muted">✉️ maxwell_montes@yahoo.com</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="single-col-right">
+                <div class="qr-top-tag">Scan for Intro</div>
+                <div class="qr-svg-wrap" data-qr="adults-en"></div>
+                <div class="qr-caption">Daily Life &amp; Work Edition</div>
+                <div class="qr-url-short">mascaz.github.io/<br />AI-Lessons-Website/adults</div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- 2. ADULTS — SINGLE-SIDED — SPANISH -->
+        <div class="card-wrapper" data-card-layout="single" data-card-lang="es" data-card-track="adults">
+          <div class="card-meta-bar">
+            <span class="card-meta-title">
+              <span class="badge-tag badge-adults">Adultos</span>
+              <span class="badge-tag badge-lang">Español</span>
+              Tarjeta de 1 Cara (Vida Diaria y Trabajo)
+            </span>
+            <a class="download-link" href="../assets/cards/adults-single-es.png" download="Maxwell-AI-Card-Adults-Single-ES.png">⬇️ Descargar PNG (600 DPI)</a>
+          </div>
+
+          <article class="bcard bcard-adults" id="card-adults-single-es">
+            <div class="bcard-single-inner">
+              <div class="single-col-left">
+                <div class="single-photo-box single-photo-adults">
+                  <img src="../assets/images/adults-04-outdoor.jpg" alt="Maxwell Montes Diaz — Retrato Exterior" />
+                </div>
+                <div class="single-id-block">
+                  <div class="single-name">Maxwell Montes Diaz</div>
+                  <div class="single-role">Clases 1-a-1 de IA Práctica</div>
+                  <div class="single-creds">
+                    • Ex-Microsoft AR Engineer<br />
+                    • Ing. App +500M Descargas
+                  </div>
+                </div>
+              </div>
+
+              <div class="single-col-center">
+                <div>
+                  <span class="eyebrow-pill">Para Personas Ocupadas y Vida Diaria</span>
+                  <h3 class="single-headline-adults">
+                    Menos Tiempo en la Computadora. <span class="accent">Más Tiempo Viviendo.</span>
+                  </h3>
+                  <ul class="single-bullets">
+                    <li><span class="bullet-check">✓</span><span>Redacta correos y resume PDFs o contratos en segundos</span></li>
+                    <li><span class="bullet-check">✓</span><span>Crea programas simples y tablas de gastos sin fórmulas</span></li>
+                    <li><span class="bullet-check">✓</span><span>Resuelve tus pendientes por voz desde tu celular</span></li>
+                  </ul>
+                </div>
+
+                <div>
+                  <div class="single-offer-box">
+                    🎁 15 Min Intro Gratis • 20% de Descuento al Compartir
+                    <span class="single-offer-sub">Explicado paso a paso sin tecnicismos • Zoom o Presencial</span>
+                  </div>
+                  <div class="single-contact-bar">
+                    <div>💬 WhatsApp / SMS: +1 (619) 634-7772</div>
+                    <div class="contact-muted">✉️ maxwell_montes@yahoo.com</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="single-col-right">
+                <div class="qr-top-tag">Escanea Aquí</div>
+                <div class="qr-svg-wrap" data-qr="adults-es"></div>
+                <div class="qr-caption">Edición Vida Diaria y Trabajo</div>
+                <div class="qr-url-short">mascaz.github.io/<br />AI-Lessons-Website/adults</div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- 3. YOUTH — SINGLE-SIDED — ENGLISH -->
+        <div class="card-wrapper" data-card-layout="single" data-card-lang="en" data-card-track="youth">
+          <div class="card-meta-bar">
+            <span class="card-meta-title">
+              <span class="badge-tag badge-youth">Youth</span>
+              <span class="badge-tag badge-lang">English</span>
+              Single-Sided Card (Students, Creators &amp; Starters)
+            </span>
+            <a class="download-link" href="../assets/cards/youth-single-en.png" download="Maxwell-AI-Card-Youth-Single-EN.png">⬇️ Download 600 DPI PNG</a>
+          </div>
+
+          <article class="bcard bcard-youth" id="card-youth-single-en">
+            <div class="bcard-youth-glow"></div>
+            <div class="bcard-single-inner">
+              <div class="single-col-left">
+                <div class="single-photo-box single-photo-youth">
+                  <img src="../assets/images/youth-05-santorini.jpg" alt="Maxwell Montes Diaz — Santorini Portrait" />
+                </div>
+                <div class="single-id-block">
+                  <div class="single-name">Maxwell Montes Diaz</div>
+                  <div class="single-role">AI, Game &amp; App Mentor</div>
+                  <div class="single-creds">
+                    • 500M+ Download Hit Dev<br />
+                    • 5 Games Shipped (+5 WIP)
+                  </div>
+                </div>
+              </div>
+
+              <div class="single-col-center">
+                <div>
+                  <span class="eyebrow-pill">For Students, Creators &amp; Starters</span>
+                  <h3 class="single-headline-youth">
+                    Skip the Busywork. <span class="accent">Build Games, Apps &amp; Your Future.</span>
+                  </h3>
+                  <ul class="single-bullets">
+                    <li><span class="bullet-check">✓</span><span>Design, code &amp; play your own real video games</span></li>
+                    <li><span class="bullet-check">✓</span><span>Build custom 24/7 AI exam simulators &amp; study tools</span></li>
+                    <li><span class="bullet-check">✓</span><span>Ace deep research (real sources) &amp; launch live apps</span></li>
+                  </ul>
+                </div>
+
+                <div>
+                  <div class="single-offer-box">
+                    ⚡ Free 15-Min AI Intro Call • 20% Share Discount
+                    <span class="single-offer-sub">Learn 1-on-1 with a Pro Game &amp; AR Dev • Zoom or In-Person</span>
+                  </div>
+                  <div class="single-contact-bar">
+                    <div>💬 WhatsApp / SMS: +1 (619) 634-7772</div>
+                    <div class="contact-muted">✉️ maxwell_montes@yahoo.com</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="single-col-right">
+                <div class="qr-top-tag">Scan to Build</div>
+                <div class="qr-svg-wrap" data-qr="youth-en"></div>
+                <div class="qr-caption">Students &amp; Creators Edition</div>
+                <div class="qr-url-short">mascaz.github.io/<br />AI-Lessons-Website/youth</div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- 4. YOUTH — SINGLE-SIDED — SPANISH -->
+        <div class="card-wrapper" data-card-layout="single" data-card-lang="es" data-card-track="youth">
+          <div class="card-meta-bar">
+            <span class="card-meta-title">
+              <span class="badge-tag badge-youth">Jóvenes</span>
+              <span class="badge-tag badge-lang">Español</span>
+              Tarjeta de 1 Cara (Estudiantes y Creadores)
+            </span>
+            <a class="download-link" href="../assets/cards/youth-single-es.png" download="Maxwell-AI-Card-Youth-Single-ES.png">⬇️ Descargar PNG (600 DPI)</a>
+          </div>
+
+          <article class="bcard bcard-youth" id="card-youth-single-es">
+            <div class="bcard-youth-glow"></div>
+            <div class="bcard-single-inner">
+              <div class="single-col-left">
+                <div class="single-photo-box single-photo-youth">
+                  <img src="../assets/images/youth-05-santorini.jpg" alt="Maxwell Montes Diaz — Retrato Santorini" />
+                </div>
+                <div class="single-id-block">
+                  <div class="single-name">Maxwell Montes Diaz</div>
+                  <div class="single-role">Mentor de IA, Juegos y Apps</div>
+                  <div class="single-creds">
+                    • Ing. App +500M Descargas<br />
+                    • 5 Videojuegos Lanzados
+                  </div>
+                </div>
+              </div>
+
+              <div class="single-col-center">
+                <div>
+                  <span class="eyebrow-pill">Para Estudiantes, Creadores y Jóvenes</span>
+                  <h3 class="single-headline-youth">
+                    Deja el Trabajo Repetitivo. <span class="accent">Crea Juegos, Apps y Tu Futuro.</span>
+                  </h3>
+                  <ul class="single-bullets">
+                    <li><span class="bullet-check">✓</span><span>Diseña, programa y juega tus propios videojuegos</span></li>
+                    <li><span class="bullet-check">✓</span><span>Crea simuladores de examen y tutores con IA 24/7</span></li>
+                    <li><span class="bullet-check">✓</span><span>Investiga con fuentes 100% reales y lanza tus apps</span></li>
+                  </ul>
+                </div>
+
+                <div>
+                  <div class="single-offer-box">
+                    ⚡ 15 Min Intro Gratis • 20% de Descuento al Compartir
+                    <span class="single-offer-sub">Mentoría 1-a-1 con Desarrollador Pro • Zoom o Presencial</span>
+                  </div>
+                  <div class="single-contact-bar">
+                    <div>💬 WhatsApp / SMS: +1 (619) 634-7772</div>
+                    <div class="contact-muted">✉️ maxwell_montes@yahoo.com</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="single-col-right">
+                <div class="qr-top-tag">Escanea Aquí</div>
+                <div class="qr-svg-wrap" data-qr="youth-es"></div>
+                <div class="qr-caption">Edición Estudiantes y Creadores</div>
+                <div class="qr-url-short">mascaz.github.io/<br />AI-Lessons-Website/youth</div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         OPTION 2: DOUBLE-SIDED BUSINESS CARDS (FRONT + BACK FOR ALL 4 CARDS)
+         ====================================================================== -->
+    <section class="studio-section" data-section-layout="double">
+      <div class="studio-section-head">
+        <div>
+          <h2>Option 2: Double-Sided Business Cards (Front + Back Pairs)</h2>
+          <p>Front features a large editorial portrait, hook &amp; credibility; Back features 4 concrete session outcomes, contact details &amp; an oversized QR code.</p>
+        </div>
+      </div>
+
+      <div class="cards-showcase-grid">
+
+        <!-- 1A. ADULTS — DOUBLE-SIDED FRONT — ENGLISH -->
+        <div class="card-wrapper" data-card-layout="double" data-card-lang="en" data-card-track="adults">
+          <div class="card-meta-bar">
+            <span class="card-meta-title">
+              <span class="badge-tag badge-adults">Adults</span>
+              <span class="badge-tag badge-lang">English</span>
+              Double-Sided — FRONT
+            </span>
+            <a class="download-link" href="../assets/cards/adults-front-en.png" download="Maxwell-AI-Card-Adults-Front-EN.png">⬇️ Download 600 DPI PNG</a>
+          </div>
+
+          <article class="bcard bcard-adults" id="card-adults-front-en">
+            <div class="bcard-front-inner">
+              <div class="front-col-left">
+                <div>
+                  <span class="eyebrow-pill">For Busy People, Work &amp; Everyday Life</span>
+                  <h3 class="front-headline-adults">
+                    Spend Less Time at the Computer. <span class="accent">More Time Living.</span>
+                  </h3>
+                  <p class="front-lead">
+                    Hand off tedious writing, email &amp; PDF clutter, spreadsheets, and simple custom software to AI—taught 1-on-1 in plain, jargon-free language.
+                  </p>
+                  <div class="front-offer-pill">
+                    <span>☕</span>
+                    <span>Free 15-Min AI Intro Call • 20% Share Discount</span>
+                  </div>
+                </div>
+
+                <div class="front-footer-id">
+                  <div class="front-id-row">
+                    <span class="front-name">Maxwell Montes Diaz</span>
+                    <span class="front-role-tag">1-on-1 Practical AI Coach</span>
+                  </div>
+                  <div class="front-cred-pills">
+                    <span class="cred-mini-pill">500M+ Download Mobile Hit Dev</span>
+                    <span class="cred-mini-pill">Ex-Microsoft AR</span>
+                    <span class="cred-mini-pill">Zoom or In-Person</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="front-photo-frame single-photo-adults">
+                <img src="../assets/images/adults-04-outdoor.jpg" alt="Maxwell Montes Diaz — Outdoor Portrait" />
+                <div class="front-photo-badge">Plain Language • Zero Tech Ego</div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- 1B. ADULTS — DOUBLE-SIDED BACK — ENGLISH -->
+        <div class="card-wrapper" data-card-layout="double" data-card-lang="en" data-card-track="adults">
+          <div class="card-meta-bar">
+            <span class="card-meta-title">
+              <span class="badge-tag badge-adults">Adults</span>
+              <span class="badge-tag badge-lang">English</span>
+              Double-Sided — BACK
+            </span>
+            <a class="download-link" href="../assets/cards/adults-back-en.png" download="Maxwell-AI-Card-Adults-Back-EN.png">⬇️ Download 600 DPI PNG</a>
+          </div>
+
+          <article class="bcard bcard-adults" id="card-adults-back-en">
+            <div class="bcard-back-inner">
+              <div class="back-col-left">
+                <div>
+                  <div class="back-header">
+                    <span class="back-title">What We'll Automate in 1 Session</span>
+                    <span class="back-subtitle">Daily Life &amp; Busy Pros</span>
+                  </div>
+
+                  <div class="back-features-grid">
+                    <div class="back-feat-card">
+                      <div class="back-feat-title">✍️ Effortless Writing</div>
+                      <div class="back-feat-desc">Draft warm emails, tough replies &amp; letters in 30 seconds.</div>
+                    </div>
+                    <div class="back-feat-card">
+                      <div class="back-feat-title">📄 Paperwork &amp; PDFs</div>
+                      <div class="back-feat-desc">Instant plain-English summaries of 50-page contracts &amp; files.</div>
+                    </div>
+                    <div class="back-feat-card">
+                      <div class="back-feat-title">📊 Custom Tools</div>
+                      <div class="back-feat-desc">Build trackers, budgets &amp; clean sheets without formulas.</div>
+                    </div>
+                    <div class="back-feat-card">
+                      <div class="back-feat-title">🎙️ Voice Workflows</div>
+                      <div class="back-feat-desc">Knock out emails &amp; plans hands-free on a 15-min walk.</div>
+                    </div>
+                  </div>
+
+                  <div class="back-discount-strip">
+                    🎁 <strong>20% OFF</strong> when you share the site &amp; what you learned on social media!
+                  </div>
+                </div>
+
+                <div class="back-contact-grid">
+                  <div>💬 WhatsApp / SMS: +1 (619) 634-7772</div>
+                  <div>✉️ maxwell_montes@yahoo.com</div>
+                </div>
+              </div>
+
+              <div class="back-qr-panel">
+                <div class="qr-top-tag">Scan with Phone Camera</div>
+                <div class="back-qr-svg-wrap" data-qr="adults-en"></div>
+                <div class="qr-caption">Book Your Free 15-Min AI Intro Call</div>
+                <div class="qr-url-short">mascaz.github.io/<br />AI-Lessons-Website/adults</div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- 2A. ADULTS — DOUBLE-SIDED FRONT — SPANISH -->
+        <div class="card-wrapper" data-card-layout="double" data-card-lang="es" data-card-track="adults">
+          <div class="card-meta-bar">
+            <span class="card-meta-title">
+              <span class="badge-tag badge-adults">Adultos</span>
+              <span class="badge-tag badge-lang">Español</span>
+              Doble Cara — FRENTE
+            </span>
+            <a class="download-link" href="../assets/cards/adults-front-es.png" download="Maxwell-AI-Card-Adults-Front-ES.png">⬇️ Descargar PNG (600 DPI)</a>
+          </div>
+
+          <article class="bcard bcard-adults" id="card-adults-front-es">
+            <div class="bcard-front-inner">
+              <div class="front-col-left">
+                <div>
+                  <span class="eyebrow-pill">Para Personas Ocupadas, Trabajo y Vida Diaria</span>
+                  <h3 class="front-headline-adults">
+                    Pasa Menos Tiempo en la Computadora. <span class="accent">Y Más Viviendo.</span>
+                  </h3>
+                  <p class="front-lead">
+                    Aprende paso a paso cómo delegarle a la IA tu redacción, el orden de tus correos y PDFs, tablas de gastos y programas simples—sin tecnicismos.
+                  </p>
+                  <div class="front-offer-pill">
+                    <span>☕</span>
+                    <span>Llamada Intro 15 Min Gratis • 20% Descuento al Compartir</span>
+                  </div>
+                </div>
+
+                <div class="front-footer-id">
+                  <div class="front-id-row">
+                    <span class="front-name">Maxwell Montes Diaz</span>
+                    <span class="front-role-tag">Clases 1-a-1 de IA Práctica</span>
+                  </div>
+                  <div class="front-cred-pills">
+                    <span class="cred-mini-pill">Ing. de App (+500M Descargas)</span>
+                    <span class="cred-mini-pill">Ex-Microsoft AR</span>
+                    <span class="cred-mini-pill">Zoom o Presencial</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="front-photo-frame single-photo-adults">
+                <img src="../assets/images/adults-04-outdoor.jpg" alt="Maxwell Montes Diaz — Retrato Exterior" />
+                <div class="front-photo-badge">En Tu Idioma • Cero Tecnicismos</div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- 2B. ADULTS — DOUBLE-SIDED BACK — SPANISH -->
+        <div class="card-wrapper" data-card-layout="double" data-card-lang="es" data-card-track="adults">
+          <div class="card-meta-bar">
+            <span class="card-meta-title">
+              <span class="badge-tag badge-adults">Adultos</span>
+              <span class="badge-tag badge-lang">Español</span>
+              Doble Cara — REVERSO
+            </span>
+            <a class="download-link" href="../assets/cards/adults-back-es.png" download="Maxwell-AI-Card-Adults-Back-ES.png">⬇️ Descargar PNG (600 DPI)</a>
+          </div>
+
+          <article class="bcard bcard-adults" id="card-adults-back-es">
+            <div class="bcard-back-inner">
+              <div class="back-col-left">
+                <div>
+                  <div class="back-header">
+                    <span class="back-title">Lo que Automatizaremos en 1 Sesión</span>
+                    <span class="back-subtitle">Vida Diaria y Trabajo</span>
+                  </div>
+
+                  <div class="back-features-grid">
+                    <div class="back-feat-card">
+                      <div class="back-feat-title">✍️ Redacción Rápida</div>
+                      <div class="back-feat-desc">Correos importantes, cartas y respuestas en 30 segundos.</div>
+                    </div>
+                    <div class="back-feat-card">
+                      <div class="back-feat-title">📄 PDFs y Trámites</div>
+                      <div class="back-feat-desc">Resúmenes claros de contratos, pólizas y documentos largos.</div>
+                    </div>
+                    <div class="back-feat-card">
+                      <div class="back-feat-title">📊 Tablas Sin Fórmulas</div>
+                      <div class="back-feat-desc">Control de gastos, agendas y programas simples a tu medida.</div>
+                    </div>
+                    <div class="back-feat-card">
+                      <div class="back-feat-title">🎙️ Todo por Voz</div>
+                      <div class="back-feat-desc">Avanza tus pendientes hablando desde tu celular al caminar.</div>
+                    </div>
+                  </div>
+
+                  <div class="back-discount-strip">
+                    🎁 <strong>20% DE DESCUENTO</strong> al compartir la página y lo que aprendiste en redes.
+                  </div>
+                </div>
+
+                <div class="back-contact-grid">
+                  <div>💬 WhatsApp / SMS: +1 (619) 634-7772</div>
+                  <div>✉️ maxwell_montes@yahoo.com</div>
+                </div>
+              </div>
+
+              <div class="back-qr-panel">
+                <div class="qr-top-tag">Escanea con tu Cámara</div>
+                <div class="back-qr-svg-wrap" data-qr="adults-es"></div>
+                <div class="qr-caption">Agenda Tus 15 Minutos Gratis</div>
+                <div class="qr-url-short">mascaz.github.io/<br />AI-Lessons-Website/adults</div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- 3A. YOUTH — DOUBLE-SIDED FRONT — ENGLISH -->
+        <div class="card-wrapper" data-card-layout="double" data-card-lang="en" data-card-track="youth">
+          <div class="card-meta-bar">
+            <span class="card-meta-title">
+              <span class="badge-tag badge-youth">Youth</span>
+              <span class="badge-tag badge-lang">English</span>
+              Double-Sided — FRONT
+            </span>
+            <a class="download-link" href="../assets/cards/youth-front-en.png" download="Maxwell-AI-Card-Youth-Front-EN.png">⬇️ Download 600 DPI PNG</a>
+          </div>
+
+          <article class="bcard bcard-youth" id="card-youth-front-en">
+            <div class="bcard-youth-glow"></div>
+            <div class="bcard-front-inner">
+              <div class="front-col-left">
+                <div>
+                  <span class="eyebrow-pill">For Students, Creators &amp; Career Starters</span>
+                  <h3 class="front-headline-youth">
+                    Skip the Busywork. <span class="accent">Build Games, Apps &amp; Your Future.</span>
+                  </h3>
+                  <p class="front-lead">
+                    Learn 3x faster, build custom 24/7 study tools, crush deep research, and code your own real video games &amp; apps with a pro Game &amp; AR Engineer.
+                  </p>
+                  <div class="front-offer-pill">
+                    <span>⚡</span>
+                    <span>Free 15-Min AI Intro Call • 20% Share Discount</span>
+                  </div>
+                </div>
+
+                <div class="front-footer-id">
+                  <div class="front-id-row">
+                    <span class="front-name">Maxwell Montes Diaz</span>
+                    <span class="front-role-tag">Game, App &amp; AI Dev Mentor</span>
+                  </div>
+                  <div class="front-cred-pills">
+                    <span class="cred-mini-pill">500M+ Download Hit Dev</span>
+                    <span class="cred-mini-pill">5 Games Shipped (+5 WIP)</span>
+                    <span class="cred-mini-pill">Ex-Microsoft AR</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="front-photo-frame single-photo-youth">
+                <img src="../assets/images/youth-05-santorini.jpg" alt="Maxwell Montes Diaz — Santorini Portrait" />
+                <div class="front-photo-badge">1-on-1 Pro Game &amp; AI Mentorship</div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- 3B. YOUTH — DOUBLE-SIDED BACK — ENGLISH -->
+        <div class="card-wrapper" data-card-layout="double" data-card-lang="en" data-card-track="youth">
+          <div class="card-meta-bar">
+            <span class="card-meta-title">
+              <span class="badge-tag badge-youth">Youth</span>
+              <span class="badge-tag badge-lang">English</span>
+              Double-Sided — BACK
+            </span>
+            <a class="download-link" href="../assets/cards/youth-back-en.png" download="Maxwell-AI-Card-Youth-Back-EN.png">⬇️ Download 600 DPI PNG</a>
+          </div>
+
+          <article class="bcard bcard-youth" id="card-youth-back-en">
+            <div class="bcard-youth-glow"></div>
+            <div class="bcard-back-inner">
+              <div class="back-col-left">
+                <div>
+                  <div class="back-header">
+                    <span class="back-title">What We Can Build Together 1-on-1</span>
+                    <span class="back-subtitle">Students &amp; Creators</span>
+                  </div>
+
+                  <div class="back-features-grid">
+                    <div class="back-feat-card">
+                      <div class="back-feat-title">🎮 Create Video Games</div>
+                      <div class="back-feat-desc">Design mechanics, code scripts &amp; play your own game.</div>
+                    </div>
+                    <div class="back-feat-card">
+                      <div class="back-feat-title">🧠 24/7 Exam Simulators</div>
+                      <div class="back-feat-desc">Turn class slides into interactive quizzes &amp; AI voice tutors.</div>
+                    </div>
+                    <div class="back-feat-card">
+                      <div class="back-feat-title">🔍 Verified Research</div>
+                      <div class="back-feat-desc">Ace homework &amp; papers fast with 100% real citations.</div>
+                    </div>
+                    <div class="back-feat-card">
+                      <div class="back-feat-title">⚡ Vibe-Code Real Apps</div>
+                      <div class="back-feat-desc">Build &amp; deploy live web/mobile apps &amp; standout decks.</div>
+                    </div>
+                  </div>
+
+                  <div class="back-discount-strip">
+                    🎁 <strong>20% OFF</strong> when you share the site &amp; show off what you built!
+                  </div>
+                </div>
+
+                <div class="back-contact-grid">
+                  <div>💬 WhatsApp / SMS: +1 (619) 634-7772</div>
+                  <div>✉️ maxwell_montes@yahoo.com</div>
+                </div>
+              </div>
+
+              <div class="back-qr-panel">
+                <div class="qr-top-tag">Scan with Phone Camera</div>
+                <div class="back-qr-svg-wrap" data-qr="youth-en"></div>
+                <div class="qr-caption">Book Your Free 15-Min Intro Call</div>
+                <div class="qr-url-short">mascaz.github.io/<br />AI-Lessons-Website/youth</div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- 4A. YOUTH — DOUBLE-SIDED FRONT — SPANISH -->
+        <div class="card-wrapper" data-card-layout="double" data-card-lang="es" data-card-track="youth">
+          <div class="card-meta-bar">
+            <span class="card-meta-title">
+              <span class="badge-tag badge-youth">Jóvenes</span>
+              <span class="badge-tag badge-lang">Español</span>
+              Doble Cara — FRENTE
+            </span>
+            <a class="download-link" href="../assets/cards/youth-front-es.png" download="Maxwell-AI-Card-Youth-Front-ES.png">⬇️ Descargar PNG (600 DPI)</a>
+          </div>
+
+          <article class="bcard bcard-youth" id="card-youth-front-es">
+            <div class="bcard-youth-glow"></div>
+            <div class="bcard-front-inner">
+              <div class="front-col-left">
+                <div>
+                  <span class="eyebrow-pill">Para Estudiantes, Creadores y Nuevos Profesionales</span>
+                  <h3 class="front-headline-youth">
+                    Deja el Trabajo Repetitivo. <span class="accent">Crea Juegos, Apps y Tu Futuro.</span>
+                  </h3>
+                  <p class="front-lead">
+                    Aprende 3 veces más rápido, domina tareas e investigaciones, y crea tus propios videojuegos y apps reales con un desarrollador profesional.
+                  </p>
+                  <div class="front-offer-pill">
+                    <span>⚡</span>
+                    <span>Llamada Intro 15 Min Gratis • 20% Descuento al Compartir</span>
+                  </div>
+                </div>
+
+                <div class="front-footer-id">
+                  <div class="front-id-row">
+                    <span class="front-name">Maxwell Montes Diaz</span>
+                    <span class="front-role-tag">Mentor de Juegos, Apps e IA</span>
+                  </div>
+                  <div class="front-cred-pills">
+                    <span class="cred-mini-pill">Ing. de App (+500M Descargas)</span>
+                    <span class="cred-mini-pill">5 Juegos Lanzados</span>
+                    <span class="cred-mini-pill">Ex-Microsoft AR</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="front-photo-frame single-photo-youth">
+                <img src="../assets/images/youth-05-santorini.jpg" alt="Maxwell Montes Diaz — Retrato Santorini" />
+                <div class="front-photo-badge">Mentoría 1-a-1 en Videojuegos e IA</div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- 4B. YOUTH — DOUBLE-SIDED BACK — SPANISH -->
+        <div class="card-wrapper" data-card-layout="double" data-card-lang="es" data-card-track="youth">
+          <div class="card-meta-bar">
+            <span class="card-meta-title">
+              <span class="badge-tag badge-youth">Jóvenes</span>
+              <span class="badge-tag badge-lang">Español</span>
+              Doble Cara — REVERSO
+            </span>
+            <a class="download-link" href="../assets/cards/youth-back-es.png" download="Maxwell-AI-Card-Youth-Back-ES.png">⬇️ Descargar PNG (600 DPI)</a>
+          </div>
+
+          <article class="bcard bcard-youth" id="card-youth-back-es">
+            <div class="bcard-youth-glow"></div>
+            <div class="bcard-back-inner">
+              <div class="back-col-left">
+                <div>
+                  <div class="back-header">
+                    <span class="back-title">Lo que Construiremos Juntos 1-a-1</span>
+                    <span class="back-subtitle">Estudiantes y Creadores</span>
+                  </div>
+
+                  <div class="back-features-grid">
+                    <div class="back-feat-card">
+                      <div class="back-feat-title">🎮 Tus Videojuegos</div>
+                      <div class="back-feat-desc">Diseña mecánicas, programa y juega tu propio videojuego.</div>
+                    </div>
+                    <div class="back-feat-card">
+                      <div class="back-feat-title">🧠 Tutor y Exámenes 24/7</div>
+                      <div class="back-feat-desc">Convierte tus apuntes en simuladores de examen interactivos.</div>
+                    </div>
+                    <div class="back-feat-card">
+                      <div class="back-feat-title">🔍 Investigación Real</div>
+                      <div class="back-feat-desc">Domina tareas y ensayos con fuentes académicas 100% reales.</div>
+                    </div>
+                    <div class="back-feat-card">
+                      <div class="back-feat-title">⚡ Crea Apps Reales</div>
+                      <div class="back-feat-desc">Construye y publica apps web/móviles y presentaciones pro.</div>
+                    </div>
+                  </div>
+
+                  <div class="back-discount-strip">
+                    🎁 <strong>20% DE DESCUENTO</strong> al compartir el sitio y mostrar lo que creaste.
+                  </div>
+                </div>
+
+                <div class="back-contact-grid">
+                  <div>💬 WhatsApp / SMS: +1 (619) 634-7772</div>
+                  <div>✉️ maxwell_montes@yahoo.com</div>
+                </div>
+              </div>
+
+              <div class="back-qr-panel">
+                <div class="qr-top-tag">Escanea con tu Cámara</div>
+                <div class="back-qr-svg-wrap" data-qr="youth-es"></div>
+                <div class="qr-caption">Agenda Tus 15 Minutos Gratis</div>
+                <div class="qr-url-short">mascaz.github.io/<br />AI-Lessons-Website/youth</div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // Embedded Vector SVG QR Codes for 100% offline reliability & infinite print sharpness
+    const QR_SVGS = {
+      "adults-en": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41 41" shape-rendering="crispEdges"><path fill="#ffffff" d="M0 0h41v41H0z"/><path stroke="#162A22" d="M4 4.5h7m1 0h1m1 0h2m1 0h2m2 0h2m1 0h2m4 0h7M4 5.5h1m5 0h1m4 0h1m12 0h1m1 0h1m5 0h1M4 6.5h1m1 0h3m1 0h1m1 0h3m2 0h1m1 0h1m1 0h1m2 0h2m1 0h2m1 0h1m1 0h3m1 0h1M4 7.5h1m1 0h3m1 0h1m8 0h1m5 0h2m3 0h1m1 0h3m1 0h1M4 8.5h1m1 0h3m1 0h1m3 0h4m1 0h1m3 0h1m2 0h1m3 0h1m1 0h3m1 0h1M4 9.5h1m5 0h1m1 0h1m1 0h1m1 0h1m1 0h2m1 0h3m1 0h1m2 0h1m1 0h1m5 0h1M4 10.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M15 11.5h1m2 0h3m2 0h2m2 0h2M4 12.5h1m1 0h1m3 0h2m1 0h2m5 0h1m3 0h1m1 0h1m1 0h1m2 0h1m2 0h1m1 0h1M8 13.5h2m1 0h8m1 0h2m1 0h2m2 0h2m1 0h1m2 0h1m2 0h1M4 14.5h2m2 0h4m1 0h3m3 0h1m3 0h1m1 0h1m1 0h1m1 0h2m2 0h2m1 0h1M6 15.5h1m4 0h2m1 0h4m2 0h2m2 0h1m2 0h1m2 0h4m1 0h2M4 16.5h1m2 0h6m1 0h1m1 0h2m3 0h1m1 0h2m2 0h2m1 0h2M5 17.5h1m1 0h1m3 0h3m1 0h1m5 0h1m3 0h3m1 0h3m1 0h4M5 18.5h2m3 0h1m1 0h3m1 0h4m1 0h3m3 0h1m4 0h2m2 0h1M4 19.5h1m2 0h2m2 0h1m1 0h2m1 0h2m4 0h3m3 0h4m1 0h1M4 20.5h1m4 0h2m1 0h1m1 0h3m2 0h2m6 0h2m1 0h2m3 0h1M4 21.5h1m2 0h2m2 0h1m1 0h2m1 0h4m3 0h2m2 0h2m1 0h1m2 0h1m2 0h1M4 22.5h1m1 0h1m2 0h2m1 0h2m1 0h1m2 0h2m1 0h5m1 0h1m1 0h3m1 0h2m1 0h1M6 23.5h2m6 0h1m1 0h1m5 0h1m3 0h2m1 0h2m1 0h2m1 0h2M5 24.5h4m1 0h3m2 0h3m2 0h3m1 0h1m2 0h2m1 0h2m3 0h2M5 25.5h3m1 0h1m1 0h3m1 0h1m1 0h2m1 0h4m3 0h2m1 0h2m4 0h1M4 26.5h3m1 0h4m3 0h2m1 0h1m1 0h1m2 0h1m3 0h2m7 0h1M6 27.5h1m1 0h2m2 0h3m2 0h1m1 0h2m1 0h2m2 0h1m1 0h2m1 0h1m3 0h2M4 28.5h3m3 0h1m3 0h3m3 0h1m1 0h3m2 0h7m1 0h2M12 29.5h1m3 0h3m1 0h2m1 0h3m1 0h2m3 0h1m2 0h2M4 30.5h7m1 0h3m1 0h4m3 0h3m2 0h1m1 0h1m1 0h3m1 0h1M4 31.5h1m5 0h1m3 0h1m1 0h3m2 0h1m2 0h1m2 0h2m3 0h2m1 0h2M4 32.5h1m1 0h3m1 0h1m8 0h1m1 0h1m1 0h1m3 0h6m2 0h2M4 33.5h1m1 0h3m1 0h1m3 0h5m2 0h1m1 0h5m1 0h1m1 0h6M4 34.5h1m1 0h3m1 0h1m1 0h3m1 0h1m2 0h1m3 0h7m1 0h2m1 0h3M4 35.5h1m5 0h1m3 0h1m2 0h1m4 0h1m1 0h1m1 0h3m1 0h4M4 36.5h7m1 0h2m2 0h2m1 0h3m1 0h1m4 0h1m1 0h3m1 0h1m1 0h1"/></svg>`,
+      "adults-es": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41 41" shape-rendering="crispEdges"><path fill="#ffffff" d="M0 0h41v41H0z"/><path stroke="#162A22" d="M4 4.5h7m1 0h4m1 0h2m3 0h1m1 0h2m4 0h7M4 5.5h1m5 0h1m5 0h1m5 0h1m5 0h1m1 0h1m5 0h1M4 6.5h1m1 0h3m1 0h1m1 0h1m1 0h1m2 0h1m1 0h1m1 0h2m1 0h2m1 0h2m1 0h1m1 0h3m1 0h1M4 7.5h1m1 0h3m1 0h1m2 0h2m4 0h1m1 0h2m2 0h2m3 0h1m1 0h3m1 0h1M4 8.5h1m1 0h3m1 0h1m3 0h1m1 0h2m1 0h1m2 0h1m3 0h1m3 0h1m1 0h3m1 0h1M4 9.5h1m5 0h1m1 0h2m4 0h2m1 0h2m1 0h2m2 0h1m1 0h1m5 0h1M4 10.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M18 11.5h3m2 0h2m2 0h2M4 12.5h1m1 0h1m3 0h2m2 0h2m4 0h1m3 0h1m1 0h1m1 0h1m2 0h1m2 0h1m1 0h1M6 13.5h1m1 0h2m3 0h1m2 0h3m1 0h1m2 0h2m2 0h2m1 0h1m2 0h1m2 0h1M4 14.5h3m2 0h3m1 0h2m4 0h1m1 0h3m1 0h1m1 0h1m1 0h2m2 0h2m1 0h1M4 15.5h1m2 0h2m3 0h1m1 0h1m2 0h1m2 0h1m1 0h1m1 0h1m2 0h1m2 0h4m1 0h2M5 16.5h1m3 0h2m1 0h1m4 0h1m2 0h1m2 0h1m3 0h2m1 0h2M4 17.5h1m2 0h3m2 0h3m6 0h1m1 0h1m1 0h3m1 0h3m1 0h4M4 18.5h1m1 0h2m2 0h1m1 0h2m5 0h1m1 0h3m3 0h1m4 0h2m2 0h1M7 19.5h3m5 0h2m1 0h2m2 0h3m3 0h4m1 0h1M4 20.5h4m1 0h2m2 0h1m1 0h1m1 0h1m1 0h2m6 0h2m1 0h2m3 0h1M5 21.5h5m2 0h1m1 0h1m2 0h1m1 0h1m1 0h1m1 0h2m2 0h2m1 0h1m2 0h1m2 0h1M5 22.5h1m1 0h1m1 0h2m7 0h2m3 0h3m1 0h1m1 0h3m1 0h2m1 0h1M7 23.5h1m1 0h1m1 0h3m12 0h2m1 0h2m1 0h2m1 0h2M4 24.5h2m2 0h1m1 0h1m2 0h1m2 0h1m1 0h1m5 0h1m2 0h2m1 0h2m3 0h2M5 25.5h3m1 0h1m1 0h1m1 0h5m1 0h3m1 0h1m3 0h2m1 0h2m4 0h1M4 26.5h3m1 0h3m2 0h1m2 0h1m2 0h1m3 0h1m3 0h2m7 0h1M6 27.5h1m1 0h1m3 0h3m1 0h1m3 0h1m1 0h2m2 0h1m1 0h2m1 0h1m3 0h2M4 28.5h2m2 0h9m2 0h2m1 0h3m2 0h7m1 0h1M12 29.5h2m3 0h2m1 0h1m2 0h3m1 0h2m3 0h1m2 0h2M4 30.5h7m1 0h2m1 0h1m3 0h1m3 0h3m2 0h1m1 0h1m1 0h3m1 0h1M4 31.5h1m5 0h1m2 0h1m2 0h1m1 0h1m3 0h1m1 0h1m2 0h2m3 0h2m1 0h2M4 32.5h1m1 0h3m1 0h1m2 0h1m1 0h1m1 0h1m1 0h2m1 0h2m3 0h6m2 0h2M4 33.5h1m1 0h3m1 0h1m2 0h1m2 0h1m2 0h9m1 0h1m1 0h6M4 34.5h1m1 0h3m1 0h1m1 0h3m1 0h4m3 0h7m1 0h2m1 0h3M4 35.5h1m5 0h1m2 0h1m1 0h1m2 0h1m1 0h1m1 0h1m1 0h1m1 0h3m1 0h4M4 36.5h7m1 0h1m3 0h1m1 0h1m1 0h2m1 0h1m4 0h1m1 0h3m1 0h1m1 0h1"/></svg>`,
+      "youth-en": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41 41" shape-rendering="crispEdges"><path fill="#ffffff" d="M0 0h41v41H0z"/><path stroke="#090C12" d="M4 4.5h7m1 0h1m5 0h1m3 0h1m1 0h1m5 0h7M4 5.5h1m5 0h1m4 0h1m1 0h2m2 0h2m5 0h1m1 0h1m5 0h1M4 6.5h1m1 0h3m1 0h1m1 0h2m4 0h2m2 0h1m1 0h2m1 0h2m1 0h1m1 0h3m1 0h1M4 7.5h1m1 0h3m1 0h1m2 0h1m4 0h3m1 0h1m1 0h3m1 0h1m1 0h1m1 0h3m1 0h1M4 8.5h1m1 0h3m1 0h1m2 0h1m2 0h5m1 0h3m1 0h1m3 0h1m1 0h3m1 0h1M4 9.5h1m5 0h1m1 0h2m4 0h1m1 0h3m1 0h2m2 0h1m1 0h1m5 0h1M4 10.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M15 11.5h1m2 0h1m8 0h2M4 12.5h1m1 0h1m3 0h2m3 0h1m3 0h2m2 0h2m1 0h1m1 0h1m2 0h1m2 0h1m1 0h1M4 13.5h1m1 0h1m4 0h1m2 0h1m1 0h1m1 0h1m1 0h1m2 0h3m1 0h2m1 0h1m2 0h1m2 0h1M4 14.5h3m2 0h2m1 0h1m4 0h3m1 0h3m3 0h1m1 0h2m2 0h2m1 0h1M6 15.5h4m1 0h1m1 0h3m2 0h1m1 0h1m1 0h1m1 0h1m1 0h2m2 0h4m1 0h2M10 16.5h1m1 0h1m3 0h3m1 0h5m2 0h2m1 0h2M6 17.5h1m1 0h1m2 0h1m3 0h4m1 0h3m1 0h4m1 0h3m1 0h4M4 18.5h2m2 0h1m1 0h1m2 0h1m6 0h3m1 0h1m2 0h1m4 0h2m2 0h1M5 19.5h1m1 0h1m1 0h1m3 0h2m2 0h1m1 0h2m1 0h3m3 0h4m1 0h1M5 20.5h1m1 0h2m1 0h1m1 0h3m1 0h1m1 0h1m1 0h1m6 0h2m1 0h2m3 0h1M9 21.5h1m4 0h3m2 0h1m1 0h1m1 0h2m2 0h2m1 0h1m2 0h1m2 0h1M4 22.5h2m1 0h1m1 0h3m1 0h1m2 0h1m2 0h1m3 0h3m1 0h1m1 0h3m1 0h2m1 0h1M8 23.5h1m2 0h8m2 0h1m4 0h2m1 0h2m1 0h2m1 0h2M7 24.5h5m3 0h3m3 0h1m2 0h1m2 0h2m1 0h2m3 0h2M5 25.5h1m1 0h2m4 0h1m2 0h3m2 0h1m4 0h3m1 0h2m4 0h1M4 26.5h3m1 0h1m1 0h1m1 0h1m1 0h2m2 0h2m3 0h1m3 0h2m7 0h1M6 27.5h1m2 0h1m1 0h5m6 0h3m1 0h1m1 0h2m1 0h1m4 0h1M4 28.5h2m1 0h2m1 0h1m1 0h4m3 0h2m1 0h1m1 0h1m2 0h7m1 0h2M12 29.5h3m2 0h1m2 0h1m2 0h2m2 0h2m3 0h1m2 0h2M4 30.5h7m1 0h1m1 0h2m3 0h1m1 0h5m2 0h1m1 0h1m1 0h3m1 0h1M4 31.5h1m5 0h1m5 0h1m5 0h1m1 0h1m2 0h2m3 0h2m1 0h2M4 32.5h1m1 0h3m1 0h1m4 0h1m1 0h1m1 0h6m2 0h6m2 0h2M4 33.5h1m1 0h3m1 0h1m2 0h1m1 0h2m3 0h4m1 0h1m1 0h1m1 0h1m1 0h6M4 34.5h1m1 0h3m1 0h1m1 0h1m5 0h1m1 0h1m2 0h7m1 0h2m1 0h3M4 35.5h1m5 0h1m2 0h1m1 0h1m1 0h4m1 0h1m3 0h3m1 0h4M4 36.5h7m1 0h2m1 0h2m1 0h1m1 0h2m6 0h1m1 0h3m1 0h1m1 0h1"/></svg>`,
+      "youth-es": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41 41" shape-rendering="crispEdges"><path fill="#ffffff" d="M0 0h41v41H0z"/><path stroke="#090C12" d="M4 4.5h7m1 0h1m5 0h1m2 0h2m1 0h1m5 0h7M4 5.5h1m5 0h1m2 0h2m1 0h3m9 0h1m1 0h1m5 0h1M4 6.5h1m1 0h3m1 0h1m1 0h1m5 0h2m1 0h1m2 0h2m1 0h2m1 0h1m1 0h3m1 0h1M4 7.5h1m1 0h3m1 0h1m7 0h5m2 0h2m1 0h1m1 0h1m1 0h3m1 0h1M4 8.5h1m1 0h3m1 0h1m2 0h1m3 0h4m1 0h1m3 0h1m3 0h1m1 0h3m1 0h1M4 9.5h1m5 0h1m1 0h1m1 0h1m3 0h1m1 0h3m2 0h1m2 0h1m1 0h1m5 0h1M4 10.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M16 11.5h1m1 0h1m5 0h1m2 0h2M4 12.5h1m1 0h1m3 0h2m1 0h1m5 0h2m3 0h1m1 0h1m1 0h1m2 0h1m2 0h1m1 0h1M12 13.5h2m1 0h2m1 0h1m1 0h2m1 0h3m1 0h2m1 0h1m2 0h1m2 0h1M4 14.5h1m3 0h1m1 0h1m1 0h2m1 0h1m1 0h3m3 0h1m3 0h1m1 0h2m2 0h2m1 0h1M5 15.5h1m2 0h1m4 0h2m1 0h1m1 0h1m1 0h1m3 0h1m1 0h2m2 0h4m1 0h2M4 16.5h2m1 0h1m1 0h4m1 0h1m1 0h3m1 0h1m2 0h2m2 0h2m1 0h2M4 17.5h2m5 0h1m5 0h2m1 0h2m1 0h5m1 0h3m1 0h4M6 18.5h3m1 0h2m1 0h6m1 0h4m3 0h1m4 0h2m2 0h1M4 19.5h2m9 0h2m1 0h3m1 0h3m3 0h4m1 0h1M6 20.5h1m1 0h1m1 0h2m5 0h2m1 0h1m6 0h2m1 0h2m3 0h1M4 21.5h3m4 0h2m1 0h2m1 0h3m3 0h2m2 0h2m1 0h1m2 0h1m2 0h1M4 22.5h1m1 0h1m1 0h1m1 0h3m2 0h2m1 0h2m3 0h3m1 0h1m1 0h3m1 0h2m1 0h1M4 23.5h3m6 0h1m1 0h1m6 0h1m3 0h2m1 0h2m1 0h2m1 0h2M6 24.5h1m1 0h1m1 0h1m6 0h2m1 0h1m1 0h1m4 0h2m1 0h2m3 0h2M7 25.5h3m3 0h2m1 0h3m2 0h3m2 0h3m1 0h2m4 0h1M4 26.5h5m1 0h1m1 0h3m1 0h1m2 0h1m3 0h1m3 0h2m7 0h1M7 27.5h1m3 0h1m1 0h2m1 0h2m1 0h1m2 0h3m1 0h1m1 0h2m1 0h1m4 0h1M4 28.5h2m1 0h1m1 0h3m2 0h2m3 0h2m1 0h1m1 0h1m2 0h7m1 0h1M12 29.5h1m1 0h1m1 0h1m3 0h2m1 0h2m2 0h2m3 0h1m2 0h2M4 30.5h7m1 0h3m1 0h4m1 0h1m1 0h3m2 0h1m1 0h1m1 0h3m1 0h1M4 31.5h1m5 0h1m5 0h3m3 0h1m1 0h1m2 0h2m3 0h2m1 0h2M4 32.5h1m1 0h3m1 0h1m2 0h1m3 0h1m1 0h1m3 0h2m2 0h6m2 0h2M4 33.5h1m1 0h3m1 0h1m3 0h1m2 0h5m1 0h1m1 0h1m1 0h1m1 0h1m1 0h6M4 34.5h1m1 0h3m1 0h1m1 0h1m2 0h1m1 0h1m1 0h1m3 0h7m1 0h2m1 0h3M4 35.5h1m5 0h1m3 0h1m1 0h1m3 0h1m1 0h1m3 0h3m1 0h4M4 36.5h7m1 0h1m2 0h3m1 0h3m6 0h1m1 0h3m1 0h1m1 0h1"/></svg>`
+    };
+
+    document.querySelectorAll("[data-qr]").forEach((el) => {
+      const key = el.getAttribute("data-qr");
+      if (QR_SVGS[key]) el.innerHTML = QR_SVGS[key];
+    });
+
+    // Interactive Filtering
+    let activeLayout = "all";
+    let activeLang = "all";
+    let activeTrack = "all";
+
+    function applyFilters() {
+      document.querySelectorAll(".card-wrapper").forEach((wrap) => {
+        const l = wrap.getAttribute("data-card-layout");
+        const lang = wrap.getAttribute("data-card-lang");
+        const track = wrap.getAttribute("data-card-track");
+
+        const matchLayout = activeLayout === "all" || activeLayout === l;
+        const matchLang = activeLang === "all" || activeLang === lang;
+        const matchTrack = activeTrack === "all" || activeTrack === track;
+
+        wrap.style.display = matchLayout && matchLang && matchTrack ? "" : "none";
+      });
+
+      document.querySelectorAll("[data-section-layout]").forEach((sec) => {
+        const secLayout = sec.getAttribute("data-section-layout");
+        sec.style.display = activeLayout === "all" || activeLayout === secLayout ? "" : "none";
+      });
+    }
+
+    document.querySelectorAll("[data-filter-layout]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("[data-filter-layout]").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        activeLayout = btn.getAttribute("data-filter-layout");
+        applyFilters();
+      });
+    });
+
+    document.querySelectorAll("[data-filter-lang]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("[data-filter-lang]").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        activeLang = btn.getAttribute("data-filter-lang");
+        applyFilters();
+      });
+    });
+
+    document.querySelectorAll("[data-filter-track]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("[data-filter-track]").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        activeTrack = btn.getAttribute("data-filter-track");
+        applyFilters();
+      });
+    });
+  </script>
+</body>
+</html>

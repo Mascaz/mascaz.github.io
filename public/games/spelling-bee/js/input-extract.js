@@ -103,8 +103,29 @@ function preprocessImageToCanvas(imgElement, canvas, highContrast = true) {
   }
 }
 
-// Run OCR using Tesseract.js (loaded on demand or via script tag)
+// Run OCR using native iOS/iPadOS Vision framework when in the Xcode wrapper, or Tesseract.js on the web
 async function runPhotoOCR(canvas, onProgress) {
+  if (window.IS_NATIVE_IOS_APP) {
+    try {
+      if (typeof onProgress === 'function') onProgress(25);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
+      const res = await fetch('/api/ocr', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ image: dataUrl })
+      });
+      if (res.ok) {
+        const payload = await res.json();
+        if (typeof onProgress === 'function') onProgress(100);
+        if (payload && payload.ok && typeof payload.text === 'string') {
+          return payload.text;
+        }
+      }
+    } catch (nativeErr) {
+      console.warn('Native Vision OCR failed, falling back to Tesseract.js:', nativeErr);
+    }
+  }
+
   if (!window.Tesseract) {
     // Dynamically load Tesseract.js from CDN if not yet loaded
     await new Promise((resolve, reject) => {
