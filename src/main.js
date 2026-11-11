@@ -292,9 +292,9 @@ function renderModernOS() {
     const badgeModifier =
       badgeLabel.includes('Demo')
         ? 'badge-demo'
-        : badgeLabel.includes('Sim')
+        : badgeLabel.includes('Sim') || badgeLabel.includes('Sandbox')
           ? 'badge-sim'
-          : badgeLabel.includes('Interactive')
+          : badgeLabel.includes('Interactive') || badgeLabel.includes('Studio')
             ? 'badge-app'
             : '';
     card.innerHTML = `

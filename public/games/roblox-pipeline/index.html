@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Automated Roblox Experiences — MCP Game Factory & Aether Strike RNG</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at 20% 0%, #1e1b4b 0%, #090b14 60%);
+      color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+      padding: 18px;
+    }
+    .shell { max-width: 1120px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }
+    .topbar {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 14px 18px; border-radius: 20px;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.16);
+      backdrop-filter: blur(20px);
+    }
+    .tabs { display: inline-flex; gap: 6px; background: rgba(0,0,0,0.35); padding: 4px; border-radius: 999px; }
+    .tab-btn {
+      border: none; background: transparent; color: #94a3b8;
+      padding: 8px 16px; border-radius: 999px; font-size: 12.5px; font-weight: 700; cursor: pointer;
+    }
+    .tab-btn.active { background: linear-gradient(135deg, #6366f1, #a855f7); color: #ffffff; }
+
+    .grid-2 { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 16px; }
+    @media (max-width: 840px) { .grid-2 { grid-template-columns: 1fr; } }
+
+    .card {
+      background: rgba(15, 23, 42, 0.72);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 22px; padding: 18px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .stats-strip {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+    }
+    @media (max-width: 600px) { .stats-strip { grid-template-columns: repeat(2, 1fr); } }
+    .stat-box {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px; padding: 10px 12px;
+    }
+    .stat-label { font-size: 10.5px; text-transform: uppercase; color: #94a3b8; letter-spacing: 0.05em; }
+    .stat-val { font-size: 18px; font-weight: 800; color: #38bdf8; margin-top: 2px; }
+
+    /* Rhythm Anvil Arena */
+    .anvil-arena {
+      position: relative; height: 220px; border-radius: 18px; overflow: hidden;
+      background: radial-gradient(circle at 50% 60%, rgba(139, 92, 246, 0.35), rgba(9, 11, 20, 0.95));
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+      cursor: pointer; user-select: none;
+    }
+    .anvil-core {
+      width: 96px; height: 96px; border-radius: 24px;
+      background: linear-gradient(135deg, #38bdf8, #a855f7, #f43f5e);
+      box-shadow: 0 0 36px rgba(168, 85, 247, 0.65);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 38px; transition: transform 0.08s ease;
+    }
+    .anvil-arena:active .anvil-core { transform: scale(0.9); }
+    .cadence-bar {
+      width: 240px; height: 10px; border-radius: 999px; background: rgba(255,255,255,0.12);
+      position: relative; overflow: hidden;
+    }
+    .cadence-zone {
+      position: absolute; left: 35%; width: 40%; top: 0; bottom: 0;
+      background: rgba(52, 211, 153, 0.45); border-left: 2px solid #34d399; border-right: 2px solid #34d399;
+    }
+    .cadence-fill { height: 100%; width: 0%; background: #fde047; }
+    .float-msg {
+      font-size: 13px; font-weight: 800; min-height: 20px; color: #fde047;
+    }
+
+    .btn-primary {
+      padding: 11px 16px; border-radius: 14px; border: 1px solid rgba(250,204,21,0.6);
+      background: linear-gradient(135deg, rgba(250,204,21,0.28), rgba(168,85,247,0.32));
+      color: #fef9c3; font-weight: 800; font-size: 13px; cursor: pointer;
+    }
+    .btn-primary:hover { filter: brightness(1.15); }
+
+    .pedestal-list, .upgrade-list { display: flex; flex-direction: column; gap: 8px; }
+    .item-row {
+      display: flex; justify-content: space-between; align-items: center; gap: 8px;
+      padding: 9px 12px; border-radius: 12px;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      font-size: 12.5px;
+    }
+    .mini-btn {
+      padding: 5px 11px; border-radius: 9px; border: 1px solid rgba(56,189,248,0.45);
+      background: rgba(56,189,248,0.18); color: #e0f2fe; font-size: 11.5px; font-weight: 700; cursor: pointer;
+    }
+
+    /* Pipeline Explorer & Store Kit */
+    .phase-steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+    @media (max-width: 760px) { .phase-steps { grid-template-columns: 1fr 1fr; } }
+    .phase-card {
+      padding: 12px; border-radius: 14px; cursor: pointer; text-align: left;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.14); color: #e2e8f0;
+    }
+    .phase-card.active { border-color: #38bdf8; background: rgba(56,189,248,0.16); }
+    .assets-gallery {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(135px, 1fr)); gap: 12px;
+    }
+    .asset-tile {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 14px; padding: 10px; text-align: center; font-size: 11px; color: #cbd5e1;
+    }
+    .asset-tile img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 10px; margin-bottom: 6px; }
+    .hero-img { width: 100%; border-radius: 16px; border: 1px solid rgba(255,255,255,0.18); }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div>
+        <div style="font-size:11px;font-weight:700;color:#a78bfa;letter-spacing:0.06em">AUTONOMOUS ANTIGRAVITY + ROBLOX STUDIO MCP PIPELINE</div>
+        <h1 style="font-size:18px;margin-top:2px">Automated Roblox Experiences &bull; <em>Aether Strike RNG</em></h1>
+      </div>
+      <div class="tabs">
+        <button type="button" class="tab-btn active" id="tabPipeline">1. 5-Phase AI Pipeline &amp; Store Kit</button>
+        <button type="button" class="tab-btn" id="tabGame">2. Playable Core-Loop Prototype</button>
+      </div>
+    </header>
+
+    <!-- TAB 1: 5-Phase Pipeline + Generated Storefront Assets -->
+    <section id="viewPipeline" style="display:flex;flex-direction:column;gap:16px">
+      <div class="grid-2">
+        <div class="card">
+          <h2 style="font-size:15px">Autonomous 5-Phase Game Factory Architecture</h2>
+          <p style="font-size:13px;line-height:1.6;color:#cbd5e1">
+            With a single command, this Python + <code>Roblox_Studio</code> MCP pipeline scrapes live Roblox Top Charts &amp; Game Pass pricing, synthesizes a 30s/5m/Ascension retention spec, builds a <code>--!strict</code> client/server Luau game directly inside Roblox Studio, runs mobile safe-zone playtests, and generates 12 store-ready monetization &amp; badge icons.
+          </p>
+          <div class="phase-steps" id="phaseSteps"></div>
+          <div class="item-row" id="phaseDetail" style="line-height:1.55;color:#e2e8f0"></div>
+        </div>
+        <div class="card">
+          <h2 style="font-size:15px">Pipeline Architecture &amp; Generated 16:9 Experience Thumbnail</h2>
+          <img src="./assets/pipeline_infographic.png" alt="5-Phase Pipeline Infographic" class="hero-img" />
+          <img src="./assets/experience_thumbnail_1920x1080.png" alt="Aether Strike RNG Thumbnail" class="hero-img" />
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 style="font-size:15px">Auto-Generated Creator Hub Monetization Passes, Dev Products &amp; Badges (11 Icons)</h2>
+        <div class="assets-gallery" id="storeGallery"></div>
+      </div>
+    </section>
+
+    <!-- TAB 2: Interactive Aether Strike RNG Core-Loop Simulator -->
+    <section id="viewGame" style="display:none;flex-direction:column;gap:16px">
+      <div class="stats-strip">
+        <div class="stat-box"><div class="stat-label">Aether Shards</div><div class="stat-val" id="valShards">120</div></div>
+        <div class="stat-box"><div class="stat-label">Combo Chain</div><div class="stat-val" id="valCombo">1×</div></div>
+        <div class="stat-box"><div class="stat-label">Pedestal Passive</div><div class="stat-val" id="valPassive">+0 / sec</div></div>
+        <div class="stat-box"><div class="stat-label">Astral Luck</div><div class="stat-val" id="valLuck">1.00×</div></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h2 style="font-size:15px">30s Tactile Loop: Overcharge Rhythm Anvil (0.35s–0.75s Sweet Spot)</h2>
+          <div class="anvil-arena" id="anvilArena">
+            <div class="anvil-core">&#9889;</div>
+            <div class="cadence-bar">
+              <div class="cadence-zone" title="2.5x Overcharge Crit Window"></div>
+              <div class="cadence-fill" id="cadenceFill"></div>
+            </div>
+            <div class="float-msg" id="strikeMsg">Click or press [SPACE] in rhythm inside the green zone for 2.5× OVERCHARGE CRIT!</div>
+          </div>
+
+          <button type="button" class="btn-primary" id="rollRelicBtn">
+            &#128302; Roll Astral Relic Altar (Cost: 50 Shards)
+          </button>
+          <div class="item-row" id="lastRollBox" style="color:#fde68a">
+            No Relics rolled yet — strike the Anvil or roll your first Relic!
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 style="font-size:15px">Sanctum Pedestals (Top 4 Relics Auto-Generate Passive Shards)</h2>
+          <div class="pedestal-list" id="pedestalList"></div>
+
+          <h2 style="font-size:15px;margin-top:6px">5m Progression Loop: Sanctum Upgrade Forge</h2>
+          <div class="upgrade-list" id="upgradeList"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const PHASES = [
+      { title: '1. Market Scraper', desc: 'tools/scrape_charts.py queries live Roblox & Rolimon APIs across 17 top experiences (e.g., Steal An Egg at 511K CCU, Blox Fruits at 202K CCU), capturing retention loops, title keywords, and Game Pass price tiers into market_snapshot.json.' },
+      { title: '2. Spec Synthesis', desc: 'Combines human FEEL_NOTES.md with market_snapshot.json to author GAME_SPEC.md: defining the 0.35s–0.75s Overcharge Strike cadence, 3-Tier Rift Core Heist, 6×4 Relic RNG table, and Explorer hierarchy.' },
+      { title: '3. Studio MCP Build', desc: 'Generates --!strict Luau client/server/shared modules and drives Roblox Studio directly via MCP to construct procedural neon Sanctum geometry, Rift arenas, Void Sentinel Boss, and sound effects.' },
+      { title: '4. Mobile Playtest', desc: 'Automated Roblox Studio playtest verifies thumbstick/HUD safe zones on mobile viewports, tests pathfinding & banking pads, and patches any Luau console warnings in a closed loop.' },
+      { title: '5. Publishing Kit', desc: 'Renders 12 bespoke store assets (512×512 Icon, 1920×1080 Thumbnail, 3 Game Passes, 3 Dev Products, 4 Badges) and writes PUBLISHING_KIT.md with SEO titles, maturity questionnaire answers, and Robux pricing.' }
+    ];
+
+    const STORE_ASSETS = [
+      { file: 'experience_icon_512x512.png', label: 'Experience Icon' },
+      { file: 'pass_2x_aether_shards_512x512.png', label: 'Pass: 2× Aether Shards' },
+      { file: 'pass_astral_shiny_hunter_512x512.png', label: 'Pass: Shiny Hunter' },
+      { file: 'pass_vip_aether_overlord_512x512.png', label: 'Pass: VIP Overlord' },
+      { file: 'prod_guaranteed_epic_core_512x512.png', label: 'Prod: Epic Core' },
+      { file: 'prod_astral_shard_surge_512x512.png', label: 'Prod: Shard Surge' },
+      { file: 'prod_server_overdrive_512x512.png', label: 'Prod: Server Overdrive' },
+      { file: 'badge_first_rift_heist_512x512.png', label: 'Badge: First Rift Heist' },
+      { file: 'badge_void_sentinel_slayer_512x512.png', label: 'Badge: Sentinel Slayer' },
+      { file: 'badge_first_ascension_512x512.png', label: 'Badge: First Ascension' },
+      { file: 'badge_celestial_singularity_512x512.png', label: 'Badge: 0.5% Celestial' }
+    ];
+
+    const phaseStepsEl = document.getElementById('phaseSteps');
+    const phaseDetailEl = document.getElementById('phaseDetail');
+    function selectPhase(idx) {
+      phaseStepsEl.querySelectorAll('.phase-card').forEach((c, i) => c.classList.toggle('active', i === idx));
+      phaseDetailEl.textContent = PHASES[idx].desc;
+    }
+    PHASES.forEach((p, i) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'phase-card';
+      b.innerHTML = `<strong style="font-size:12px">${p.title}</strong>`;
+      b.onclick = () => selectPhase(i);
+      phaseStepsEl.appendChild(b);
+    });
+    selectPhase(0);
+
+    const gallery = document.getElementById('storeGallery');
+    STORE_ASSETS.forEach(a => {
+      const d = document.createElement('div');
+      d.className = 'asset-tile';
+      d.innerHTML = `<img src="./assets/${a.file}" alt="${a.label}" loading="lazy" /><div>${a.label}</div>`;
+      gallery.appendChild(d);
+    });
+
+    // Tabs
+    const tabPipeline = document.getElementById('tabPipeline');
+    const tabGame = document.getElementById('tabGame');
+    const viewPipeline = document.getElementById('viewPipeline');
+    const viewGame = document.getElementById('viewGame');
+    tabPipeline.onclick = () => {
+      tabPipeline.classList.add('active'); tabGame.classList.remove('active');
+      viewPipeline.style.display = 'flex'; viewGame.style.display = 'none';
+    };
+    tabGame.onclick = () => {
+      tabGame.classList.add('active'); tabPipeline.classList.remove('active');
+      viewGame.style.display = 'flex'; viewPipeline.style.display = 'none';
+    };
+
+    // Playable Core-Loop Prototype (from GAME_SPEC.md exact formulas!)
+    let shards = 120;
+    let combo = 1;
+    let lastStrikeAt = 0;
+    const relics = [];
+    const upgrades = [
+      { id: 'strike', name: 'Strike Overdrive', base: 25, mult: 1.55, lvl: 0, desc: '+45% Strike Power' },
+      { id: 'luck', name: 'Astral Luck', base: 75, mult: 1.75, lvl: 0, desc: '+35% Rare+ Weight' },
+      { id: 'conduit', name: 'Sanctum Conduit', base: 60, mult: 1.65, lvl: 0, desc: '+40% Pedestal Income' }
+    ];
+
+    const RARITIES = [
+      { tier: 'Common', name: 'Ember Shard', weight: 50, rate: 5, color: '#cbd5e1' },
+      { tier: 'Uncommon', name: 'Cobalt Prism', weight: 27, rate: 15, color: '#38bdf8' },
+      { tier: 'Rare', name: 'Solar Helix', weight: 14, rate: 45, color: '#fbbf24' },
+      { tier: 'Epic', name: 'Void Tesseract', weight: 6, rate: 135, color: '#c084fc' },
+      { tier: 'Mythic', name: 'Astral Seraph', weight: 2.5, rate: 450, color: '#fb7185' },
+      { tier: 'Celestial', name: 'Singularity Crown', weight: 0.5, rate: 1800, color: '#fef08a' }
+    ];
+    const MUTATIONS = [
+      { name: 'Standard', mult: 1.0, w: 72 },
+      { name: 'Golden', mult: 1.5, w: 18 },
+      { name: 'Void-Touched', mult: 2.5, w: 8 },
+      { name: 'Prismatic', mult: 4.0, w: 2 }
+    ];
+
+    let audioCtx = null;
+    function beep(freq, dur = 0.09) {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const o = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        o.type = 'triangle';
+        o.frequency.value = freq;
+        g.gain.setValueAtTime(0.12, audioCtx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+        o.connect(g); g.connect(audioCtx.destination);
+        o.start(); o.stop(audioCtx.currentTime + dur);
+      } catch {}
+    }
+
+    function passivePerSec() {
+      const conduitMult = 1 + upgrades[2].lvl * 0.4;
+      return relics.slice(0, 4).reduce((s, r) => s + r.income, 0) * conduitMult;
+    }
+
+    function renderGameUI() {
+      document.getElementById('valShards').textContent = Math.floor(shards).toLocaleString();
+      document.getElementById('valCombo').textContent = `${combo}×`;
+      document.getElementById('valPassive').textContent = `+${Math.round(passivePerSec())} / sec`;
+      document.getElementById('valLuck').textContent = `${(1 + upgrades[1].lvl * 0.35).toFixed(2)}×`;
+
+      const ped = document.getElementById('pedestalList');
+      ped.innerHTML = '';
+      for (let i = 0; i < 4; i++) {
+        const r = relics[i];
+        const row = document.createElement('div');
+        row.className = 'item-row';
+        row.innerHTML = r
+          ? `<span style="color:${r.color};font-weight:700">[${r.mutation}] ${r.tier} ${r.name}</span><span>+${Math.round(r.income)}/s</span>`
+          : `<span style="color:#64748b">Pedestal #${i + 1} — Empty</span><span>—</span>`;
+        ped.appendChild(row);
+      }
+
+      const upList = document.getElementById('upgradeList');
+      upList.innerHTML = '';
+      upgrades.forEach(u => {
+        const cost = Math.round(u.base * Math.pow(u.mult, u.lvl));
+        const row = document.createElement('div');
+        row.className = 'item-row';
+        row.innerHTML = `
+          <div><strong>${u.name} (Lv.${u.lvl})</strong> <span style="color:#94a3b8;font-size:11px">${u.desc}</span></div>
+          <button type="button" class="mini-btn">${cost} Shards</button>
+        `;
+        row.querySelector('button').onclick = () => {
+          if (shards < cost) return;
+          shards -= cost; u.lvl++; beep(520 + u.lvl * 40, 0.12); renderGameUI();
+        };
+        upList.appendChild(row);
+      });
+    }
+
+    function strikeAnvil() {
+      const now = performance.now();
+      const dt = (now - lastStrikeAt) / 1000;
+      lastStrikeAt = now;
+      const isCrit = dt >= 0.35 && dt <= 0.75;
+      if (isCrit) combo = Math.min(10, combo + 1);
+      else if (dt > 1.1) combo = 1;
+
+      const baseGain = 8 * (1 + upgrades[0].lvl * 0.45);
+      const gain = Math.round(baseGain * (isCrit ? 2.5 : 1.0) * (1 + (combo - 1) * 0.15));
+      shards += gain;
+      beep(isCrit ? 440 + combo * 55 : 260, isCrit ? 0.14 : 0.07);
+      document.getElementById('strikeMsg').textContent = isCrit
+        ? `⚡ OVERCHARGE CRIT (2.5×)! +${gain} Shards • ${combo}× Combo!`
+        : `Strike +${gain} Shards (Hit every 0.35s–0.75s for Overcharge Crit!)`;
+      renderGameUI();
+    }
+
+    document.getElementById('anvilArena').addEventListener('click', strikeAnvil);
+    window.addEventListener('keydown', (e) => {
+      if (e.code === 'Space' && viewGame.style.display !== 'none') {
+        e.preventDefault(); strikeAnvil();
+      }
+    });
+
+    document.getElementById('rollRelicBtn').onclick = () => {
+      if (shards < 50) {
+        document.getElementById('lastRollBox').textContent = 'Need 50 Aether Shards to roll! Strike the Anvil above.';
+        return;
+      }
+      shards -= 50;
+      const luck = 1 + upgrades[1].lvl * 0.35;
+      const weights = RARITIES.map((r, i) => i >= 2 ? r.weight * luck : r.weight);
+      let roll = Math.random() * weights.reduce((a, b) => a + b, 0);
+      let picked = RARITIES[0];
+      for (let i = 0; i < RARITIES.length; i++) {
+        roll -= weights[i];
+        if (roll <= 0) { picked = RARITIES[i]; break; }
+      }
+      let mRoll = Math.random() * 100;
+      let mut = MUTATIONS[0];
+      for (const m of MUTATIONS) {
+        mRoll -= m.w;
+        if (mRoll <= 0) { mut = m; break; }
+      }
+      const relic = {
+        tier: picked.tier, name: picked.name, color: picked.color,
+        mutation: mut.name, income: picked.rate * mut.mult
+      };
+      relics.push(relic);
+      relics.sort((a, b) => b.income - a.income);
+      beep(680, 0.18);
+      document.getElementById('lastRollBox').innerHTML =
+        `Rolled <strong style="color:${relic.color}">[${relic.mutation}] ${relic.tier} — ${relic.name}</strong> (+${Math.round(relic.income)} Shards/s)!`;
+      renderGameUI();
+    };
+
+    setInterval(() => {
+      const inc = passivePerSec() / 4;
+      if (inc > 0) { shards += inc; renderGameUI(); }
+      const elapsed = (performance.now() - lastStrikeAt) / 1000;
+      const pct = lastStrikeAt ? Math.min(100, elapsed * 100) : 0;
+      document.getElementById('cadenceFill').style.width = `${pct}%`;
+    }, 250);
+
+    renderGameUI();
+  </script>
+</body>
+</html>

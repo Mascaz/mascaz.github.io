@@ -297,7 +297,7 @@ export const MODERN_APPS = [
     id: 'sumten',
     name: 'SumTen',
     shortName: 'SumTen',
-    folder: 'AI-Sumten',
+    folder: 'AI-Sumten • Sumten',
     group: 'games',
     badge: 'Playable',
     category: 'Retro Pixel-Art Number Puzzle • TypeScript & Expo',
@@ -306,8 +306,8 @@ export const MODERN_APPS = [
     playLabel: 'Play SumTen Live',
     tldr: 'A fast-paced 16×10 number-grid puzzle where you drag rectangles over digits that sum to exactly 10 before the 120-second clock runs out. Features backwards-generated solvable boards, ×8 combo multipliers, powerups, and procedural chiptune audio.',
     description:
-      'Drag a rectangle over numbers that add up to 10 to clear them, and race to clear the entire 16×10 board before the timer runs out. Every board is constructed backwards from a guaranteed full solution—including nested moves where inner tiles must be cleared first. Built as a clean monorepo separating pure TypeScript rules (@sumten/core), mock/RevenueCat commerce (@sumten/commerce), bilingual EN/ES i18n, and procedural pixel-art & chiptune SFX generators.',
-    tech: ['TypeScript', 'Expo / React Native', 'Procedural Chiptune SFX', 'Deterministic Solver'],
+      'Drag a rectangle over numbers that add up to 10 to clear them, and race to clear the entire 16×10 board before the timer runs out. Every board is constructed backwards from a guaranteed full solution—including nested moves where inner tiles must be cleared first. Built as a clean monorepo separating pure TypeScript rules (@sumten/core), mock/RevenueCat commerce (@sumten/commerce), bilingual EN/ES i18n, and procedural pixel-art & chiptune SFX generators.\n\n• Evolution / Version History: Evolved from an earlier native Swift & SpriteKit Xcode build for iOS and macOS (Sumten) featuring StoreKit 2 IAP, HapticsManager, and seeded deterministic board validation before expanding into the cross-platform TypeScript/Expo monorepo.',
+    tech: ['TypeScript', 'Expo / React Native', 'Swift / SpriteKit Origin', 'Procedural Chiptune SFX', 'Deterministic Solver'],
     screenshots: [
       './assets/screenshots/sumten/header.png',
       './assets/screenshots/sumten/ipad_1_gameplay.png',
@@ -319,7 +319,7 @@ export const MODERN_APPS = [
     id: 'juice-sort',
     name: 'Aesthetic Juice Sort',
     shortName: 'Juice Sort',
-    folder: 'AI-JuiceSort',
+    folder: 'AI-JuiceSort • AI-Argon-JuiceSort',
     group: 'games',
     badge: 'Playable',
     category: 'Liquid Physics Puzzle • React Native Skia & WebAudio',
@@ -328,7 +328,7 @@ export const MODERN_APPS = [
     playLabel: 'Play Juice Sort Live',
     tldr: 'A tactile liquid-pouring puzzle game featuring custom Skia shaders, straw transfer mechanics, celebratory floppy burst animations, and interactive WebAudio sound synthesis.',
     description:
-      'Pour and sort vibrant layered fruit juices across glass bottles until each bottle holds a single pure flavor. Built with Expo Router, React Native Skia for fluid glass highlights and liquid surface waves, Reanimated 4, Zustand state management, and custom multi-layered sound effects.',
+      'Pour and sort vibrant layered fruit juices across glass bottles until each bottle holds a single pure flavor. Built with Expo Router, React Native Skia for fluid glass highlights and liquid surface waves, Reanimated 4, Zustand state management, and custom multi-layered sound effects.\n\n• Evolution / Version History: Evolved from an earlier Frutiger Aero / Y2K web prototype (AI-Argon-JuiceSort) featuring procedural 1–3 loop SVG twisty-straws, synthesized ASMR straw-slurp harmonics, and silent Dynamic Difficulty Adjustment (DDA).',
     tech: ['React Native Skia', 'Expo Router', 'Reanimated', 'Zustand', 'WebAudio'],
     screenshots: [
       './assets/screenshots/juice-sort/feature.png',
@@ -421,6 +421,125 @@ export const MODERN_APPS = [
     description:
       'Spawn in a procedurally generated low-poly wilderness with towering landmarks (Volcano, Castle, Snowy Peak, Waterfall, or Desert Pyramid) on the horizon. Scavenge weapons, unlock cosmetics & permanent upgrades in the Hub, battle scaling enemies, or race head-to-head in local splitscreen—rendered with a custom N64 shader and procedural synth sequencer.',
     tech: ['Three.js', 'TypeScript', 'Procedural IK & Landmarks', 'Splitscreen Mode', 'N64 Shader'],
+    screenshots: []
+  },
+  {
+    id: 'your-rooms',
+    name: 'Your Rooms',
+    shortName: 'Your Rooms',
+    folder: 'Your Rooms • Rooms',
+    group: 'games',
+    badge: '3D Spatial Sim',
+    category: 'visionOS 26 Spatial Backrooms Horror • Swift, RealityKit & ARKit',
+    iconUrl: './assets/icons/your-rooms.svg',
+    playUrl: './games/your-rooms/index.html',
+    playLabel: 'Launch 3D Room-to-Backrooms Sim',
+    tldr: 'A visionOS 26 Full Space psychological horror experience where ARKit Scene Reconstruction meshes your real walls, floor, and ceiling and glitches them panel-by-panel into an endless Euclidean Backrooms labyrinth with 60Hz spatial audio.',
+    description:
+      'Built natively for Apple Vision Pro (visionOS 26) using ARKit SceneReconstructionProvider, PlaneDetectionProvider, and WorldTrackingProvider. Starts in your actual physical room before corrupting detected wall/floor/ceiling patches into yellowed mono-wallpaper, damp carpet, and buzzing fluorescent panels—opening non-Euclidean RealityKit PortalComponent doorways into procedural corridors across 4 escalating anomalous phases.\n\n• Interactive Web Preview & Precursor: Includes an interactive Three.js 3D portal & corruption simulator using the game’s actual textures and 60Hz spatial audio stems, uniting Your Rooms with its earlier Reality Composer Pro spatial prototype (Rooms).',
+    tech: ['visionOS 26', 'Swift & RealityKit', 'ARKit Scene Mesh', 'PortalComponent', 'Spatial Audio'],
+    screenshots: [
+      './games/your-rooms/assets/wallpaper_yellow.png',
+      './games/your-rooms/assets/carpet_damp.png',
+      './games/your-rooms/assets/ceiling_tiles.png',
+      './games/your-rooms/assets/door_exit.png'
+    ]
+  },
+  {
+    id: 'human-climb',
+    name: 'Human Climb Pictures',
+    shortName: 'Human Climb',
+    folder: 'Unity / Human Climb Pictures',
+    group: 'games',
+    badge: '3D AR Sandbox',
+    category: 'AR Tabletop Ragdoll Co-op • Unity 6, AR Foundation & Netcode',
+    iconUrl: './assets/icons/human-climb.svg',
+    playUrl: './games/human-climb/index.html',
+    playLabel: 'Launch 3D Island & Ragdoll Sandbox',
+    tldr: 'A Unity 6 multiplayer AR party climber that converts real-world desk photos and depth maps into climbable 3D tabletop islands for 1–4 networked Active Ragdoll climbers ("Bob") with physics reach-and-grab hands.',
+    description:
+      'Snap a photo of your desk or room clutter and turn it into a Miniature AR Mountain! Built in Unity 6 (URP) with AR Foundation 6, Netcode for GameObjects, and Unity Relay:\n• Photo-to-Mountain Pipeline: DepthEstimator & TerrainMeshBuilder convert monocular depth maps into vertex-colored 3D terrain while IslandDecorator auto-places Start Pads, Summit Beacons, BouncyPads, MovingPlatforms, SpinningBars, and Physics Toybox props.\n• Active Ragdoll ("Bob"): ConfigurableJoint muscle torque balancing paired with independent left/right GrabHand reach-and-latch climbing.\n\n(Interactive Web Sandbox reconstructs the actual sample heightmaps—or any photo you upload—in real-time 3D.)',
+    tech: ['Unity 6 (C#)', 'AR Foundation 6', 'Netcode for GameObjects', 'Active Ragdoll Physics', 'Depth-to-Mesh Gen'],
+    screenshots: [
+      './games/human-climb/assets/Sample1_GrandCanyonDesk.png',
+      './games/human-climb/assets/Sample3_GiantTabletop.png',
+      './games/human-climb/assets/Sample2_SpiralPeak.png'
+    ]
+  },
+  {
+    id: 'roblox-pipeline',
+    name: 'Roblox MCP Factory & Aether Strike',
+    shortName: 'Aether Strike',
+    folder: 'Roblox',
+    group: 'games',
+    badge: 'MCP + RNG Sim',
+    category: 'Autonomous 5-Phase Roblox Studio MCP Pipeline • Luau & Open Cloud',
+    iconUrl: './assets/icons/roblox-pipeline.png',
+    playUrl: './games/roblox-pipeline/index.html',
+    playLabel: 'Explore MCP Pipeline & RNG Sim',
+    tldr: 'An autonomous 5-phase Antigravity + Roblox Studio MCP production pipeline (Trend Research → Luau Greybox → 3D/Audio Polish → Multi-Agent Playtest QA → Store Kit Packaging) showcased alongside its flagship experience, Aether Strike RNG.',
+    description:
+      'Combines an automated 5-phase Roblox Studio MCP development pipeline with an interactive slice of its flagship Luau experience, Aether Strike RNG:\n• 5-Phase Autonomous Pipeline: Automates genre/retention research, strict Server-Authoritative Luau greyboxing, procedural 3D asset & PBR material generation, multi-agent playtest & RemoteEvent security auditing, and complete 512×512 / 1920×1080 Store Kit packaging.\n• Aether Strike RNG Sim: Test the active-skill Overcharge Anvil timing ring, roll across 7 rarity tiers (up to 1-in-12,500 Celestial), equip your 6×4 Relic Altar & 3D Sanctum Pedestals, and inspect the generated Game Passes, DevProducts, and Badges.',
+    tech: ['Luau (Roblox)', 'Roblox Studio MCP', 'Open Cloud API', '5-Phase Agentic Pipeline', 'Store Kit Automation'],
+    screenshots: [
+      './games/roblox-pipeline/assets/hero_banner.png',
+      './games/roblox-pipeline/assets/pipeline_infographic.png',
+      './games/roblox-pipeline/assets/experience_thumbnail_1920x1080.png'
+    ]
+  },
+  {
+    id: 'ai-airbrush',
+    name: 'AI Airbrush',
+    shortName: 'AI Airbrush',
+    folder: 'AI-Airbrush',
+    group: 'apps',
+    badge: 'GPU Shader Studio',
+    category: 'iOS Metal & Vision Portrait Retouch Studio • SwiftUI, Metal & WebGL',
+    iconUrl: './assets/icons/ai-airbrush.png',
+    playUrl: './games/ai-airbrush/index.html',
+    playLabel: 'Launch WebGL Retouch Studio',
+    tldr: 'An on-device iOS portrait studio built with SwiftUI, Apple Vision 76-point face landmarks, CoreImage, and custom Metal shaders for frequency-preserved skin retouching, 3D normal-field relighting, and cumulative UV Liquify sculpting.',
+    description:
+      'Processes high-resolution portraits 100% on-device with zero cloud uploads. On iOS, FaceAnalyzer combines VNDetectFaceLandmarksRequest (76-point facial contour & eye/lip exclusion masks) and VNGeneratePersonSegmentationRequest with custom Metal compute/fragment kernels (Shaders.metal) for bilateral skin smoothing, 3D directional studio relighting across 6 presets, and cumulative RGFloat UV displacement Liquify brushes (Push, Slim, Plump, Swirl, Restore).\n\n• Interactive WebGL Port: Ports the Metal fragment shaders directly to WebGL so you can drag the 3D light orb, paint UV Liquify warps, apply film LUTs, upload custom photos, and compare via a live Before/After split slider.',
+    tech: ['SwiftUI & Metal', 'Apple Vision Framework', 'CoreImage', 'WebGL GLSL Port', 'UV Liquify Displacement'],
+    screenshots: ['./games/ai-airbrush/default-portrait.jpg']
+  },
+  {
+    id: 'kids-video-gen',
+    name: "Kids' Bilingual Video Engine",
+    shortName: 'Kids Video Gen',
+    folder: 'Generate Youtube Videos For Kids',
+    group: 'apps',
+    badge: 'Interactive Studio',
+    category: 'Automated Story-JSON to Bilingual MP4 Pipeline • Python, FFmpeg & TTS',
+    iconUrl: './assets/icons/kids-video-gen.svg',
+    playUrl: './games/kids-video-gen/index.html',
+    playLabel: 'Launch Story-to-Video Studio',
+    tldr: 'An automated Python + FFmpeg + Neural TTS production pipeline that compiles declarative bilingual (English & Spanish) story.json scripts into 1080p read-along children’s videos with Ken Burns camera motion and synchronized vocabulary cards.',
+    description:
+      'Turns structured story.json manifests into broadcast-ready 1080p bilingual educational episodes in a single command. The pipeline synthesizes paired English and Latin American Spanish voiceovers, animates storybook illustrations with smooth Ken Burns zoom/pan filtergraphs, overlays phonetic lower-third vocabulary callouts, and muxes gentle background music—showcased here with the rendered Reading Spanish: Colors & Shapes episode synchronized to its live JSON scene timeline.',
+    tech: ['Python', 'FFmpeg Filtergraphs', 'Bilingual EN/ES TTS', 'Declarative Story JSON', '1080p MP4 Pipeline'],
+    screenshots: [
+      './games/kids-video-gen/assets/teacher_scene.png',
+      './games/kids-video-gen/assets/page_rainbow.png',
+      './games/kids-video-gen/assets/page_shapes.png'
+    ]
+  },
+  {
+    id: 'game-localization',
+    name: 'Game-to-Spanish Localization Pipeline',
+    shortName: 'ES Localization',
+    folder: 'Localization Pipeline',
+    group: 'apps',
+    badge: 'Interactive Pipeline',
+    category: 'Automated Game Dialogue Localization & QA Engine • Python & Gemini',
+    iconUrl: './assets/icons/game-localization.svg',
+    playUrl: './games/game-localization/index.html',
+    playLabel: 'Launch Localization Workbench',
+    tldr: 'A general-purpose game-to-Spanish localization pipeline and QA workbench that translates dialogue JSON/CSV bundles into natural Latin American Spanish while strictly preserving inline engine control tags, variables, and dialogue-box line limits.',
+    description:
+      'An end-to-end localization engineering pipeline built to translate any narrative or dialogue-heavy game into Latin American Spanish (es-419) without breaking runtime scripting:\n• Control-Tag & Placeholder Shielding: Freezes inline engine control sequences (color switches %c, wait/shake triggers %ws, hard line breaks %n, and dynamic {player} variables) prior to batch translation and enforces 100% token parity in automated QA.\n• Glossary & Register Consistency: Locks recurring terminology, UI labels, and per-speaker formality (tú vs. usted) across string tables.\n• Live Overflow & Typewriter Preview: Audits ~22% Spanish text expansion against per-line character budgets and simulates real-time dialogue rendering with typewriter cadence and screen-shake triggers.',
+    tech: ['Python', 'LLM Batch Translation', 'Inline Control-Tag QA', 'es-419 Glossary Lock', 'Dialogue Box Validator'],
     screenshots: []
   },
   {
@@ -557,7 +676,7 @@ export const MODERN_APPS = [
     id: 'argon-bot',
     name: 'Argon OANDA Bot',
     shortName: 'Argon FX Bot',
-    folder: 'Argon-Oanda-Bot',
+    folder: 'Argon-Oanda-Bot • Gemini-Oanda-Bot',
     group: 'apps',
     badge: 'Synthetic Sim',
     category: '3-Layer Algorithmic FX & Gemini LLM Strategy Engine • Python',
@@ -566,7 +685,7 @@ export const MODERN_APPS = [
     playLabel: 'Launch Synthetic Simulator',
     tldr: 'A 3-layer algorithmic FX trading architecture separating 1-second reflex stop-loss execution (Micro), 1-minute 8-major currency strength matrix signals (Meso), and event-driven Gemini LLM strategy optimization (Macro).',
     description:
-      'Separates high-frequency data ingestion from signal generation and macro strategy rethinking so microstructure noise never causes whipsawing:\n• Micro Layer (Every 1s): Bounded ring-buffer tick ingestion, hard stop-losses, profit-locking trailing stops, and drawdown circuit breakers.\n• Meso Layer (Every 1m): Computes an 8-major cross-sectional currency strength matrix, session-aware regime switching (Asian Mean-Reversion vs. London/NY Breakout), and a strict 2.5× spread friction filter.\n• Macro Layer (Event/Session): Uses the Google Gemini API to evaluate hypothesis performance and update strategy parameters.\n\n(Note: The interactive portfolio demo runs on 100% synthetic/simulated data.)',
+      'Separates high-frequency data ingestion from signal generation and macro strategy rethinking so microstructure noise never causes whipsawing:\n• Micro Layer (Every 1s): Bounded ring-buffer tick ingestion, hard stop-losses, profit-locking trailing stops, and drawdown circuit breakers.\n• Meso Layer (Every 1m): Computes an 8-major cross-sectional currency strength matrix, session-aware regime switching (Asian Mean-Reversion vs. London/NY Breakout), and a strict 2.5× spread friction filter.\n• Macro Layer (Event/Session): Uses the Google Gemini API to evaluate hypothesis performance and update strategy parameters.\n\n• Evolution / Version History: Evolved from an initial single-loop Python + Gemini FX analyzer prototype (Gemini-Oanda-Bot) into the decoupled 3-layer Micro/Meso/Macro architecture.\n\n(Note: The interactive portfolio demo runs on 100% synthetic/simulated data.)',
     tech: ['Python', 'OANDA REST-v20', 'Google Gemini API', '3-Layer Quant Architecture', 'Synthetic Sandbox'],
     screenshots: []
   }

@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI-Airbrush — GPU Portrait Retouch, 3D Relight & Liquify Sandbox</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%; height: 100%; overflow: hidden;
+      background: #090b12; color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+      user-select: none;
+    }
+    .studio-shell {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      width: 100%; height: 100%;
+    }
+    @media (max-width: 860px) {
+      .studio-shell {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 44%;
+      }
+    }
+    .canvas-stage {
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+      background: radial-gradient(circle at 50% 45%, #171d2e 0%, #07090f 100%);
+      overflow: hidden;
+      padding: 18px;
+    }
+    .canvas-wrap {
+      position: relative;
+      display: inline-flex;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.16);
+      max-width: 100%; max-height: 100%;
+    }
+    canvas {
+      display: block;
+      max-width: 100%; max-height: calc(100vh - 44px);
+      object-fit: contain;
+      cursor: crosshair;
+      touch-action: none;
+    }
+    @media (max-width: 860px) {
+      canvas { max-height: calc(56vh - 28px); }
+    }
+    .top-floating-bar {
+      position: absolute; top: 14px; left: 14px; right: 14px;
+      display: flex; justify-content: space-between; align-items: center; gap: 8px;
+      pointer-events: none;
+    }
+    .pill {
+      pointer-events: auto;
+      background: rgba(15, 23, 42, 0.76);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 999px;
+      padding: 6px 13px;
+      font-size: 12px; font-weight: 600;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .light-orb-indicator {
+      position: absolute;
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      border: 2.5px solid #ffffff;
+      box-shadow: 0 0 16px currentColor;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      display: none;
+    }
+    .split-line {
+      position: absolute; top: 0; bottom: 0; width: 2px;
+      background: rgba(255,255,255,0.88);
+      box-shadow: 0 0 10px rgba(0,0,0,0.7);
+      pointer-events: none;
+    }
+    .split-badge {
+      position: absolute; top: 12px;
+      padding: 3px 8px; border-radius: 999px;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.05em;
+      background: rgba(0,0,0,0.62); border: 1px solid rgba(255,255,255,0.25);
+      pointer-events: none;
+    }
+
+    /* Right Control Inspector */
+    .inspector {
+      background: rgba(15, 20, 32, 0.95);
+      border-left: 1px solid rgba(255,255,255,0.14);
+      padding: 16px;
+      overflow-y: auto;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .mode-tabs {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;
+      background: rgba(0,0,0,0.35); padding: 4px; border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    .mode-tab {
+      border: none; background: transparent; color: #94a3b8;
+      font-size: 11.5px; font-weight: 700; padding: 8px 4px; border-radius: 9px; cursor: pointer;
+    }
+    .mode-tab.active {
+      background: rgba(255,255,255,0.16); color: #ffffff;
+    }
+    .card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 16px;
+      padding: 13px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .card h3 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: #cbd5e1; }
+    .slider-row { display: flex; flex-direction: column; gap: 4px; font-size: 12px; }
+    .slider-head { display: flex; justify-content: space-between; color: #e2e8f0; }
+    input[type="range"] { width: 100%; accent-color: #f472b6; cursor: pointer; }
+    .preset-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .preset-btn {
+      padding: 7px 6px; border-radius: 10px; font-size: 11px; font-weight: 600;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.16);
+      color: #f8fafc; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px;
+    }
+    .preset-btn.active { border-color: #f472b6; background: rgba(244, 114, 182, 0.2); }
+    .swatch { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+    .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .action-btn {
+      flex: 1; padding: 8px 10px; border-radius: 10px; font-size: 12px; font-weight: 600;
+      background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.22);
+      color: #fff; cursor: pointer; text-align: center;
+    }
+    .action-btn:hover { background: rgba(255,255,255,0.18); }
+    .note { font-size: 11px; line-height: 1.5; color: #94a3b8; }
+  </style>
+</head>
+<body>
+  <div class="studio-shell">
+    <div class="canvas-stage">
+      <div class="top-floating-bar">
+        <div class="pill">
+          <span style="color:#f472b6">&#10024; SkSL &rarr; WebGL2</span>
+          <span>AI-Airbrush GPU Shader Sandbox</span>
+        </div>
+        <label class="pill" style="cursor:pointer">
+          &#128247; Try Your Own Photo
+          <input type="file" id="photoUpload" accept="image/*" hidden />
+        </label>
+      </div>
+
+      <div class="canvas-wrap" id="canvasWrap">
+        <canvas id="glCanvas" width="768" height="960"></canvas>
+        <div class="split-line" id="splitLine" style="left:22%"></div>
+        <span class="split-badge" id="beforeBadge" style="left:10px">BEFORE</span>
+        <span class="split-badge" style="right:10px">AFTER (GPU)</span>
+        <div class="light-orb-indicator" id="lightOrb"></div>
+      </div>
+    </div>
+
+    <aside class="inspector">
+      <div class="mode-tabs" role="tablist">
+        <button type="button" class="mode-tab active" data-panel="retouch">Retouch</button>
+        <button type="button" class="mode-tab" data-panel="relight">3D Relight</button>
+        <button type="button" class="mode-tab" data-panel="liquify">Liquify</button>
+        <button type="button" class="mode-tab" data-panel="lut">Film LUT</button>
+      </div>
+
+      <!-- Before / After Wipe -->
+      <div class="card">
+        <div class="slider-row">
+          <div class="slider-head">
+            <span>Before / After Split Wipe</span>
+            <strong id="splitVal">22%</strong>
+          </div>
+          <input type="range" id="splitSlider" min="0" max="100" value="22" />
+        </div>
+      </div>
+
+      <!-- Panel 1: Bilateral Skin Retouch -->
+      <div class="card tool-panel" id="panel-retouch">
+        <h3>Edge-Preserving Bilateral Retouch</h3>
+        <div class="slider-row">
+          <div class="slider-head"><span>Skin Smooth (Preserves Pores)</span><strong id="smoothVal">65%</strong></div>
+          <input type="range" id="smoothSlider" min="0" max="100" value="65" />
+        </div>
+        <div class="slider-row">
+          <div class="slider-head"><span>Portrait Radiance &amp; Lift</span><strong id="glowVal">30%</strong></div>
+          <input type="range" id="glowSlider" min="0" max="100" value="30" />
+        </div>
+        <p class="note">Ports <code>skinSmoothRuntimeEffect</code> from <code>retouchShaders.ts</code>: 7×7 spatial/color bilateral kernel that smooths skin blotchiness while preserving high-frequency eyelashes, hair, and edges.</p>
+      </div>
+
+      <!-- Panel 2: 3D Facial Relighting -->
+      <div class="card tool-panel" id="panel-relight" hidden>
+        <h3>3D Normal-Field Relight (Drag Canvas!)</h3>
+        <div class="preset-grid" id="relightPresets"></div>
+        <div class="slider-row">
+          <div class="slider-head"><span>3D Gel Light Intensity</span><strong id="relightVal">55%</strong></div>
+          <input type="range" id="relightSlider" min="0" max="100" value="55" />
+        </div>
+        <div class="slider-row">
+          <div class="slider-head"><span>Ambient Fill Ratio</span><strong id="ambientVal">55%</strong></div>
+          <input type="range" id="ambientSlider" min="15" max="100" value="55" />
+        </div>
+        <p class="note">Ports <code>RELIGHT_3D_SKSL</code> from <code>relightShader.ts</code>. Drag directly on the portrait to move the virtual 3D studio light source!</p>
+      </div>
+
+      <!-- Panel 3: Liquify Displacement Brush -->
+      <div class="card tool-panel" id="panel-liquify" hidden>
+        <h3>Cumulative UV Liquify Brush (Paint on Photo!)</h3>
+        <div class="preset-grid" id="liquifyModes">
+          <button type="button" class="preset-btn active" data-lmode="push">Push</button>
+          <button type="button" class="preset-btn" data-lmode="slim">Slim / Pinch</button>
+          <button type="button" class="preset-btn" data-lmode="plump">Plump</button>
+          <button type="button" class="preset-btn" data-lmode="swirl">Swirl</button>
+          <button type="button" class="preset-btn" data-lmode="restore">Restore</button>
+          <button type="button" class="preset-btn" id="clearLiquifyBtn">Clear All</button>
+        </div>
+        <div class="slider-row">
+          <div class="slider-head"><span>Brush Radius</span><strong id="brushRadVal">75px</strong></div>
+          <input type="range" id="brushRadSlider" min="25" max="180" value="75" />
+        </div>
+        <p class="note">Ports <code>liquifyShader.ts</code> + <code>LiquifyDisplacementEngine.ts</code>: accumulates sub-pixel X/Y UV displacement vectors in a live buffer with zero generational blur.</p>
+      </div>
+
+      <!-- Panel 4: Film LUTs, Grain & Vignette -->
+      <div class="card tool-panel" id="panel-lut" hidden>
+        <h3>Film Grade LUT, Grain &amp; Chromatic</h3>
+        <div class="preset-grid" id="lutPresets"></div>
+        <div class="slider-row">
+          <div class="slider-head"><span>LUT Grade Intensity</span><strong id="lutVal">45%</strong></div>
+          <input type="range" id="lutSlider" min="0" max="100" value="45" />
+        </div>
+        <div class="slider-row">
+          <div class="slider-head"><span>35mm Film Grain</span><strong id="grainVal">10%</strong></div>
+          <input type="range" id="grainSlider" min="0" max="100" value="10" />
+        </div>
+        <div class="slider-row">
+          <div class="slider-head"><span>Optical Vignette</span><strong id="vigVal">20%</strong></div>
+          <input type="range" id="vigSlider" min="0" max="100" value="20" />
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button type="button" class="action-btn" id="resetAllBtn">&#8634; Reset Parameters</button>
+        <button type="button" class="action-btn" id="exportPngBtn">&#11015; Export Edited PNG</button>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    const RELIGHT_PRESETS = [
+      { id: 'golden', label: 'Golden', hex: '#FFB347', rgb: [1.0, 0.702, 0.278] },
+      { id: 'studio', label: 'Studio', hex: '#FFF1E0', rgb: [1.0, 0.945, 0.878] },
+      { id: 'cyan', label: 'Cyber Cyan', hex: '#22D3EE', rgb: [0.133, 0.827, 0.933] },
+      { id: 'pink', label: 'Neon Pink', hex: '#F43F5E', rgb: [0.957, 0.247, 0.369] },
+      { id: 'violet', label: 'UV Violet', hex: '#A855F7', rgb: [0.659, 0.333, 0.969] },
+      { id: 'emerald', label: 'Emerald', hex: '#10B981', rgb: [0.063, 0.725, 0.506] }
+    ];
+
+    const LUT_PRESETS = [
+      { id: 0, label: 'Clean Glow', tint: [1.03, 1.0, 0.98], contrast: 1.04, bw: 0 },
+      { id: 1, label: 'Warm Portra', tint: [1.08, 1.01, 0.91], contrast: 1.08, bw: 0 },
+      { id: 2, label: 'Golden Hour', tint: [1.12, 0.99, 0.84], contrast: 1.1, bw: 0 },
+      { id: 3, label: 'Matte B&W', tint: [1.0, 1.0, 1.0], contrast: 1.16, bw: 1 },
+      { id: 4, label: 'Cyber Neon', tint: [0.94, 1.02, 1.14], contrast: 1.14, bw: 0 },
+      { id: 5, label: 'Creamy Peach', tint: [1.07, 0.98, 0.96], contrast: 1.02, bw: 0 }
+    ];
+
+    const state = {
+      activeTab: 'retouch',
+      split: 0.22,
+      smooth: 0.65,
+      glow: 0.30,
+      relightIntensity: 0.55,
+      ambient: 0.55,
+      lightX: 0.28,
+      lightY: 0.34,
+      lightRgb: RELIGHT_PRESETS[0].rgb,
+      lightHex: RELIGHT_PRESETS[0].hex,
+      liquifyMode: 'push',
+      brushRadius: 75,
+      lutIdx: 1,
+      lutIntensity: 0.45,
+      grain: 0.10,
+      vignette: 0.20
+    };
+
+    const canvas = document.getElementById('glCanvas');
+    const gl = canvas.getContext('webgl', { preserveDrawingBuffer: true });
+
+    const vsSource = `
+      attribute vec2 a_pos;
+      varying vec2 v_uv;
+      void main() {
+        v_uv = a_pos * 0.5 + 0.5;
+        v_uv.y = 1.0 - v_uv.y;
+        gl_Position = vec4(a_pos, 0.0, 1.0);
+      }
+    `;
+
+    const fsSource = `
+      precision highp float;
+      varying vec2 v_uv;
+      uniform sampler2D u_img;
+      uniform sampler2D u_disp;
+      uniform vec2 u_res;
+      uniform float u_split;
+      uniform float u_smooth;
+      uniform float u_glow;
+      uniform float u_relight;
+      uniform float u_ambient;
+      uniform vec2 u_lightPos;
+      uniform vec3 u_lightColor;
+      uniform vec3 u_lutTint;
+      uniform float u_lutContrast;
+      uniform float u_lutBw;
+      uniform float u_lutIntensity;
+      uniform float u_grain;
+      uniform float u_vignette;
+
+      float hash(vec2 p) {
+        return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+      }
+
+      void main() {
+        // Before split shows original unedited photo
+        if (v_uv.x < u_split) {
+          gl_FragColor = texture2D(u_img, v_uv);
+          return;
+        }
+
+        // 1. Decode Liquify RG UV Displacement
+        vec4 dSample = texture2D(u_disp, v_uv);
+        vec2 dispUV = (dSample.rg - 0.5) * 2.0 * dSample.b * 0.22;
+        vec2 uv = clamp(v_uv - dispUV, vec2(0.001), vec2(0.999));
+
+        vec4 center = texture2D(u_img, uv);
+        vec3 col = center.rgb;
+
+        // 2. Edge-Preserving Bilateral Skin Smoothing (7x7 kernel)
+        if (u_smooth > 0.005) {
+          vec3 sumC = vec3(0.0);
+          float sumW = 0.0;
+          vec2 px = 1.5 / u_res;
+          for (int dx = -3; dx <= 3; dx++) {
+            for (int dy = -3; dy <= 3; dy++) {
+              vec2 off = vec2(float(dx), float(dy));
+              vec3 s = texture2D(u_img, clamp(uv + off * px, 0.0, 1.0)).rgb;
+              float sp = dot(off, off) / 40.5;
+              vec3 cd = s - col;
+              float rg = dot(cd, cd) / 0.028;
+              float w = exp(-(sp + rg));
+              sumC += s * w;
+              sumW += w;
+            }
+          }
+          vec3 blurred = sumC / max(sumW, 0.0001);
+          // Skin-tone heuristic mask so background stays ultra-crisp
+          float skinMask = smoothstep(0.02, 0.14, col.r - col.b) * smoothstep(0.08, 0.25, col.r);
+          col = mix(col, blurred, u_smooth * 0.85 * (0.45 + 0.55 * skinMask));
+        }
+
+        // Subtle Portrait Radiance Lift
+        if (u_glow > 0.005) {
+          vec3 softLift = 1.0 - (1.0 - col) * (1.0 - col * 0.38);
+          col = mix(col, softLift, u_glow * 0.65);
+        }
+
+        // 3. 3D Ellipsoidal Portrait Normal-Field Relighting
+        if (u_relight > 0.005) {
+          vec2 faceCenter = vec2(0.5, 0.44);
+          vec2 rel = (uv - faceCenter) / vec2(0.32, 0.40);
+          float r2 = dot(rel, rel);
+          float z = sqrt(max(0.08, 1.0 - min(0.92, r2 * 0.65)));
+          vec3 normal = normalize(vec3(rel.x * 0.75, -rel.y * 0.75, z));
+          vec3 lightDir = normalize(vec3((u_lightPos.x - uv.x) * 1.6, -(u_lightPos.y - uv.y) * 1.6, 0.52));
+          float ndotl = max(0.0, dot(normal, lightDir));
+          float distAtten = 1.0 / (1.0 + 1.8 * distance(uv, u_lightPos) * distance(uv, u_lightPos));
+          vec3 lit = col * (u_ambient + (1.0 - u_ambient) * 0.65) + col * u_lightColor * ndotl * distAtten * 1.45;
+          col = mix(col, lit, u_relight);
+        }
+
+        // 4. Film LUT Grade, Grain & Vignette
+        if (u_lutIntensity > 0.005) {
+          vec3 graded = (col - 0.5) * u_lutContrast + 0.5;
+          if (u_lutBw > 0.5) {
+            float luma = dot(graded, vec3(0.299, 0.587, 0.114));
+            graded = vec3(mix(0.04, 0.96, clamp(luma, 0.0, 1.0)));
+          } else {
+            graded *= u_lutTint;
+          }
+          col = mix(col, clamp(graded, 0.0, 1.0), u_lutIntensity);
+        }
+
+        if (u_vignette > 0.005) {
+          float d = distance(uv, vec2(0.5, 0.5));
+          col *= mix(1.0, smoothstep(0.88, 0.25, d), u_vignette * 0.85);
+        }
+
+        if (u_grain > 0.005) {
+          float n = (hash(uv * u_res) - 0.5) * 0.16 * u_grain;
+          col += n;
+        }
+
+        gl_FragColor = vec4(clamp(col, 0.0, 1.0), 1.0);
+      }
+    `;
+
+    function compile(type, src) {
+      const s = gl.createShader(type);
+      gl.shaderSource(s, src);
+      gl.compileShader(s);
+      return s;
+    }
+    const prog = gl.createProgram();
+    gl.attachShader(prog, compile(gl.VERTEX_SHADER, vsSource));
+    gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, fsSource));
+    gl.linkProgram(prog);
+    gl.useProgram(prog);
+
+    const quad = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, quad);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, -1,1, 1,-1, 1,1]), gl.STATIC_DRAW);
+    const aPos = gl.getAttribLocation(prog, 'a_pos');
+    gl.enableVertexAttribArray(aPos);
+    gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+    // Displacement map (256x320 RGBA Uint8 encoding centered at 128,128)
+    const DW = 256, DH = 320;
+    const dispData = new Uint8Array(DW * DH * 4);
+    const dispFloatX = new Float32Array(DW * DH);
+    const dispFloatY = new Float32Array(DW * DH);
+
+    function clearDisp() {
+      dispFloatX.fill(0);
+      dispFloatY.fill(0);
+      for (let i = 0; i < DW * DH; i++) {
+        dispData[i * 4] = 128;
+        dispData[i * 4 + 1] = 128;
+        dispData[i * 4 + 2] = 0;
+        dispData[i * 4 + 3] = 255;
+      }
+    }
+    clearDisp();
+
+    const imgTex = gl.createTexture();
+    const dispTex = gl.createTexture();
+
+    function uploadDispTex() {
+      gl.activeTexture(gl.TEXTURE1);
+      gl.bindTexture(gl.TEXTURE_2D, dispTex);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, DW, DH, 0, gl.RGBA, gl.UNSIGNED_BYTE, dispData);
+    }
+    uploadDispTex();
+
+    function loadPortrait(srcUrl) {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        const maxDim = 960;
+        const scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
+        gl.viewport(0, 0, canvas.width, canvas.height);
+
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, imgTex);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+        render();
+      };
+      img.src = srcUrl;
+    }
+
+    const U = (name) => gl.getUniformLocation(prog, name);
+
+    function render() {
+      gl.useProgram(prog);
+      gl.uniform1i(U('u_img'), 0);
+      gl.uniform1i(U('u_disp'), 1);
+      gl.uniform2f(U('u_res'), canvas.width, canvas.height);
+      gl.uniform1f(U('u_split'), state.split);
+      gl.uniform1f(U('u_smooth'), state.smooth);
+      gl.uniform1f(U('u_glow'), state.glow);
+      gl.uniform1f(U('u_relight'), state.relightIntensity);
+      gl.uniform1f(U('u_ambient'), state.ambient);
+      gl.uniform2f(U('u_lightPos'), state.lightX, state.lightY);
+      gl.uniform3fv(U('u_lightColor'), state.lightRgb);
+
+      const lut = LUT_PRESETS[state.lutIdx];
+      gl.uniform3fv(U('u_lutTint'), lut.tint);
+      gl.uniform1f(U('u_lutContrast'), lut.contrast);
+      gl.uniform1f(U('u_lutBw'), lut.bw);
+      gl.uniform1f(U('u_lutIntensity'), state.lutIntensity);
+      gl.uniform1f(U('u_grain'), state.grain);
+      gl.uniform1f(U('u_vignette'), state.vignette);
+
+      gl.drawArrays(gl.TRIANGLES, 0, 6);
+
+      document.getElementById('splitLine').style.left = `${state.split * 100}%`;
+      document.getElementById('beforeBadge').style.opacity = state.split > 0.08 ? '1' : '0';
+      const orb = document.getElementById('lightOrb');
+      orb.style.display = state.activeTab === 'relight' ? 'block' : 'none';
+      orb.style.left = `${state.lightX * 100}%`;
+      orb.style.top = `${state.lightY * 100}%`;
+      orb.style.background = state.lightHex;
+      orb.style.color = state.lightHex;
+    }
+
+    // Build Relight & LUT preset buttons
+    const relightGrid = document.getElementById('relightPresets');
+    RELIGHT_PRESETS.forEach((p, idx) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = `preset-btn ${idx === 0 ? 'active' : ''}`;
+      b.innerHTML = `<span class="swatch" style="background:${p.hex}"></span>${p.label}`;
+      b.onclick = () => {
+        relightGrid.querySelectorAll('.preset-btn').forEach(el => el.classList.remove('active'));
+        b.classList.add('active');
+        state.lightRgb = p.rgb;
+        state.lightHex = p.hex;
+        render();
+      };
+      relightGrid.appendChild(b);
+    });
+
+    const lutGrid = document.getElementById('lutPresets');
+    LUT_PRESETS.forEach((p, idx) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = `preset-btn ${idx === 1 ? 'active' : ''}`;
+      b.textContent = p.label;
+      b.onclick = () => {
+        lutGrid.querySelectorAll('.preset-btn').forEach(el => el.classList.remove('active'));
+        b.classList.add('active');
+        state.lutIdx = idx;
+        render();
+      };
+      lutGrid.appendChild(b);
+    });
+
+    // Tab switching
+    document.querySelectorAll('.mode-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        state.activeTab = tab.dataset.panel;
+        document.querySelectorAll('.tool-panel').forEach(p => {
+          p.hidden = p.id !== `panel-${state.activeTab}`;
+        });
+        render();
+      });
+    });
+
+    // Canvas pointer interaction (Relight orb drag OR Liquify brush strokes!)
+    let pointerDown = false;
+    let prevUV = null;
+
+    function applyLiquifyBrush(uvX, uvY, dx, dy) {
+      const radUV = state.brushRadius / Math.max(canvas.width, 400);
+      const minX = Math.max(0, Math.floor((uvX - radUV) * DW));
+      const maxX = Math.min(DW - 1, Math.ceil((uvX + radUV) * DW));
+      const minY = Math.max(0, Math.floor((uvY - radUV) * DH));
+      const maxY = Math.min(DH - 1, Math.ceil((uvY + radUV) * DH));
+
+      for (let y = minY; y <= maxY; y++) {
+        for (let x = minX; x <= maxX; x++) {
+          const px = x / DW - uvX;
+          const py = y / DH - uvY;
+          const dist = Math.hypot(px, py);
+          if (dist >= radUV) continue;
+          const falloff = Math.pow(1 - dist / radUV, 2);
+          const idx = y * DW + x;
+
+          if (state.liquifyMode === 'push') {
+            dispFloatX[idx] += dx * falloff * 3.8;
+            dispFloatY[idx] += dy * falloff * 3.8;
+          } else if (state.liquifyMode === 'slim') {
+            dispFloatX[idx] -= px * falloff * 0.35;
+            dispFloatY[idx] -= py * falloff * 0.35;
+          } else if (state.liquifyMode === 'plump') {
+            dispFloatX[idx] += px * falloff * 0.35;
+            dispFloatY[idx] += py * falloff * 0.35;
+          } else if (state.liquifyMode === 'swirl') {
+            dispFloatX[idx] += -py * falloff * 0.45;
+            dispFloatY[idx] += px * falloff * 0.45;
+          } else if (state.liquifyMode === 'restore') {
+            dispFloatX[idx] *= (1 - falloff * 0.35);
+            dispFloatY[idx] *= (1 - falloff * 0.35);
+          }
+
+          const cx = Math.max(-1, Math.min(1, dispFloatX[idx]));
+          const cy = Math.max(-1, Math.min(1, dispFloatY[idx]));
+          dispFloatX[idx] = cx; dispFloatY[idx] = cy;
+          const active = Math.hypot(cx, cy) > 0.002 ? 255 : 0;
+          dispData[idx * 4] = Math.round((cx * 0.5 + 0.5) * 255);
+          dispData[idx * 4 + 1] = Math.round((cy * 0.5 + 0.5) * 255);
+          dispData[idx * 4 + 2] = active;
+        }
+      }
+      uploadDispTex();
+      render();
+    }
+
+    function getCanvasUV(e) {
+      const r = canvas.getBoundingClientRect();
+      return {
+        x: Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)),
+        y: Math.max(0, Math.min(1, (e.clientY - r.top) / r.height))
+      };
+    }
+
+    canvas.addEventListener('pointerdown', (e) => {
+      pointerDown = true;
+      const uv = getCanvasUV(e);
+      prevUV = uv;
+      if (state.activeTab === 'relight') {
+        state.lightX = uv.x; state.lightY = uv.y; render();
+      } else if (state.activeTab === 'liquify' && state.liquifyMode !== 'push') {
+        applyLiquifyBrush(uv.x, uv.y, 0, 0);
+      }
+    });
+    window.addEventListener('pointermove', (e) => {
+      if (!pointerDown) return;
+      const uv = getCanvasUV(e);
+      if (state.activeTab === 'relight') {
+        state.lightX = uv.x; state.lightY = uv.y; render();
+      } else if (state.activeTab === 'liquify') {
+        applyLiquifyBrush(uv.x, uv.y, uv.x - prevUV.x, uv.y - prevUV.y);
+      }
+      prevUV = uv;
+    });
+    window.addEventListener('pointerup', () => { pointerDown = false; });
+
+    // Liquify mode buttons
+    document.querySelectorAll('[data-lmode]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('[data-lmode]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        state.liquifyMode = btn.dataset.lmode;
+      });
+    });
+    document.getElementById('clearLiquifyBtn').onclick = () => {
+      clearDisp(); uploadDispTex(); render();
+    };
+
+    // Sliders wiring
+    function bindSlider(id, labelId, suffix, onChange) {
+      const el = document.getElementById(id);
+      const lbl = document.getElementById(labelId);
+      el.addEventListener('input', () => {
+        lbl.textContent = `${el.value}${suffix}`;
+        onChange(parseFloat(el.value));
+        render();
+      });
+    }
+    bindSlider('splitSlider', 'splitVal', '%', v => state.split = v / 100);
+    bindSlider('smoothSlider', 'smoothVal', '%', v => state.smooth = v / 100);
+    bindSlider('glowSlider', 'glowVal', '%', v => state.glow = v / 100);
+    bindSlider('relightSlider', 'relightVal', '%', v => state.relightIntensity = v / 100);
+    bindSlider('ambientSlider', 'ambientVal', '%', v => state.ambient = v / 100);
+    bindSlider('brushRadSlider', 'brushRadVal', 'px', v => state.brushRadius = v);
+    bindSlider('lutSlider', 'lutVal', '%', v => state.lutIntensity = v / 100);
+    bindSlider('grainSlider', 'grainVal', '%', v => state.grain = v / 100);
+    bindSlider('vigSlider', 'vigVal', '%', v => state.vignette = v / 100);
+
+    document.getElementById('resetAllBtn').onclick = () => {
+      state.split = 0.22; document.getElementById('splitSlider').value = 22; document.getElementById('splitVal').textContent = '22%';
+      state.smooth = 0.65; document.getElementById('smoothSlider').value = 65; document.getElementById('smoothVal').textContent = '65%';
+      state.glow = 0.30; document.getElementById('glowSlider').value = 30; document.getElementById('glowVal').textContent = '30%';
+      state.relightIntensity = 0.55; document.getElementById('relightSlider').value = 55; document.getElementById('relightVal').textContent = '55%';
+      state.lutIntensity = 0.45; document.getElementById('lutSlider').value = 45; document.getElementById('lutVal').textContent = '45%';
+      clearDisp(); uploadDispTex(); render();
+    };
+
+    document.getElementById('exportPngBtn').onclick = () => {
+      const prevSplit = state.split;
+      state.split = 0; render();
+      const a = document.createElement('a');
+      a.download = 'ai-airbrush-edited.png';
+      a.href = canvas.toDataURL('image/png');
+      a.click();
+      state.split = prevSplit; render();
+    };
+
+    document.getElementById('photoUpload').addEventListener('change', (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      clearDisp(); uploadDispTex();
+      loadPortrait(URL.createObjectURL(file));
+    });
+
+    loadPortrait('./default-portrait.jpg');
+  </script>
+</body>
+</html>

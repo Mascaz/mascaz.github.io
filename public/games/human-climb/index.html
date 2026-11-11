@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Human Climb Pictures — Photo/AR Depth-to-3D Island & Active Ragdoll Sandbox</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%; height: 100%; overflow: hidden;
+      background: #0a0e1a; color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+      user-select: none;
+    }
+    .layout {
+      display: grid; grid-template-columns: 1fr 340px; width: 100%; height: 100%;
+    }
+    @media (max-width: 860px) {
+      .layout { grid-template-columns: 1fr; grid-template-rows: 1fr 44%; }
+    }
+    .viewport-wrap { position: relative; width: 100%; height: 100%; overflow: hidden; }
+    canvas { display: block; width: 100%; height: 100%; cursor: grab; }
+    canvas:active { cursor: grabbing; }
+
+    .floating-hud {
+      position: absolute; top: 14px; left: 14px; right: 14px;
+      display: flex; justify-content: space-between; align-items: center; gap: 10px;
+      pointer-events: none;
+    }
+    .pill {
+      pointer-events: auto;
+      padding: 7px 14px; border-radius: 999px; font-size: 12px; font-weight: 600;
+      background: rgba(15, 23, 42, 0.78); backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.22);
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .bottom-controls {
+      position: absolute; bottom: 14px; left: 14px;
+      display: flex; flex-wrap: wrap; gap: 7px;
+    }
+    .ctrl-btn {
+      padding: 7px 12px; border-radius: 999px; font-size: 11.5px; font-weight: 700;
+      background: rgba(15, 23, 42, 0.84); border: 1px solid rgba(56,189,248,0.45);
+      color: #e0f2fe; cursor: pointer;
+    }
+    .ctrl-btn:hover { background: rgba(56,189,248,0.25); }
+    .ctrl-btn.active { background: #0284c7; color: #fff; }
+
+    .sidebar {
+      background: rgba(13, 18, 30, 0.96);
+      border-left: 1px solid rgba(255,255,255,0.14);
+      padding: 16px; overflow-y: auto;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 16px; padding: 13px;
+      display: flex; flex-direction: column; gap: 9px;
+    }
+    .card h3 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: #7dd3fc; }
+    .level-btn {
+      display: flex; align-items: center; gap: 10px; width: 100%;
+      padding: 8px 10px; border-radius: 12px; cursor: pointer; text-align: left;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); color: #f8fafc;
+    }
+    .level-btn.active { border-color: #38bdf8; background: rgba(56,189,248,0.18); }
+    .level-btn img {
+      width: 40px; height: 40px; border-radius: 8px; object-fit: cover; image-rendering: pixelated;
+      border: 1px solid rgba(255,255,255,0.25);
+    }
+    .arch-item {
+      font-size: 11.5px; line-height: 1.5; color: #cbd5e1;
+      padding: 8px 10px; border-radius: 10px; background: rgba(0,0,0,0.28);
+    }
+    .arch-item code { color: #fde047; font-size: 11px; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <div class="viewport-wrap" id="vp">
+      <div class="floating-hud">
+        <div class="pill">
+          <span style="color:#38bdf8">Unity 6 URP + AR Foundation + Netcode</span>
+          <strong>Human Climb Pictures</strong>
+        </div>
+        <div class="pill" id="climbStatus">Bob Altitude: 0.0m &bull; Drag to Orbit</div>
+      </div>
+
+      <div class="bottom-controls">
+        <button type="button" class="ctrl-btn" id="btnJump">&#11014; Launch Ragdoll Climb / Bounce</button>
+        <button type="button" class="ctrl-btn" id="btnSpawnCrate">&#128230; Drop Toybox Crate</button>
+        <button type="button" class="ctrl-btn active" id="btnWire">AR Scan Grid: ON</button>
+      </div>
+    </div>
+
+    <aside class="sidebar">
+      <div class="card">
+        <h3>1. Generated Depth-to-Island Maps</h3>
+        <p style="font-size:11.5px;color:#94a3b8;line-height:1.45">
+          Select an extracted depth/height map from <code>Assets/GeneratedLevels/</code> (or upload any photo!) to reconstruct its 3D climbable tabletop island live:
+        </p>
+        <button type="button" class="level-btn active" data-src="./assets/Sample1_GrandCanyonDesk.png" data-scale="3.4">
+          <img src="./assets/Sample1_GrandCanyonDesk.png" alt="Grand Canyon Desk" />
+          <div><strong style="font-size:12.5px">Sample 1: Grand Canyon Desk</strong><div style="font-size:11px;color:#94a3b8">Terraced canyon ridges &amp; summit</div></div>
+        </button>
+        <button type="button" class="level-btn" data-src="./assets/Sample2_SpiralPeak.png" data-scale="4.0">
+          <img src="./assets/Sample2_SpiralPeak.png" alt="Spiral Peak" />
+          <div><strong style="font-size:12.5px">Sample 2: Spiral Peak</strong><div style="font-size:11px;color:#94a3b8">Helical ascent spire</div></div>
+        </button>
+        <button type="button" class="level-btn" data-src="./assets/Sample3_GiantTabletop.png" data-scale="3.1">
+          <img src="./assets/Sample3_GiantTabletop.png" alt="Giant Tabletop" />
+          <div><strong style="font-size:12.5px">Sample 3: Giant Tabletop</strong><div style="font-size:11px;color:#94a3b8">Multi-plateau household scan</div></div>
+        </button>
+        <label class="ctrl-btn" style="text-align:center;display:block;margin-top:4px">
+          &#128247; Convert Any Photo to 3D Island
+          <input type="file" id="customPhoto" accept="image/*" hidden />
+        </label>
+      </div>
+
+      <div class="card">
+        <h3>2. Core C# Systems Architecture</h3>
+        <div class="arch-item">
+          <code>OnnxDepthModelRunner.cs</code> + <code>VideoLevelExtractor.cs</code><br/>
+          Converts camera photos, video frames, or ARKit tabletop scans into 3D island collider meshes at runtime.
+        </div>
+        <div class="arch-item">
+          <code>ActiveRagdollController.cs</code> (891 lines) + <code>HandGrabSensor.cs</code><br/>
+          Human: Fall Flat-style dual-arm active ragdoll climber ("Player_Bob") with dual-reach procedural grabbing (`HFFArmControlPadUI.cs`).
+        </div>
+        <div class="arch-item">
+          <code>NetworkLevelStreamer.cs</code> + <code>LocalLanDiscovery.cs</code><br/>
+          Streams custom photo-generated island meshes over Unity Netcode so friends on LAN/multiplayer climb your desk scan together, plus interactive <code>ToyboxSpawner</code> props (Bouncy Pads, Seesaws, Crates).
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script type="module">
+    import * as THREE from '../../assets/vendor/three.min.js';
+
+    const vp = document.getElementById('vp');
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(vp.clientWidth, vp.clientHeight);
+    renderer.shadowMap.enabled = true;
+    vp.appendChild(renderer.domElement);
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0b1120);
+
+    const camera = new THREE.PerspectiveCamera(50, vp.clientWidth / vp.clientHeight, 0.1, 100);
+    let camYaw = 0.65, camPitch = 0.52, camDist = 11.5;
+
+    scene.add(new THREE.AmbientLight(0x93c5fd, 0.85));
+    const sun = new THREE.DirectionalLight(0xfffbeb, 2.0);
+    sun.position.set(6, 12, 8);
+    scene.add(sun);
+
+    // AR Tabletop Scanning Wireframe Base Plane
+    const arGrid = new THREE.GridHelper(12, 24, 0x38bdf8, 0x1e3a8a);
+    arGrid.position.y = -0.02;
+    scene.add(arGrid);
+
+    let islandMesh = null;
+    let islandWire = null;
+    const SEG = 64;
+    const SIZE = 8.4;
+    let heightGrid = new Float32Array((SEG + 1) * (SEG + 1));
+
+    function sampleHeight(wx, wz) {
+      const u = (wx / SIZE + 0.5) * SEG;
+      const v = (wz / SIZE + 0.5) * SEG;
+      const ix = Math.max(0, Math.min(SEG, Math.round(u)));
+      const iz = Math.max(0, Math.min(SEG, Math.round(v)));
+      return heightGrid[iz * (SEG + 1) + ix] || 0;
+    }
+
+    // Bouncy Pad Prop (BouncyPadTrigger.cs)
+    const bouncyPad = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.55, 0.62, 0.18, 20),
+      new THREE.MeshStandardMaterial({ color: 0xf43f5e, emissive: 0x881337, roughness: 0.35 })
+    );
+    scene.add(bouncyPad);
+
+    // Active Ragdoll Climber "Player_Bob" (articulated head, torso, left/right reaching arms, legs)
+    const bob = new THREE.Group();
+    const bobMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.45 });
+    const torso = new THREE.Mesh(new THREE.CapsuleGeometry(0.2, 0.36, 6, 12), bobMat);
+    torso.position.y = 0.55;
+    const head = new THREE.Mesh(new THREE.SphereGeometry(0.2, 16, 16), bobMat);
+    head.position.y = 1.02;
+    const armL = new THREE.Mesh(new THREE.CapsuleGeometry(0.075, 0.34, 4, 8), new THREE.MeshStandardMaterial({ color: 0x38bdf8 }));
+    armL.position.set(-0.28, 0.78, -0.15);
+    armL.rotation.x = -0.9;
+    const armR = new THREE.Mesh(new THREE.CapsuleGeometry(0.075, 0.34, 4, 8), new THREE.MeshStandardMaterial({ color: 0xfb923c }));
+    armR.position.set(0.28, 0.78, -0.15);
+    armR.rotation.x = -0.9;
+    bob.add(torso, head, armL, armR);
+    scene.add(bob);
+
+    const bobState = { x: -1.8, z: 1.8, y: 2, vy: 0, vx: 0.55, vz: -0.55 };
+    const crates = [];
+
+    function buildIslandFromImage(url, heightScale = 3.4) {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        const c = document.createElement('canvas');
+        c.width = SEG + 1; c.height = SEG + 1;
+        const ctx = c.getContext('2d');
+        ctx.drawImage(img, 0, 0, SEG + 1, SEG + 1);
+        const data = ctx.getImageData(0, 0, SEG + 1, SEG + 1).data;
+
+        const geo = new THREE.PlaneGeometry(SIZE, SIZE, SEG, SEG);
+        geo.rotateX(-Math.PI / 2);
+        const pos = geo.attributes.position;
+        const colors = new Float32Array(pos.count * 3);
+
+        for (let i = 0; i < pos.count; i++) {
+          const r = data[i * 4] / 255;
+          const g = data[i * 4 + 1] / 255;
+          const b = data[i * 4 + 2] / 255;
+          const luma = 0.299 * r + 0.587 * g + 0.114 * b;
+
+          // Radial island falloff so edges meet the AR tabletop cleanly
+          const x = pos.getX(i), z = pos.getZ(i);
+          const radial = Math.max(0, 1 - Math.pow(Math.hypot(x, z) / (SIZE * 0.49), 3.2));
+          const h = luma * heightScale * radial;
+          pos.setY(i, h);
+          heightGrid[i] = h;
+
+          // Vertex biome coloring (sand -> canyon terracotta -> snow summit)
+          const col = new THREE.Color();
+          if (h < 0.35) col.setHex(0x1e3a5f);
+          else if (h < 1.3) col.setHex(0xd97706).lerp(new THREE.Color(0xb45309), h / 1.3);
+          else if (h < 2.5) col.setHex(0xea580c).lerp(new THREE.Color(0x65a30d), (h - 1.3) / 1.2);
+          else col.setHex(0xf8fafc);
+          colors[i * 3] = col.r; colors[i * 3 + 1] = col.g; colors[i * 3 + 2] = col.b;
+        }
+        geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+        geo.computeVertexNormals();
+
+        if (islandMesh) { scene.remove(islandMesh); islandMesh.geometry.dispose(); }
+        if (islandWire) { scene.remove(islandWire); }
+
+        islandMesh = new THREE.Mesh(
+          geo,
+          new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.72, flatShading: true })
+        );
+        scene.add(islandMesh);
+
+        islandWire = new THREE.Mesh(
+          geo,
+          new THREE.MeshBasicMaterial({ color: 0x38bdf8, wireframe: true, transparent: true, opacity: 0.14 })
+        );
+        islandWire.visible = arGrid.visible;
+        scene.add(islandWire);
+
+        // Place bouncy pad near mid-slope
+        bouncyPad.position.set(1.2, sampleHeight(1.2, 1.1) + 0.1, 1.1);
+        bobState.x = -1.6; bobState.z = 1.6; bobState.y = sampleHeight(-1.6, 1.6) + 1.8; bobState.vy = 0;
+      };
+      img.src = url;
+    }
+
+    // Orbit camera drag + click island to guide ragdoll target
+    let dragging = false, lx = 0, ly = 0;
+    let targetGoal = new THREE.Vector2(0, 0);
+    renderer.domElement.addEventListener('pointerdown', (e) => { dragging = true; lx = e.clientX; ly = e.clientY; });
+    window.addEventListener('pointermove', (e) => {
+      if (!dragging) return;
+      camYaw -= (e.clientX - lx) * 0.007;
+      camPitch = Math.max(0.18, Math.min(1.35, camPitch + (e.clientY - ly) * 0.006));
+      lx = e.clientX; ly = e.clientY;
+    });
+    window.addEventListener('pointerup', () => { dragging = false; });
+    renderer.domElement.addEventListener('wheel', (e) => {
+      camDist = Math.max(5.5, Math.min(18, camDist + e.deltaY * 0.01));
+    }, { passive: true });
+
+    // UI Controls
+    document.querySelectorAll('.level-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        buildIslandFromImage(btn.dataset.src, parseFloat(btn.dataset.scale));
+      });
+    });
+
+    document.getElementById('customPhoto').addEventListener('change', (e) => {
+      const f = e.target.files?.[0];
+      if (f) buildIslandFromImage(URL.createObjectURL(f), 3.5);
+    });
+
+    document.getElementById('btnJump').onclick = () => {
+      bobState.vy = 6.2;
+      targetGoal.set((Math.random() - 0.5) * 2.2, (Math.random() - 0.5) * 2.2);
+    };
+
+    document.getElementById('btnSpawnCrate').onclick = () => {
+      const m = new THREE.Mesh(
+        new THREE.BoxGeometry(0.45, 0.45, 0.45),
+        new THREE.MeshStandardMaterial({ color: 0xfbbf24, roughness: 0.5 })
+      );
+      const rx = (Math.random() - 0.5) * 3.2;
+      const rz = (Math.random() - 0.5) * 3.2;
+      m.position.set(rx, 5.2, rz);
+      scene.add(m);
+      crates.push({ mesh: m, vy: 0 });
+    };
+
+    const btnWire = document.getElementById('btnWire');
+    btnWire.onclick = () => {
+      arGrid.visible = !arGrid.visible;
+      if (islandWire) islandWire.visible = arGrid.visible;
+      btnWire.classList.toggle('active', arGrid.visible);
+      btnWire.textContent = `AR Scan Grid: ${arGrid.visible ? 'ON' : 'OFF'}`;
+    };
+
+    let prev = performance.now();
+    function tick(now) {
+      requestAnimationFrame(tick);
+      const dt = Math.min(0.04, (now - prev) / 1000);
+      prev = now;
+
+      // Active ragdoll climbs toward highest peak / goal with playful wobble
+      const dx = targetGoal.x - bobState.x;
+      const dz = targetGoal.y - bobState.z;
+      const dist = Math.hypot(dx, dz);
+      if (dist > 0.25) {
+        bobState.x += (dx / dist) * 1.35 * dt;
+        bobState.z += (dz / dist) * 1.35 * dt;
+        bob.rotation.y = Math.atan2(dx, dz);
+      } else {
+        targetGoal.set(Math.sin(now * 0.0007) * 2.2, Math.cos(now * 0.0009) * 2.2);
+      }
+
+      bobState.vy -= 13.5 * dt;
+      bobState.y += bobState.vy * dt;
+      const groundH = sampleHeight(bobState.x, bobState.z);
+      if (bobState.y <= groundH) {
+        bobState.y = groundH;
+        bobState.vy = 2.4; // Playful climbing hop!
+      }
+      // BouncyPad boost!
+      if (Math.hypot(bobState.x - bouncyPad.position.x, bobState.z - bouncyPad.position.z) < 0.75 && bobState.y < bouncyPad.position.y + 0.4) {
+        bobState.vy = 8.2;
+      }
+
+      bob.position.set(bobState.x, bobState.y, bobState.z);
+      bob.rotation.z = Math.sin(now * 0.008) * 0.14;
+      armL.rotation.x = -1.1 + Math.sin(now * 0.012) * 0.65;
+      armR.rotation.x = -1.1 - Math.sin(now * 0.012) * 0.65;
+
+      crates.forEach(c => {
+        c.vy -= 14 * dt;
+        c.mesh.position.y += c.vy * dt;
+        const gh = sampleHeight(c.mesh.position.x, c.mesh.position.z) + 0.225;
+        if (c.mesh.position.y < gh) {
+          c.mesh.position.y = gh;
+          c.vy *= -0.35;
+        }
+      });
+
+      document.getElementById('climbStatus').textContent = `Bob Altitude: ${bobState.y.toFixed(2)}m • Drag to Orbit`;
+
+      camera.position.set(
+        Math.sin(camYaw) * Math.cos(camPitch) * camDist,
+        Math.sin(camPitch) * camDist + 1.2,
+        Math.cos(camYaw) * Math.cos(camPitch) * camDist
+      );
+      camera.lookAt(0, 1.1, 0);
+      renderer.render(scene, camera);
+    }
+
+    window.addEventListener('resize', () => {
+      camera.aspect = vp.clientWidth / vp.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(vp.clientWidth, vp.clientHeight);
+    });
+
+    buildIslandFromImage('./assets/Sample1_GrandCanyonDesk.png', 3.4);
+    requestAnimationFrame(tick);
+  </script>
+</body>
+</html>
