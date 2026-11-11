@@ -248,6 +248,9 @@ export const CLASSIC_APPS = [
 /**
  * Era 2: Modern Liquid Glass Projects (Playable Games, Official Demos & Interactive Apps)
  * Styled after Apple's Liquid Glass design system (visionOS / macOS Tahoe / iOS 26)
+ *
+ * Standing Exclusion Note: Do NOT add "RelaisPalais Rework" or empty scaffolds ("Fototecateca")
+ * when scanning /Users/max/Local/Projects for future portfolio updates (see AGENTS.md).
  */
 export const MODERN_APPS = [
   {
@@ -592,27 +595,6 @@ export const MODERN_APPS = [
       'Guides beginners step-by-step through launching an organic or paid-ads e-commerce store in English or Español without hype or hidden traps. Includes a live unit-economics profit simulator, supplier vetting checklists, brand & boutique copywriter tools, short-form video hook generators, and shareable URL state. (Portfolio build runs 100% client-side using its built-in smart curation fallback with zero API keys exposed.)',
     tech: ['React 19', 'Next.js Architecture', 'TypeScript', 'Bilingual EN/ES', 'Tailwind CSS'],
     screenshots: []
-  },
-  {
-    id: 'relais-palais',
-    name: 'Relais Palais Rework',
-    shortName: 'Relais Palais',
-    folder: 'RelaisPalais Rework',
-    group: 'apps',
-    badge: 'Interactive Site',
-    category: 'Editorial Fashion Storefront & Custom Shopify Theme • Liquid & JS',
-    iconUrl: './assets/icons/relais-palais.svg',
-    playUrl: './games/relais-palais/index.html',
-    playLabel: 'Explore Storefront Rework',
-    tldr: 'A Rhode-inspired luxury minimalist storefront redesign and full Shopify OS 2.0 Liquid theme for independent fashion label Relais Palais, featuring framed video heroes, size & rise modals, lookbook tabs, and a slide-out shopping bag.',
-    description:
-      'Complete e-commerce UX/UI rework built both as an interactive standalone preview and a production-ready Shopify Online Store 2.0 theme (sections, snippets, JSON templates, and custom schema settings). Highlights small-batch made-to-order drops, the signature 6" rise editorial story, purple graphic tee capsules, interactive sizing modals, and stateful cart drawer.',
-    tech: ['Shopify Liquid (OS 2.0)', 'Vanilla JS', 'Editorial CSS', 'Interactive Cart Drawer'],
-    screenshots: [
-      './games/relais-palais/assets/karina-1.jpg',
-      './games/relais-palais/assets/purple-tees/capybaras-in-paris-purple.jpg',
-      './games/relais-palais/assets/purple-tees/tiramisu-t-purple.jpg'
-    ]
   },
   {
     id: 'doctor-calendar',
