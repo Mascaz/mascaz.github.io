@@ -1,0 +1,2382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fototecateca — Glossy Arcade Parody Video Ad Booth</title>
+  <style>
+    :root {
+      --booth-bg: #080612;
+      --booth-panel: #120d26;
+      --neon-pink: #ff2e93;
+      --neon-cyan: #22d3ee;
+      --neon-amber: #fbbf24;
+      --neon-lime: #a3e635;
+      --font-display: "Arial Black", "Impact", "Trebuchet MS", system-ui, sans-serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: "SFMono-Regular", ui-monospace, Menlo, Consolas, monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--booth-bg);
+      color: #f8f5ff;
+      font-family: var(--font-sans);
+      min-height: 100dvh;
+      overflow-x: hidden;
+      background-image:
+        radial-gradient(circle at 15% 0%, rgba(255, 46, 147, 0.18), transparent 42%),
+        radial-gradient(circle at 85% 8%, rgba(34, 211, 238, 0.16), transparent 42%),
+        radial-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 24px 24px;
+      line-height: 1.45;
+    }
+
+    button, input, textarea, select {
+      font: inherit;
+      color: inherit;
+    }
+
+    .marquee-glow {
+      font-family: var(--font-display);
+      letter-spacing: 0.01em;
+      text-shadow:
+        0 0 12px rgba(255, 46, 147, 0.72),
+        0 0 24px rgba(255, 46, 147, 0.42),
+        0 2px 0 rgba(0, 0, 0, 0.9);
+    }
+
+    .coin-slot-chrome {
+      background: linear-gradient(180deg, #4b5563 0%, #1f2937 22%, #0f172a 55%, #334155 100%);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.42),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.8),
+        0 4px 14px rgba(0, 0, 0, 0.65);
+    }
+
+    .booth-bezel {
+      background: linear-gradient(180deg, rgba(26, 18, 52, 0.93) 0%, rgba(14, 10, 30, 0.97) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.14),
+        0 20px 50px rgba(0, 0, 0, 0.65);
+      border-radius: 24px;
+    }
+
+    .btn-arcade {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      border-radius: 14px;
+      padding: 10px 16px;
+      font-size: 13px;
+      border: none;
+      transition: transform 90ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 90ms ease, filter 120ms ease;
+      user-select: none;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn-arcade:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+    .btn-arcade-pink {
+      background: linear-gradient(180deg, #ff5db1 0%, #f0167f 52%, #c80b65 100%);
+      color: #ffffff;
+      border: 1px solid rgba(255, 195, 226, 0.55);
+      box-shadow: inset 0 2px 1px rgba(255, 255, 255, 0.52), 0 5px 0 #7d063e, 0 9px 22px rgba(255, 46, 147, 0.42);
+    }
+    .btn-arcade-pink:hover:not(:disabled) { filter: brightness(1.07); }
+    .btn-arcade-pink:active:not(:disabled) {
+      transform: translateY(4px);
+      box-shadow: inset 0 2px 1px rgba(255, 255, 255, 0.4), 0 1px 0 #7d063e;
+    }
+    .btn-arcade-cyan {
+      background: linear-gradient(180deg, #67e8f9 0%, #06b6d4 54%, #0e7490 100%);
+      color: #04131a;
+      border: 1px solid rgba(207, 250, 254, 0.65);
+      box-shadow: inset 0 2px 1px rgba(255, 255, 255, 0.65), 0 5px 0 #164e63, 0 9px 22px rgba(34, 211, 238, 0.36);
+    }
+    .btn-arcade-cyan:hover:not(:disabled) { filter: brightness(1.06); }
+    .btn-arcade-cyan:active:not(:disabled) {
+      transform: translateY(4px);
+      box-shadow: inset 0 2px 1px rgba(255, 255, 255, 0.45), 0 1px 0 #164e63;
+    }
+    .btn-arcade-amber {
+      background: linear-gradient(180deg, #fde047 0%, #f59e0b 55%, #d97706 100%);
+      color: #1c0f02;
+      border: 1px solid rgba(254, 249, 195, 0.72);
+      box-shadow: inset 0 2px 1px rgba(255, 255, 255, 0.7), 0 5px 0 #78350f, 0 9px 24px rgba(251, 191, 36, 0.38);
+    }
+    .btn-arcade-amber:hover:not(:disabled) { filter: brightness(1.06); }
+    .btn-arcade-amber:active:not(:disabled) {
+      transform: translateY(4px);
+      box-shadow: inset 0 2px 1px rgba(255, 255, 255, 0.5), 0 1px 0 #78350f;
+    }
+    .btn-arcade-dark {
+      background: linear-gradient(180deg, #2b224b 0%, #191233 60%, #120c26 100%);
+      color: #f3ecff;
+      border: 1px solid rgba(167, 139, 250, 0.35);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 4px 0 #090514, 0 6px 16px rgba(0, 0, 0, 0.5);
+    }
+    .btn-arcade-dark:hover:not(:disabled) { border-color: rgba(232, 121, 249, 0.65); }
+    .btn-arcade-dark:active:not(:disabled) {
+      transform: translateY(3px);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 1px 0 #090514;
+    }
+
+    @keyframes dispenseFilmStrip {
+      0% { opacity: 0; transform: translateY(-44px) scale(0.98); }
+      65% { opacity: 1; transform: translateY(5px) scale(1); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .animate-film-dispense {
+      animation: dispenseFilmStrip 650ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    @keyframes xenonFlash {
+      0% { opacity: 0; }
+      14% { opacity: 0.94; }
+      40% { opacity: 0.22; }
+      100% { opacity: 0; }
+    }
+    .animate-xenon-flash {
+      animation: xenonFlash 820ms ease-out forwards;
+    }
+
+    /* Sticky Arcade Header */
+    .arcade-header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(10, 7, 24, 0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 46, 147, 0.32);
+    }
+    .marquee-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 4px 14px;
+      background: linear-gradient(90deg, rgba(219,39,119,0.32), rgba(6,182,212,0.26), rgba(245,158,11,0.32));
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #fce7f3;
+    }
+    .nav-inner {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .brand-btn {
+      background: none;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      text-align: left;
+    }
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #ec4899, #581c87);
+      border: 1px solid rgba(244, 114, 182, 0.7);
+      box-shadow: 0 0 16px rgba(255, 46, 147, 0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 19px;
+    }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .coin-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 11px;
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      cursor: pointer;
+    }
+    .coin-btn:hover { border-color: rgba(251, 191, 36, 0.8); }
+    .coin-slit {
+      width: 10px;
+      height: 24px;
+      border-radius: 3px;
+      background: #090d16;
+      border: 1px solid rgba(100, 116, 139, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .coin-slit::after {
+      content: "";
+      width: 2px;
+      height: 14px;
+      border-radius: 99px;
+      background: #fbbf24;
+    }
+
+    main {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 18px 16px 64px;
+    }
+
+    .sandbox-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(251, 191, 36, 0.15);
+      border: 1px solid rgba(251, 191, 36, 0.5);
+      color: #fde68a;
+    }
+
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+      margin-top: 22px;
+    }
+    .pillar-card {
+      background: rgba(0, 0, 0, 0.42);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 13px;
+    }
+
+    .templates-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .tpl-card {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+      transition: transform 0.16s ease, border-color 0.16s ease;
+    }
+    .tpl-card:hover { transform: translateY(-3px); }
+
+    .badge-mono {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    /* Studio Form Controls */
+    .cast-row {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 6px 0 4px;
+    }
+    .cast-chip {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 13px;
+      border-radius: 16px;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1.5px solid rgba(255, 255, 255, 0.16);
+      cursor: pointer;
+      text-align: left;
+    }
+    .cast-chip.active {
+      border-color: #22d3ee;
+      background: rgba(34, 211, 238, 0.18);
+      box-shadow: 0 0 18px rgba(34, 211, 238, 0.28);
+    }
+    .cast-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 11px;
+      object-fit: cover;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      background: #1e1b4b;
+    }
+
+    .cartridge-selector {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .cartridge-btn {
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(0, 0, 0, 0.38);
+      border: 1.5px solid rgba(255, 255, 255, 0.12);
+      text-align: left;
+      cursor: pointer;
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+    .cartridge-btn.active {
+      border-color: #ff2e93;
+      background: rgba(255, 46, 147, 0.18);
+      box-shadow: 0 0 22px rgba(255, 46, 147, 0.26);
+    }
+
+    .field-input {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: #110a24;
+      padding: 10px 13px;
+      font-size: 13px;
+      color: #ffffff;
+      margin-top: 6px;
+    }
+    .field-input:focus {
+      outline: none;
+      border-color: #ff2e93;
+    }
+
+    /* Film Strip Dispenser */
+    .film-paper {
+      margin: 0 10px;
+      border-radius: 0 0 24px 24px;
+      border-left: 4px solid rgba(255, 255, 255, 0.92);
+      border-right: 4px solid rgba(255, 255, 255, 0.92);
+      border-bottom: 4px solid rgba(255, 255, 255, 0.92);
+      background: linear-gradient(180deg, #faf8ff 0%, #f3effb 55%, #e8e1f7 100%);
+      color: #0f172a;
+      padding: 18px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.78);
+    }
+    .frames-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 14px;
+    }
+    @media (max-width: 720px) {
+      .frames-grid { grid-template-columns: 1fr; }
+    }
+    .frame-card {
+      background: #ffffff;
+      border: 2px solid rgba(15, 23, 42, 0.14);
+      border-radius: 14px;
+      padding: 8px;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+    }
+    .frame-img {
+      width: 100%;
+      border-radius: 9px;
+      display: block;
+      background: #0f172a;
+    }
+
+    /* Studio Video Monitor + Dials */
+    .monitor-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 14px;
+    }
+    #commercialCanvas {
+      border-radius: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 0 42px rgba(255, 46, 147, 0.28);
+      background: #05030a;
+      max-width: 100%;
+      height: auto;
+    }
+    .dials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .dial-box {
+      background: rgba(0, 0, 0, 0.42);
+      border-radius: 18px;
+      padding: 15px;
+    }
+    .preset-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+    .preset-chip {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 9px;
+      border-radius: 9px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.06);
+      color: #cbd5e1;
+      cursor: pointer;
+    }
+    .preset-chip.active-pink {
+      border-color: #ff2e93;
+      background: rgba(255, 46, 147, 0.26);
+      color: #ffffff;
+    }
+    .preset-chip.active-cyan {
+      border-color: #22d3ee;
+      background: rgba(34, 211, 238, 0.24);
+      color: #ffffff;
+    }
+
+    /* Modals & Drawers */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      background: rgba(4, 2, 10, 0.82);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-backdrop[hidden] { display: none !important; }
+
+    .curtain-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+    .curtain-overlay[hidden] { display: none !important; }
+    .curtain-velvet {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(74, 5, 29, 0.96), rgba(24, 4, 28, 0.92), rgba(74, 5, 29, 0.96));
+    }
+    .curtain-flash {
+      position: absolute;
+      inset: 0;
+      background: #ffffff;
+    }
+    .curtain-card {
+      position: relative;
+      z-index: 2;
+      background: rgba(18, 9, 38, 0.96);
+      border: 2px solid rgba(244, 114, 182, 0.85);
+      border-radius: 18px;
+      padding: 18px 28px;
+      text-align: center;
+      box-shadow: 0 0 42px rgba(255, 46, 147, 0.72);
+    }
+
+    .packs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .pack-card {
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(21, 14, 46, 0.92);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .pack-card.popular {
+      border-color: #f472b6;
+      background: linear-gradient(180deg, rgba(131, 24, 67, 0.45), rgba(26, 16, 56, 0.95));
+      box-shadow: 0 0 28px rgba(255, 46, 147, 0.25);
+    }
+  </style>
+</head>
+<body>
+  <!-- Velvet Booth Curtain + Xenon Flash Overlay -->
+  <div id="curtainOverlay" class="curtain-overlay" hidden>
+    <div class="curtain-velvet"></div>
+    <div id="curtainFlash" class="curtain-flash"></div>
+    <div class="curtain-card">
+      <div style="font-size:10px;font-weight:800;letter-spacing:0.24em;color:#67e8f9;text-transform:uppercase">
+        BOOTH CURTAIN CLOSED
+      </div>
+      <div id="curtainText" class="marquee-glow" style="font-size:20px;margin-top:5px">
+        SNAPPING 3-FRAME STORYBOARD...
+      </div>
+    </div>
+  </div>
+
+  <!-- Sticky Arcade Navbar -->
+  <header class="arcade-header">
+    <div class="marquee-strip">
+      <span>● BOOTH NO. 01 // PARODY TV STUDIO</span>
+      <span style="color:#a5f3fc">3-FRAME WALKTHROUGH • VEO 3.1 AUDIO • REBATE ESCROW</span>
+      <span style="color:#fcd34d">PORTFOLIO SANDBOX</span>
+    </div>
+    <div class="nav-inner">
+      <button type="button" class="brand-btn" id="navHomeBtn">
+        <div class="brand-icon" aria-hidden="true">📸</div>
+        <div>
+          <div class="marquee-glow" style="font-size:19px;color:#fff">FOTOTECATECA</div>
+          <div style="font-size:10px;letter-spacing:0.16em;color:#67e8f9;text-transform:uppercase;font-weight:700">
+            Glossy Arcade Ad Booth
+          </div>
+        </div>
+      </button>
+
+      <div class="nav-actions">
+        <button type="button" class="btn-arcade btn-arcade-dark" id="switchViewBtn" style="padding:7px 12px;font-size:12px">
+          🎬 Studio Booth
+        </button>
+
+        <!-- Brushed Chrome Coin-Slot Counter -->
+        <button type="button" class="coin-slot-chrome coin-btn" id="openCoinsBtn" title="Open Simulated Arcade Coin Dispenser">
+          <span class="coin-slit" aria-hidden="true"></span>
+          <div style="text-align:left;line-height:1.1">
+            <div style="font-family:var(--font-mono);font-size:13px;font-weight:900;color:#fcd34d">
+              🪙 <span id="navCoinsText">210</span> <span style="font-size:10px;color:#fde68a">COINS</span>
+            </div>
+            <div id="navEscrowSub" style="font-family:var(--font-mono);font-size:9px;color:#cbd5e1;margin-top:2px">
+              + FREE SANDBOX TOP-UP
+            </div>
+          </div>
+        </button>
+
+        <button type="button" class="btn-arcade btn-arcade-dark" id="openCastBtn" style="padding:7px 11px;font-size:12px">
+          🐾 Cast <span id="navCastCount" style="background:rgba(34,211,238,0.2);color:#a5f3fc;padding:1px 6px;border-radius:99px;font-family:var(--font-mono);font-size:10px">3</span>
+        </button>
+
+        <button type="button" class="btn-arcade btn-arcade-dark" id="openArchBtn" style="padding:7px 11px;font-size:12px" title="View Production Architecture & Escrow Math">
+          ⚙️ Stack
+        </button>
+
+        <button type="button" class="btn-arcade btn-arcade-dark" id="sfxToggleBtn" style="padding:7px 10px;font-size:12px" title="Toggle Arcade WebAudio SFX">
+          🔊
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ==================== VIEW A: MARQUEE LANDING & CARTRIDGE CATALOG ==================== -->
+    <div id="homeView">
+      <section class="booth-bezel" style="padding:28px;border-color:rgba(255,46,147,0.42);position:relative;overflow:hidden">
+        <span class="sandbox-pill">✨ Interactive Portfolio Sandbox • +210 Demo Coins Pre-Loaded</span>
+        <h1 class="marquee-glow" style="font-size:clamp(1.75rem,3.6vw,2.75rem);margin-top:14px;max-width:740px;line-height:1.12">
+          Step Into the Booth. Put Your Pet or Face in Iconic TV Parody Ads!
+        </h1>
+        <p style="margin-top:12px;max-width:680px;color:#e2e8f0;font-size:15px">
+          Pick a classic retro commercial cartridge, dispense a
+          <strong style="color:#67e8f9">3-frame glossy photo-booth storyboard strip</strong>
+          before spending video coins, dial in up to
+          <strong style="color:#f472b6">2 guided comedy takes</strong>, and earn
+          <strong style="color:#fcd34d">+20 Coin Rebates</strong> when you lock on Take 1.
+        </p>
+
+        <div style="margin-top:20px;display:flex;flex-wrap:wrap;gap:10px">
+          <button type="button" class="btn-arcade btn-arcade-pink" id="heroEnterStudioBtn" style="padding:13px 22px;font-size:14px">
+            📸 Enter Photo Booth Studio →
+          </button>
+          <button type="button" class="btn-arcade btn-arcade-dark" id="heroOpenCoinsBtn">
+            🪙 Inspect Rebate Escrow &amp; Packs
+          </button>
+        </div>
+
+        <div class="pillars-grid">
+          <div class="pillar-card">
+            <div style="font-size:12px;font-weight:800;color:#67e8f9">🎞️ 1. 3-Frame Film Strip (10 Coins)</div>
+            <p style="font-size:12px;color:#cbd5e1;margin-top:4px">
+              Assembles structured scripts via Gemini 3.5 Flash-Lite &amp; renders 3 consistent Nano Banana 2.1 keyframes (+ 1 free redo!).
+            </p>
+          </div>
+          <div class="pillar-card">
+            <div style="font-size:12px;font-weight:800;color:#f472b6">🎬 2. Veo 3.1 Video + Native Audio</div>
+            <p style="font-size:12px;color:#cbd5e1;margin-top:4px">
+              8-second 9:16 or 16:9 commercials with booming voiceovers, jingles, and pre-locked camera choreography.
+            </p>
+          </div>
+          <div class="pillar-card">
+            <div style="font-size:12px;font-weight:800;color:#fcd34d">🪙 3. Rebate Escrow Economics</div>
+            <p style="font-size:12px;color:#cbd5e1;margin-top:4px">
+              Escrow 90 coins for up to 2 guided dial corrections. Lock on Take 1 and +20 unused-correction coins drop back!
+            </p>
+          </div>
+          <div class="pillar-card">
+            <div style="font-size:12px;font-weight:800;color:#6ee7b7">🛡️ 4. Safety Shield &amp; Edge Vault</div>
+            <p style="font-size:12px;color:#cbd5e1;margin-top:4px">
+              Auto-refunds escrow on safety blocks; FFmpeg transcodes &amp; archives masters to Google Drive v3 + Cloud CDN.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:28px">
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:8px">
+          <div>
+            <div style="font-size:11px;font-weight:800;letter-spacing:0.2em;color:#67e8f9;text-transform:uppercase">
+              SELECT YOUR COMMERCIAL CARTRIDGE
+            </div>
+            <h2 class="marquee-glow" style="font-size:24px;margin-top:2px">5 Locked-Beat V1 Parody Templates</h2>
+          </div>
+          <div style="font-size:12px;color:#cbd5e1">
+            🎛️ Zero prompt engineering — camera, lighting &amp; audio pre-rigged!
+          </div>
+        </div>
+        <div id="catalogGrid" class="templates-grid"></div>
+      </section>
+    </div>
+
+    <!-- ==================== VIEW B: INTERACTIVE CREATE STUDIO ==================== -->
+    <div id="studioView" hidden>
+      <div id="bannerSlot" style="margin-bottom:14px"></div>
+
+      <!-- STAGE 1: Cartridge & Star Setup -->
+      <form id="setupForm" class="booth-bezel" style="padding:24px;border-color:rgba(255,46,147,0.38)">
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,0.1);padding-bottom:14px">
+          <div>
+            <div style="font-size:10px;font-weight:800;letter-spacing:0.2em;color:#67e8f9;text-transform:uppercase">
+              STEP 1 // CONFIGURE YOUR PARODY COMMERCIAL
+            </div>
+            <h2 class="marquee-glow" style="font-size:24px;margin-top:2px">Load Star &amp; Parody Channel</h2>
+          </div>
+          <span class="badge-mono" style="background:rgba(251,191,36,0.15);border-color:rgba(251,191,36,0.45);color:#fde68a;padding:6px 12px;font-size:11px">
+            WALKTHROUGH: 10 COINS (+1 FREE REDO)
+          </span>
+        </div>
+
+        <!-- 1. Cast Picker -->
+        <div style="margin-top:18px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <label style="font-size:11px;font-weight:800;letter-spacing:0.1em;color:#a5f3fc;text-transform:uppercase">
+              1. Pick Starring Pet or Adult Face (18+)
+            </label>
+            <button type="button" id="inlineAddStarBtn" style="background:none;border:none;color:#f472b6;font-size:12px;font-weight:800;cursor:pointer">
+              + Upload / Manage Stars
+            </button>
+          </div>
+          <div id="studioCastRow" class="cast-row"></div>
+        </div>
+
+        <!-- 2. Parody Cartridge -->
+        <div style="margin-top:18px">
+          <label style="font-size:11px;font-weight:800;letter-spacing:0.1em;color:#a5f3fc;text-transform:uppercase">
+            2. Select Parody TV Cartridge
+          </label>
+          <div id="studioCartridgeGrid" class="cartridge-selector"></div>
+          <div id="rigSummaryBox" style="margin-top:10px;background:rgba(0,0,0,0.42);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:12px;font-size:12px;color:#cbd5e1"></div>
+        </div>
+
+        <!-- 3 & 4. Product Name & Aspect Ratio -->
+        <div style="margin-top:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">
+          <div>
+            <label for="productInput" style="font-size:11px;font-weight:800;letter-spacing:0.1em;color:#a5f3fc;text-transform:uppercase">
+              3. Parody Product / Brand Name
+            </label>
+            <input id="productInput" class="field-input" type="text" maxlength="60" />
+          </div>
+          <div>
+            <label style="font-size:11px;font-weight:800;letter-spacing:0.1em;color:#a5f3fc;text-transform:uppercase">
+              4. Format / Aspect Ratio
+            </label>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px">
+              <button type="button" id="ratio916Btn" class="btn-arcade btn-arcade-cyan" style="padding:10px">📱 9:16 Vertical</button>
+              <button type="button" id="ratio169Btn" class="btn-arcade btn-arcade-dark" style="padding:10px">📺 16:9 Widescreen</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Punchline Hook -->
+        <div style="margin-top:16px">
+          <label for="hookInput" style="font-size:11px;font-weight:800;letter-spacing:0.1em;color:#a5f3fc;text-transform:uppercase">
+            5. Comedy Punchline / Catchphrase Hook
+          </label>
+          <input id="hookInput" class="field-input" type="text" maxlength="140" />
+        </div>
+
+        <div style="margin-top:20px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px">
+          <span style="font-size:12px;color:#cbd5e1">
+            Uses <strong style="color:#fcd34d">10 Coins</strong> for structured script + 3 glossy storyboard frames (+ 1 free redo!).
+          </span>
+          <button type="submit" class="btn-arcade btn-arcade-pink" style="padding:13px 24px;font-size:14px">
+            📸 Dispense 3-Frame Walkthrough (10 Coins)
+          </button>
+        </div>
+      </form>
+
+      <!-- STAGE 2: Dispensed 3-Frame Storyboard Strip -->
+      <section id="walkthroughSection" hidden style="margin-top:16px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <button type="button" id="backToSetupBtn" class="btn-arcade btn-arcade-dark" style="font-size:12px;padding:7px 13px">
+            ← New Cartridge Setup
+          </button>
+          <span id="walkthroughTplLabel" style="font-family:var(--font-mono);font-size:12px;color:#67e8f9"></span>
+        </div>
+
+        <div style="max-width:860px;margin:0 auto">
+          <div class="coin-slot-chrome" style="border-radius:18px 18px 0 0;padding:10px 16px;text-align:center;border:1px solid rgba(148,163,184,0.45)">
+            <div style="height:10px;width:76%;margin:0 auto;border-radius:99px;background:#020617;box-shadow:inset 0 2px 4px #000"></div>
+            <div style="font-family:var(--font-mono);font-size:10px;font-weight:800;letter-spacing:0.2em;color:#fcd34d;margin-top:6px">
+              🎞️ FRESHLY DISPENSED 3-FRAME STORYBOARD STRIP
+            </div>
+          </div>
+
+          <div id="filmPaperEl" class="film-paper animate-film-dispense">
+            <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;border-bottom:1px solid #cbd5e1;padding-bottom:8px;font-family:var(--font-mono);font-size:11px;font-weight:800;color:#334155">
+              <span id="stripHeaderLeft">FOTOTECATECA BOOTH STRIP // 9:16</span>
+              <span id="stripHeaderRight" style="background:#db2777;color:#fff;padding:2px 8px;border-radius:5px;font-size:10px"></span>
+            </div>
+
+            <div id="stripFramesGrid" class="frames-grid"></div>
+
+            <div id="stripScriptCard" style="margin-top:14px;background:#0f172a;color:#f8fafc;border-radius:16px;padding:14px"></div>
+
+            <div style="margin-top:16px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px">
+              <button type="button" id="redoStripBtn" class="btn-arcade btn-arcade-dark" style="font-size:12px">
+                🔄 1 Free Storyboard Redo (0 Coins)
+              </button>
+              <button type="button" id="rollVeoBtn" class="btn-arcade btn-arcade-pink" style="padding:13px 22px;font-size:14px">
+                🎬 Escrow 90 Coins — Roll 8s Video + Audio
+              </button>
+            </div>
+
+            <p style="margin-top:10px;text-align:center;font-size:11px;color:#475569;font-weight:600">
+              🪙 Includes up to <strong>2 Guided Corrections</strong>. Lock on Take 1 to get <strong style="color:#047857">+20 Coins rebated</strong> automatically!
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- STAGE 3: Draft Video Monitor + 2 Guided Arcade Correction Dials -->
+      <section id="monitorSection" hidden style="margin-top:16px">
+        <div class="booth-bezel" style="padding:22px;border-color:rgba(244,114,182,0.45)">
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px">
+            <div style="font-family:var(--font-mono);font-size:12px;font-weight:800;color:#f9a8d4">
+              🔴 STUDIO MONITOR // TAKE #<span id="takeNumberText">1</span>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <button type="button" id="replayTakeBtn" class="btn-arcade btn-arcade-dark" style="padding:5px 11px;font-size:11px">
+                ▶ Replay w/ Voiceover
+              </button>
+              <span id="correctionsBadge" class="badge-mono" style="background:rgba(34,211,238,0.12);border-color:rgba(34,211,238,0.45);color:#a5f3fc">
+                2 OF 2 GUIDED CORRECTIONS LEFT
+              </span>
+            </div>
+          </div>
+
+          <div class="monitor-wrap">
+            <canvas id="commercialCanvas" width="360" height="640"></canvas>
+          </div>
+
+          <!-- Unused-Correction Rebate Callout -->
+          <div id="rebateBannerBox" style="margin-top:18px;border-radius:18px;border:1px solid rgba(251,191,36,0.45);background:linear-gradient(90deg,rgba(120,53,15,0.38),rgba(27,17,54,0.85),rgba(6,78,59,0.38));padding:16px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px">
+            <div>
+              <div id="rebateHeadline" style="font-size:12px;font-weight:900;color:#fcd34d;letter-spacing:0.06em;text-transform:uppercase">
+                🪙 UNUSED-CORRECTION REBATE READY: +20 COINS BACK!
+              </div>
+              <div id="rebateSubtext" style="font-size:12px;color:#e2e8f0;margin-top:3px">
+                Happy with Take 1? Lock now to burn 70 escrowed coins and drop +20 coins straight back into your coin slot!
+              </div>
+            </div>
+            <button type="button" id="lockAdBtn" class="btn-arcade btn-arcade-amber" style="padding:12px 20px;font-size:13px">
+              ✨ Lock &amp; Share Final Ad (+20 Coins)
+            </button>
+          </div>
+        </div>
+
+        <!-- Guided Correction Console -->
+        <div id="dialsConsole" class="booth-bezel" style="margin-top:16px;padding:22px;border-color:rgba(34,211,238,0.38)">
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px">
+            <div>
+              <div style="font-size:11px;font-weight:800;letter-spacing:0.16em;color:#67e8f9;text-transform:uppercase">
+                🎛️ GUIDED ARCADE CORRECTION CONSOLE
+              </div>
+              <h3 class="marquee-glow" style="font-size:20px;margin-top:2px">
+                Tune Dialogue or Physical Gag (Cast &amp; Storyboard Locked)
+              </h3>
+            </div>
+            <span class="badge-mono" style="background:rgba(255,255,255,0.06);color:#cbd5e1">
+              🔒 Cast + Keyframes Locked
+            </span>
+          </div>
+
+          <div class="dials-grid">
+            <div class="dial-box" style="border:1px solid rgba(244,114,182,0.32)">
+              <div style="font-size:12px;font-weight:800;color:#f9a8d4;text-transform:uppercase">
+                🎙️ Dial A // Spoken Dialogue &amp; Vocal Delivery
+              </div>
+              <div id="vocalPresetsWrap" class="preset-chips"></div>
+              <label for="dialDialogueInput" style="display:block;font-size:11px;color:#cbd5e1;margin-top:10px;font-weight:700">
+                Exact Spoken Commercial Line
+              </label>
+              <textarea id="dialDialogueInput" class="field-input" rows="2" maxlength="160"></textarea>
+            </div>
+
+            <div class="dial-box" style="border:1px solid rgba(34,211,238,0.32)">
+              <div style="font-size:12px;font-weight:800;color:#67e8f9;text-transform:uppercase">
+                ⚡ Dial B // Character Action &amp; Physical Gag
+              </div>
+              <div id="gagPresetsWrap" class="preset-chips"></div>
+              <label for="dialGagInput" style="display:block;font-size:11px;color:#cbd5e1;margin-top:10px;font-weight:700">
+                Specific Movement / Physical Comedy Beat
+              </label>
+              <textarea id="dialGagInput" class="field-input" rows="2" maxlength="160"></textarea>
+            </div>
+          </div>
+
+          <div style="margin-top:14px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px">
+            <span style="font-size:11px;color:#94a3b8">
+              Included in your 90-coin escrow (uses 1 correction slot; reduces lock rebate by 10 coins).
+            </span>
+            <button type="button" id="applyCorrectionBtn" class="btn-arcade btn-arcade-cyan">
+              🎛️ Roll Guided Correction (1/2)
+            </button>
+          </div>
+        </div>
+
+        <!-- Locked Master Upgrades Panel (Shown once Locked) -->
+        <div id="lockedUpgradesPanel" class="booth-bezel" hidden style="margin-top:16px;padding:22px;border-color:rgba(251,191,36,0.48)">
+          <div id="jackpotToast" style="margin-bottom:14px;padding:11px 14px;border-radius:14px;border:1px solid rgba(52,211,153,0.5);background:rgba(6,78,59,0.45);color:#a7f3d0;font-size:12px;text-align:center;font-weight:700"></div>
+
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px">
+            <div>
+              <span class="badge-mono" style="background:rgba(251,191,36,0.2);border-color:rgba(251,191,36,0.5);color:#fde68a">
+                ✨ FINAL MASTER LOCKED &amp; EDGE-CACHED
+              </span>
+              <h3 id="lockedMasterTitle" class="marquee-glow" style="font-size:22px;margin-top:6px"></h3>
+            </div>
+            <div style="display:flex;gap:8px;font-family:var(--font-mono);font-size:12px">
+              <span id="lockedResBadge" style="padding:5px 10px;border-radius:9px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.15);color:#67e8f9">720p</span>
+              <span id="lockedDurBadge" style="padding:5px 10px;border-radius:9px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.15);color:#f9a8d4">8s</span>
+            </div>
+          </div>
+
+          <div style="margin-top:16px;display:flex;flex-wrap:wrap;gap:10px">
+            <button type="button" id="copyViralLinkBtn" class="btn-arcade btn-arcade-pink">
+              🔗 Copy Viral Remix Share Link
+            </button>
+            <button type="button" id="shootAnotherBtn" class="btn-arcade btn-arcade-dark">
+              🎬 Shoot Another Parody Ad
+            </button>
+          </div>
+
+          <div style="margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.1);display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px">
+            <div style="border-radius:16px;border:1px solid rgba(34,211,238,0.32);background:rgba(0,0,0,0.35);padding:14px">
+              <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:800">
+                <span style="color:#67e8f9">➕ +7s Funny Outro Extension</span>
+                <span style="font-family:var(--font-mono);color:#fcd34d">30 COINS</span>
+              </div>
+              <p style="font-size:12px;color:#cbd5e1;margin-top:4px">
+                Extends your locked clip to 15s with a hilarious post-credits blooper tag!
+              </p>
+              <button type="button" id="extendOutroBtn" class="btn-arcade btn-arcade-cyan" style="width:100%;margin-top:10px;font-size:12px">
+                🎞️ Add +7s Funny Outro (30 Coins)
+              </button>
+            </div>
+
+            <div style="border-radius:16px;border:1px solid rgba(244,114,182,0.32);background:rgba(0,0,0,0.35);padding:14px">
+              <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:800">
+                <span style="color:#f9a8d4">📺 Cinema Master 1080p HD</span>
+                <span style="font-family:var(--font-mono);color:#fcd34d">120 COINS</span>
+              </div>
+              <p style="font-size:12px;color:#cbd5e1;margin-top:4px">
+                Re-masters your locked ad on flagship Veo 3.1 in crisp 1080p Full HD!
+              </p>
+              <button type="button" id="upgradeHdBtn" class="btn-arcade btn-arcade-amber" style="width:100%;margin-top:10px;font-size:12px">
+                ✨ Upgrade to 1080p HD (120 Coins)
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- ==================== MODAL 1: SIMULATED COIN DISPENSER & RECEIPT TAPE ==================== -->
+  <div id="coinModal" class="modal-backdrop" hidden>
+    <div class="booth-bezel" style="width:100%;max-width:780px;max-height:90dvh;overflow-y:auto;padding:24px;border-color:rgba(251,191,36,0.45)">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+        <div>
+          <span class="sandbox-pill">🪙 ARCADE TOKEN DISPENSER (SIMULATED SANDBOX)</span>
+          <h2 class="marquee-glow" style="font-size:24px;margin-top:8px">
+            Insert Sandbox Coins &amp; Unlock Watermark-Free TV Ads
+          </h2>
+          <p style="font-size:12px;color:#cbd5e1;margin-top:4px">
+            100% simulated in this portfolio preview (no real Stripe charges). In production, Stripe Checkout + Webhooks credit append-only Firestore wallet ledgers.
+          </p>
+        </div>
+        <button type="button" class="btn-arcade btn-arcade-dark" id="closeCoinModalBtn" style="padding:6px 11px">✕</button>
+      </div>
+
+      <div style="margin-top:14px;padding:12px 16px;border-radius:14px;background:rgba(0,0,0,0.45);border:1px solid rgba(255,255,255,0.1);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;font-size:12px">
+        <div style="display:flex;gap:18px">
+          <span>Available: <strong id="modalCoinsVal" style="font-family:var(--font-mono);color:#fcd34d;font-size:15px">210 Coins</strong></span>
+          <span>In Escrow: <strong id="modalEscrowVal" style="font-family:var(--font-mono);color:#67e8f9">0 Coins</strong></span>
+        </div>
+        <span id="modalWatermarkBadge" style="padding:3px 10px;border-radius:99px;background:rgba(244,114,182,0.16);color:#fbcfe8;font-weight:700">
+          Creator/Studio removes corner watermark
+        </span>
+      </div>
+
+      <div class="packs-grid">
+        <div class="pack-card">
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span class="badge-mono" style="background:#334155;color:#e2e8f0">INSERT $10</span>
+              <span style="font-family:var(--font-mono);font-size:18px;font-weight:900">$10 <span style="font-size:10px;color:#94a3b8">(SIM)</span></span>
+            </div>
+            <h3 class="marquee-glow" style="font-size:18px;margin-top:10px">Starter Pack</h3>
+            <div style="font-family:var(--font-mono);font-size:22px;font-weight:900;color:#fcd34d">200 <span style="font-size:11px">COINS</span></div>
+            <p style="font-size:11px;color:#a5f3fc;margin-top:2px">2 Full Parody Video Ad Passes</p>
+            <ul style="font-size:11px;color:#cbd5e1;margin-top:10px;padding-left:16px;display:grid;gap:4px">
+              <li>+20 coin rebates on 1-take locks</li>
+              <li>Unlocks Veo 3.1 Video + Audio</li>
+              <li>Includes corner "Fototecateca" badge</li>
+            </ul>
+          </div>
+          <button type="button" class="btn-arcade btn-arcade-cyan buy-pack-btn" data-tier="starter">
+            🪙 Insert 200 Sandbox Coins
+          </button>
+        </div>
+
+        <div class="pack-card popular">
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span class="badge-mono" style="background:#ec4899;color:#fff;border:none">MOST POPULAR</span>
+              <span style="font-family:var(--font-mono);font-size:18px;font-weight:900">$25 <span style="font-size:10px;color:#fbcfe8">(SIM)</span></span>
+            </div>
+            <h3 class="marquee-glow" style="font-size:18px;margin-top:10px">Creator Pack</h3>
+            <div style="font-family:var(--font-mono);font-size:22px;font-weight:900;color:#fcd34d">550 <span style="font-size:11px">COINS</span></div>
+            <p style="font-size:11px;color:#a5f3fc;margin-top:2px">5–6 Full Ads + Watermark-Free!</p>
+            <ul style="font-size:11px;color:#cbd5e1;margin-top:10px;padding-left:16px;display:grid;gap:4px">
+              <li>Permanent Watermark-Free Unlock</li>
+              <li>Unlocks +7s Outros &amp; 1080p HD</li>
+              <li>Unused-correction rebates on every ad</li>
+            </ul>
+          </div>
+          <button type="button" class="btn-arcade btn-arcade-pink buy-pack-btn" data-tier="creator">
+            ✨ Insert 550 Coins (No Watermark)
+          </button>
+        </div>
+
+        <div class="pack-card">
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span class="badge-mono" style="background:#fbbf24;color:#000;border:none">MEGA JACKPOT</span>
+              <span style="font-family:var(--font-mono);font-size:18px;font-weight:900">$60 <span style="font-size:10px;color:#94a3b8">(SIM)</span></span>
+            </div>
+            <h3 class="marquee-glow" style="font-size:18px;margin-top:10px">Studio Pack</h3>
+            <div style="font-family:var(--font-mono);font-size:22px;font-weight:900;color:#fcd34d">1,500 <span style="font-size:11px">COINS</span></div>
+            <p style="font-size:11px;color:#a5f3fc;margin-top:2px">15+ Parody Ads + 1080p Masters</p>
+            <ul style="font-size:11px;color:#cbd5e1;margin-top:10px;padding-left:16px;display:grid;gap:4px">
+              <li>1,500 Coins (25% bonus value)</li>
+              <li>Permanent Watermark-Free Unlock</li>
+              <li>Ideal for 1080p Cinema Masters</li>
+            </ul>
+          </div>
+          <button type="button" class="btn-arcade btn-arcade-amber buy-pack-btn" data-tier="studio">
+            🏆 Insert 1,500 Sandbox Coins
+          </button>
+        </div>
+      </div>
+
+      <div style="margin-top:16px">
+        <div style="font-size:11px;font-weight:800;letter-spacing:0.12em;color:#94a3b8;text-transform:uppercase">
+          🧾 Append-Only Arcade Wallet Ledger Tape
+        </div>
+        <div id="ledgerList" style="margin-top:6px;max-height:140px;overflow-y:auto;border-radius:12px;background:rgba(0,0,0,0.45);border:1px solid rgba(255,255,255,0.1);padding:10px;font-family:var(--font-mono);font-size:11px;display:grid;gap:5px"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL 2: GREEN ROOM CAST DRAWER ==================== -->
+  <div id="castModal" class="modal-backdrop" hidden>
+    <div class="booth-bezel" style="width:100%;max-width:540px;max-height:90dvh;overflow-y:auto;padding:24px;border-color:rgba(34,211,238,0.45)">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-size:10px;font-weight:800;letter-spacing:0.2em;color:#67e8f9;text-transform:uppercase">GREEN ROOM ROSTER</div>
+          <h2 class="marquee-glow" style="font-size:22px">Reusable Cast Profiles</h2>
+        </div>
+        <button type="button" class="btn-arcade btn-arcade-dark" id="closeCastModalBtn" style="padding:6px 11px">✕</button>
+      </div>
+
+      <div id="castModalList" style="margin-top:14px;display:grid;gap:8px"></div>
+
+      <form id="addCastForm" style="margin-top:18px;padding:16px;border-radius:16px;background:rgba(0,0,0,0.42);border:1px solid rgba(244,114,182,0.35)">
+        <div style="font-size:12px;font-weight:800;color:#f9a8d4;text-transform:uppercase">➕ Register Custom Star (100% Local Browser Preview)</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
+          <button type="button" id="typeAnimalBtn" class="btn-arcade btn-arcade-cyan" style="padding:8px;font-size:12px">🐶 Pet / Animal</button>
+          <button type="button" id="typeAdultBtn" class="btn-arcade btn-arcade-dark" style="padding:8px;font-size:12px">🧑 Adult Face (18+)</button>
+        </div>
+
+        <input id="newCastName" class="field-input" type="text" required maxlength="36" placeholder="Star Name (e.g., Mochi the Corgi)" style="margin-top:10px" />
+        <input id="newCastVibe" class="field-input" type="text" required maxlength="100" placeholder="Species or Comedy Vibe Notes" />
+
+        <div style="margin-top:10px;display:flex;align-items:center;gap:12px">
+          <label class="btn-arcade btn-arcade-dark" style="font-size:12px;padding:8px 12px">
+            📷 Choose Photo (Optional)
+            <input id="newCastFile" type="file" accept="image/*" style="display:none" />
+          </label>
+          <span id="newCastFileStatus" style="font-size:11px;color:#94a3b8">Or auto-generates an arcade avatar</span>
+        </div>
+
+        <label id="adultCheckWrap" hidden style="display:flex;align-items:flex-start;gap:8px;margin-top:10px;padding:10px;border-radius:11px;background:rgba(120,53,15,0.35);border:1px solid rgba(251,191,36,0.4);font-size:11px;color:#fef3c7">
+          <input id="adultCheckInput" type="checkbox" style="margin-top:2px" />
+          <span><strong>I confirm this is an adult 18+ and I have permission to use their likeness.</strong> Minors are strictly prohibited.</span>
+        </label>
+
+        <div id="castFormError" style="font-size:11px;color:#fda4af;margin-top:8px"></div>
+
+        <button type="submit" class="btn-arcade btn-arcade-pink" style="width:100%;margin-top:12px">
+          💾 Save Cast Star to Booth
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL 3: PRODUCTION ARCHITECTURE & ESCROW SPEC ==================== -->
+  <div id="archModal" class="modal-backdrop" hidden>
+    <div class="booth-bezel" style="width:100%;max-width:680px;max-height:90dvh;overflow-y:auto;padding:24px;border-color:rgba(167,139,250,0.45)">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-size:10px;font-weight:800;letter-spacing:0.2em;color:#67e8f9;text-transform:uppercase">PRODUCTION SYSTEM ARCHITECTURE</div>
+          <h2 class="marquee-glow" style="font-size:22px">Fototecateca Full-Stack Blueprint</h2>
+        </div>
+        <button type="button" class="btn-arcade btn-arcade-dark" id="closeArchModalBtn" style="padding:6px 11px">✕</button>
+      </div>
+
+      <div style="margin-top:14px;display:grid;gap:10px;font-size:13px;color:#e2e8f0">
+        <div class="pillar-card">
+          <strong style="color:#67e8f9">Next.js 15 App Router + Firebase App Hosting</strong>
+          <p style="font-size:12px;color:#cbd5e1;margin-top:3px">
+            Authenticated API routes verified via <code>firebase-admin</code> ID tokens, Firestore Security Rules &amp; Storage Rules, plus client-side <code>&lt;=1024px</code> WebP reference photo compression.
+          </p>
+        </div>
+        <div class="pillar-card">
+          <strong style="color:#f472b6">3-Model Multimodal AI Pipeline (@google/genai)</strong>
+          <p style="font-size:12px;color:#cbd5e1;margin-top:3px">
+            1) <code>gemini-3.5-flash-lite</code> compiles structured 3-beat commercial scripts &amp; safety checks.<br/>
+            2) <code>gemini-nano-banana-2.1</code> renders 3 consistent character storyboard frames from 1–3 Cast WebP refs.<br/>
+            3) <code>veo-3.1-fast-generate-preview</code> &amp; <code>veo-3.1-generate-preview</code> render 8s–15s 720p/1080p commercials with native voiceover &amp; SFX.
+          </p>
+        </div>
+        <div class="pillar-card">
+          <strong style="color:#fcd34d">Transactional Escrow &amp; Unused-Correction Rebates + Stripe Webhooks</strong>
+          <p style="font-size:12px;color:#cbd5e1;margin-top:3px">
+            Append-only Firestore wallet ledger locks <code>90</code> coins in escrow for video + 2 guided dial takes. Locking early burns <code>70</code> (or <code>80</code>) and rebates <code>+20</code> (or <code>+10</code>) coins; safety filter blocks automatically release 100% of escrow.
+          </p>
+        </div>
+        <div class="pillar-card">
+          <strong style="color:#6ee7b7">FFmpeg Static Watermark + Google Drive v3 Vault + Immutable CDN Proxy</strong>
+          <p style="font-size:12px;color:#cbd5e1;margin-top:3px">
+            Transcodes under 9 MiB H.264 MP4, conditionally composites the corner arcade watermark unless unlocked via Creator/Studio packs, archives to Google Drive v3, and serves byte-range streams via <code>/api/media/[projectId]?v=N</code> + SSR viral remix cards at <code>/v/[shareId]</code>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================================
+    // 1. Procedural Web Audio Micro-SFX (Ported from src/lib/audio/arcadeSfx.ts)
+    // =========================================================================
+    class ArcadeSfxEngine {
+      constructor() {
+        this.ctx = null;
+        this.enabled = true;
+      }
+      ensureContext() {
+        if (!this.enabled) return null;
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return null;
+        if (!this.ctx) this.ctx = new AudioCtx();
+        if (this.ctx.state === "suspended") this.ctx.resume().catch(() => {});
+        return this.ctx;
+      }
+      playButtonPress() {
+        const ctx = this.ensureContext();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "triangle";
+        osc.frequency.setValueAtTime(290, now);
+        osc.frequency.exponentialRampToValueAtTime(120, now + 0.055);
+        gain.gain.setValueAtTime(0.11, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.065);
+      }
+      playDialClick() {
+        const ctx = this.ensureContext();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(880, now);
+        osc.frequency.exponentialRampToValueAtTime(420, now + 0.03);
+        gain.gain.setValueAtTime(0.07, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.04);
+      }
+      playCoinInsert() {
+        const ctx = this.ensureContext();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+        [987.77, 1318.51].forEach((freq, idx) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "square";
+          const t0 = now + idx * 0.07;
+          osc.frequency.setValueAtTime(freq, t0);
+          gain.gain.setValueAtTime(0.055, t0);
+          gain.gain.exponentialRampToValueAtTime(0.001, t0 + 0.22);
+          osc.connect(gain).connect(ctx.destination);
+          osc.start(t0);
+          osc.stop(t0 + 0.24);
+        });
+      }
+      playShutterFlash() {
+        const ctx = this.ensureContext();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+        const bufferSize = Math.floor(ctx.sampleRate * 0.14);
+        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.28));
+        }
+        const noise = ctx.createBufferSource();
+        noise.buffer = buffer;
+        const filter = ctx.createBiquadFilter();
+        filter.type = "bandpass";
+        filter.frequency.setValueAtTime(1600, now);
+        const gain = ctx.createGain();
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+        noise.connect(filter).connect(gain).connect(ctx.destination);
+        noise.start(now);
+      }
+      playRebateJackpot() {
+        const ctx = this.ensureContext();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+        [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "triangle";
+          const start = now + i * 0.065;
+          osc.frequency.setValueAtTime(freq, start);
+          gain.gain.setValueAtTime(0.09, start);
+          gain.gain.exponentialRampToValueAtTime(0.001, start + 0.25);
+          osc.connect(gain).connect(ctx.destination);
+          osc.start(start);
+          osc.stop(start + 0.26);
+        });
+      }
+    }
+    const sfx = new ArcadeSfxEngine();
+
+    // =========================================================================
+    // 2. V1 Parody Templates (From src/lib/templates/v1Templates.ts)
+    // =========================================================================
+    const V1_PARODY_TEMPLATES = [
+      {
+        id: "infomercial_90s",
+        name: "90s Late-Night Infomercial",
+        shortBadge: "CH. 99 INFOMERCIAL",
+        eraTag: "1996 VHS BROADCAST",
+        color: "#fbbf24",
+        bgPalette: ["#27272a", "#7c2d12", "#1e3a8a"],
+        tagline: "Black-and-white clumsy catastrophe → hyper-saturated miracle pitch!",
+        description: "Starts in grainy black-and-white VHS frustration with a dramatic red 'X', then explodes into a studio-lit miracle demonstration with a flashing 1-800 graphic vibe.",
+        defaultProduct: "The Turbo-Treat 3000",
+        defaultHook: "Wait—there's STILL crumbs on the ceiling?!",
+        beats: [
+          { label: "BEAT 1 • B&W VHS FAIL", caption: "Grainy monochrome zoom on exaggerated clumsy catastrophe + giant red X!" },
+          { label: "BEAT 2 • STUDIO MIRACLE SNAP", caption: "Whip-pan into vivid QVC tabletop spotlight with sparkling specular stars." },
+          { label: "BEAT 3 • 1-800 HERO WINK", caption: "Triumphant spokesperson freeze-frame beside flashing CALL NOW banner!" }
+        ],
+        lightingCue: "Harsh monochrome fluorescent in Beat 1 snapping to warm glossy 3-point QVC studio lighting.",
+        audioCue: "Comedic trombone fail sting → upbeat 90s synth-brass infomercial jingle & pitchman hype.",
+        vocalOptions: [
+          "Breathless 2AM TV pitchman shouting 'HAS THIS EVER HAPPENED TO YOU?!'",
+          "Overly chipper morning-show host amazed by basic physics",
+          "Deadpan infomercial testimonial trying not to laugh",
+          "Booming 'BUT WAIT—ORDER RIGHT NOW!' urgency"
+        ],
+        gagOptions: [
+          "Throws paws/hands up in absurd B&W despair, then gives a gleaming hero pose",
+          "Dramatically knocks over an imaginary bowl before presenting the miracle product",
+          "Stares directly into camera with jaw-drop shock as confetti falls",
+          "Nods aggressively like a paid spokesperson holding a shiny prop"
+        ]
+      },
+      {
+        id: "luxury_perfume",
+        name: "Pretentious Luxury Perfume",
+        shortBadge: "MAISON PARODY",
+        eraTag: "ARTHOUSE COUTURE",
+        color: "#c084fc",
+        bgPalette: ["#1c1917", "#3b0764", "#422006"],
+        tagline: "Whispered nonsense philosophy, slow-mo wind machine, absurd prestige.",
+        description: "Ultra-cinematic golden chiaroscuro lighting, billowing silk curtains, slow-motion wind machine fur/hair ripple, and a dead-serious French-cinema whispered monologue.",
+        defaultProduct: "EAU DE ZOOMIES No. 5",
+        defaultHook: "I do not chase the ball. I become the sofa.",
+        beats: [
+          { label: "BEAT 1 • GOLDEN MIST SILHOUETTE", caption: "120fps close-up emerging through Venetian-blind golden shafts & silk." },
+          { label: "BEAT 2 • WIND MACHINE TURN", caption: "Sweeping dolly arc as fur/hair ripples majestically in slow motion." },
+          { label: "BEAT 3 • MARBLE PEDESTAL", caption: "Symmetrical couture portrait beside an ornate crystal flacon." }
+        ],
+        lightingCue: "Moody Venetian-blind golden-hour shafts, deep velvet shadows, warm rim backlight.",
+        audioCue: "Minimalist solo cello swell, airy shimmer, close-mic French-cinema whisper.",
+        vocalOptions: [
+          "Breathless, overly poetic French-cinema whisper",
+          "Ultra-dramatic whispered riddle with five-second pause energy",
+          "Velvety couture narrator pronouncing a ridiculous name like high art",
+          "Stoic philosopher whispering straight from the soul"
+        ],
+        gagOptions: [
+          "Slow-motion dramatic head turn toward camera while wind machine ripples fur/hair",
+          "Stares off into the distance broodingly, then blinks once with supreme arrogance",
+          "Delicately taps a crystal perfume bottle on black marble without breaking eye contact",
+          "Walks two steps in ultra-slow-motion through fluttering gold petals"
+        ]
+      },
+      {
+        id: "injury_lawyer",
+        name: "Aggressive Local Injury Lawyer",
+        shortBadge: "CALL 1-800-BARK-LAW",
+        eraTag: "DAYTIME TV LEGAL",
+        color: "#f472b6",
+        bgPalette: ["#3f1d0b", "#450a0a", "#172554"],
+        tagline: "Pointing from atop a mahogany desk + thunderous gavel slam energy!",
+        description: "Classic local daytime TV courtroom-office hybrid: leather law books, brass scales of justice, pointing intensely at the viewer, and slamming a tiny wooden gavel.",
+        defaultProduct: "Paws & Associates Law Group",
+        defaultHook: "Late dinner by five minutes? YOU DESERVE TREATS!",
+        beats: [
+          { label: "BEAT 1 • MAHOGANY POWER SHOT", caption: "Low-angle hero shot leaning authoritatively over leather law volumes." },
+          { label: "BEAT 2 • CRASH-ZOOM POINT", caption: "Fast zoom as star points squarely at the viewer demanding justice!" },
+          { label: "BEAT 3 • THUNDEROUS GAVEL SLAM", caption: "Wooden gavel hits the desk beside gleaming brass scales of justice." }
+        ],
+        lightingCue: "Crisp daytime broadcast key light with warm wood-paneled law library lamps.",
+        audioCue: "Punchy electric-guitar legal jingle, courtroom echo, crisp wooden gavel SLAM.",
+        vocalOptions: [
+          "Booming daytime TV attorney demanding justice for empty bowls",
+          "Fast-talking powerhouse litigator pointing straight at your soul",
+          "Gravelly no-nonsense negotiator who never backs down",
+          "Hyper-confident local legend shouting a catchy slogan"
+        ],
+        gagOptions: [
+          "Slams a wooden gavel on a mahogany desk and points squarely at the lens",
+          "Crosses arms/paws sternly in front of a wall of leather law books",
+          "Adjusts crooked spectacles on the desk before leaning intensely into the camera",
+          "Stands triumphantly atop stacks of legal briefs as papers flutter"
+        ]
+      },
+      {
+        id: "retro_toy_ad",
+        name: "Retro Saturday Morning Toy Ad",
+        shortBadge: "RADICAL 90s TOYBOX",
+        eraTag: "1993 CARTOON BREAK",
+        color: "#22d3ee",
+        bgPalette: ["#083344", "#4c1d95", "#831843"],
+        tagline: "Extreme Dutch angles, neon lightning bolts & tabletop diorama chaos!",
+        description: "Shot like an energetic 1993 Saturday morning commercial on a handcrafted neon cardboard-and-foam tabletop city set with wild camera tilts and radical announcer hype.",
+        defaultProduct: "MEGA LASER LOAF",
+        defaultHook: "Batteries, dignity, and nap schedule NOT included!",
+        beats: [
+          { label: "BEAT 1 • 30° DUTCH SNAP ZOOM", caption: "Star bursts onto a neon foam-block tabletop city with paper lightning!" },
+          { label: "BEAT 2 • KINETIC DIORAMA TRACK", caption: "Low tracking shot past harmless foam boulders and laser graphics." },
+          { label: "BEAT 3 • NEON TURNTABLE POSE", caption: "Heroic collectible spin on a glowing cyan/pink display base!" }
+        ],
+        lightingCue: "Electric cyan and hot-pink gel backlights with miniature smoke-machine puffs.",
+        audioCue: "90s shred-guitar riff, arcade pew-pew whooshes, ultra-fast 'Each sold separately!' tag.",
+        vocalOptions: [
+          "90s EXTREME Saturday morning announcer yelling 'TOTALLY RADICAL!'",
+          "Hyper-caffeinated arcade commercial voiceover with guitar-riff energy",
+          "Heroic cartoon action-figure catchphrase delivery",
+          "Ultra-fast 'Each sold separately!' tag-line announcer"
+        ],
+        gagOptions: [
+          "Strikes an epic kaiju hero pose in the middle of a miniature foam-block city",
+          "Spins around on a glowing neon display turntable like a deluxe collectible",
+          "Playfully swats a harmless foam boulder off a colorful tabletop mountain",
+          "Pops up from behind a cardboard volcano wearing maximum attitude"
+        ]
+      },
+      {
+        id: "action_trailer",
+        name: "Summer Blockbuster Action Trailer",
+        shortBadge: "IMAX SUMMER PARODY",
+        eraTag: "EPIC TRAILER",
+        color: "#a3e635",
+        bgPalette: ["#042f2e", "#1e293b", "#7c2d12"],
+        tagline: "BWAAAM brass hits + cool slow-mo walk away from a harmless kitchen puff!",
+        description: "Widescreen blockbuster gravitas: teal-and-orange anamorphic lens flares, thunderous orchestral BWAAAM horns, and an unflinching slow-motion walk away from a cloud of popcorn.",
+        defaultProduct: "OPERATION: SNACK HEIST",
+        defaultHook: "This summer... nobody touches the leftovers.",
+        beats: [
+          { label: "BEAT 1 • ANAMORPHIC EYES", caption: "Tense teal-and-orange close-up as eyes narrow on the kitchen counter." },
+          { label: "BEAT 2 • SLOW-MO POPCORN PUFF", caption: "60fps walk toward camera as harmless flour & popcorn billow behind!" },
+          { label: "BEAT 3 • LENS FLARE TITLE CARD", caption: "Epic silhouette stop with horizontal blue IMAX flare & BWAAAM hit." }
+        ],
+        lightingCue: "Cinematic teal shadows, warm amber backlight, horizontal blue anamorphic lens flares.",
+        audioCue: "Deep 'IN A WORLD...' rumble, orchestral BWAAAM brass hit, dramatic silence before hook.",
+        vocalOptions: [
+          "Deep movie-trailer 'THIS SUMMER...' gravelly legend voice",
+          "Whisper-quiet action hero delivering a cold one-liner before the beat drops",
+          "Over-the-top epic trailer narrator treating snacks like national security",
+          "Deadpan reluctant hero muttering 'I'm getting too old for this'"
+        ],
+        gagOptions: [
+          "Walks calmly in slow-motion toward camera without looking back at a popcorn puff",
+          "Slowly turns head over shoulder with narrow action-hero eyes under blue lens flare",
+          "Dramatically slides across a kitchen counter in slow-motion toward the prize",
+          "Pauses mid-stride as dramatic wind blows while staring down the camera"
+        ]
+      }
+    ];
+
+    // =========================================================================
+    // 3. Preset Cast Avatar Generator & State
+    // =========================================================================
+    function makePresetAvatarDataUrl(emoji, bg1, bg2, label) {
+      const c = document.createElement("canvas");
+      c.width = 240;
+      c.height = 240;
+      const g = c.getContext("2d");
+      const grad = g.createLinearGradient(0, 0, 240, 240);
+      grad.addColorStop(0, bg1);
+      grad.addColorStop(1, bg2);
+      g.fillStyle = grad;
+      g.fillRect(0, 0, 240, 240);
+      g.strokeStyle = "rgba(255,255,255,0.28)";
+      g.lineWidth = 8;
+      g.strokeRect(10, 10, 220, 220);
+      g.font = "108px serif";
+      g.textAlign = "center";
+      g.textBaseline = "middle";
+      g.fillText(emoji, 120, 112);
+      g.fillStyle = "rgba(0,0,0,0.55)";
+      g.fillRect(0, 192, 240, 48);
+      g.fillStyle = "#ffffff";
+      g.font = "bold 18px sans-serif";
+      g.fillText(label, 120, 217);
+      return c.toDataURL("image/png");
+    }
+
+    const state = {
+      view: "home", // 'home' | 'studio'
+      tokenBalance: 210, // +10 signup bonus + 200 starter demo coins so visitor can test full flow immediately
+      escrowBalance: 0,
+      watermarkFree: false,
+      ledger: [
+        { note: "Portfolio Sandbox Starter Load", delta: +200, after: 210 },
+        { note: "Verified Sign-Up Trial Bonus", delta: +10, after: 10 }
+      ],
+      castProfiles: [
+        {
+          id: "cast_barnaby",
+          name: "Barnaby the Pug",
+          type: "animal",
+          vibe: "Fawn pug with snaggletooth & dramatic side-eye",
+          avatarUrl: makePresetAvatarDataUrl("🐶", "#ec4899", "#4c1d95", "BARNABY")
+        },
+        {
+          id: "cast_whiskers",
+          name: "Lord Whiskers",
+          type: "animal",
+          vibe: "Fluffy tuxedo cat with supreme couture judgment",
+          avatarUrl: makePresetAvatarDataUrl("🐱", "#06b6d4", "#1e1b4b", "WHISKERS")
+        },
+        {
+          id: "cast_marco",
+          name: "Uncle Marco",
+          type: "human_adult",
+          vibe: "40s retro aviator sunglasses & deadpan grin (18+)",
+          avatarUrl: makePresetAvatarDataUrl("🕶️", "#f59e0b", "#7c2d12", "MARCO 18+")
+        }
+      ],
+      selectedCastId: "cast_barnaby",
+      selectedTemplateId: "infomercial_90s",
+      aspectRatio: "9:16",
+      newCastType: "animal",
+      stagedCustomPhotoUrl: null,
+      project: null
+    };
+
+    const avatarImgCache = new Map();
+    function getAvatarImg(url) {
+      if (avatarImgCache.has(url)) return avatarImgCache.get(url);
+      const img = new Image();
+      img.src = url;
+      avatarImgCache.set(url, img);
+      return img;
+    }
+    state.castProfiles.forEach((c) => getAvatarImg(c.avatarUrl));
+
+    function getTemplate(id) {
+      return V1_PARODY_TEMPLATES.find((t) => t.id === id) || V1_PARODY_TEMPLATES[0];
+    }
+    function getSelectedCast() {
+      return state.castProfiles.find((c) => c.id === state.selectedCastId) || state.castProfiles[0];
+    }
+    function computeSettlement(correctionsUsed) {
+      const c = Math.max(0, Math.min(2, correctionsUsed));
+      if (c === 0) return { burned: 70, rebate: 20 };
+      if (c === 1) return { burned: 80, rebate: 10 };
+      return { burned: 90, rebate: 0 };
+    }
+    function addLedger(note, delta) {
+      state.ledger.unshift({ note, delta, after: state.tokenBalance });
+      renderWalletUI();
+    }
+
+    // =========================================================================
+    // 4. Velvet Curtain Flash & Keyframe Storyboard Canvas Renderer
+    // =========================================================================
+    function triggerCurtain(message, callback) {
+      const overlay = document.getElementById("curtainOverlay");
+      const flash = document.getElementById("curtainFlash");
+      document.getElementById("curtainText").textContent = message;
+      overlay.hidden = false;
+      flash.classList.remove("animate-xenon-flash");
+      void flash.offsetWidth;
+      flash.classList.add("animate-xenon-flash");
+      sfx.playShutterFlash();
+      setTimeout(() => {
+        overlay.hidden = true;
+        if (callback) callback();
+      }, 620);
+    }
+
+    function renderBeatFrameDataUrl(tpl, cast, beatIdx, aspectRatio, productName, hook) {
+      const isVert = aspectRatio === "9:16";
+      const w = isVert ? 360 : 560;
+      const h = isVert ? 520 : 315;
+      const c = document.createElement("canvas");
+      c.width = w;
+      c.height = h;
+      const g = c.getContext("2d");
+
+      // Era background gradient
+      const bg = g.createLinearGradient(0, 0, w, h);
+      if (tpl.id === "infomercial_90s" && beatIdx === 0) {
+        bg.addColorStop(0, "#52525b");
+        bg.addColorStop(1, "#18181b");
+      } else {
+        bg.addColorStop(0, tpl.bgPalette[beatIdx % 3]);
+        bg.addColorStop(1, "#090514");
+      }
+      g.fillStyle = bg;
+      g.fillRect(0, 0, w, h);
+
+      // Decorative rays / lens flare / scanlines
+      g.save();
+      g.strokeStyle = tpl.color + "44";
+      g.lineWidth = 2;
+      for (let i = 0; i < 8; i++) {
+        g.beginPath();
+        g.moveTo(w / 2, h * 0.42);
+        const ang = (i / 8) * Math.PI * 2 + beatIdx * 0.4;
+        g.lineTo(w / 2 + Math.cos(ang) * w, h * 0.42 + Math.sin(ang) * h);
+        g.stroke();
+      }
+      g.restore();
+
+      // Draw Cast Star Portrait Card in scene
+      const img = getAvatarImg(cast.avatarUrl);
+      const boxSize = Math.min(w, h) * 0.46;
+      const cx = w / 2;
+      const cy = h * 0.43;
+      g.save();
+      g.translate(cx, cy);
+      if (tpl.id === "retro_toy_ad" && beatIdx === 0) g.rotate(-0.18);
+      if (tpl.id === "infomercial_90s" && beatIdx === 0) g.filter = "grayscale(100%) contrast(135%)";
+      g.fillStyle = "#ffffff";
+      g.fillRect(-boxSize / 2 - 5, -boxSize / 2 - 5, boxSize + 10, boxSize + 10);
+      if (img && img.complete && img.naturalWidth > 0) {
+        g.drawImage(img, -boxSize / 2, -boxSize / 2, boxSize, boxSize);
+      } else {
+        g.fillStyle = "#312e81";
+        g.fillRect(-boxSize / 2, -boxSize / 2, boxSize, boxSize);
+      }
+      // Infomercial giant red X on Beat 1
+      if (tpl.id === "infomercial_90s" && beatIdx === 0) {
+        g.filter = "none";
+        g.strokeStyle = "#ef4444";
+        g.lineWidth = 12;
+        g.beginPath();
+        g.moveTo(-boxSize * 0.45, -boxSize * 0.45);
+        g.lineTo(boxSize * 0.45, boxSize * 0.45);
+        g.moveTo(boxSize * 0.45, -boxSize * 0.45);
+        g.lineTo(-boxSize * 0.45, boxSize * 0.45);
+        g.stroke();
+      }
+      g.restore();
+
+      // Top Era Stamp
+      g.fillStyle = "rgba(0,0,0,0.72)";
+      g.fillRect(12, 12, w - 24, 30);
+      g.fillStyle = tpl.color;
+      g.font = "bold 12px monospace";
+      g.fillText(`${tpl.shortBadge} // ${tpl.beats[beatIdx].label}`, 20, 31);
+
+      // Lower-third broadcast super
+      g.fillStyle = "rgba(8, 6, 18, 0.86)";
+      g.fillRect(12, h - 78, w - 24, 66);
+      g.strokeStyle = tpl.color;
+      g.lineWidth = 2;
+      g.strokeRect(12, h - 78, w - 24, 66);
+
+      g.fillStyle = "#ffffff";
+      g.font = "900 15px sans-serif";
+      g.fillText(productName.slice(0, 30), 22, h - 52);
+      g.fillStyle = "#fde68a";
+      g.font = "italic 12px sans-serif";
+      const line = beatIdx === 2 ? `"${hook.slice(0, 42)}"` : tpl.beats[beatIdx].caption.slice(0, 46) + "...";
+      g.fillText(line, 22, h - 28);
+
+      return c.toDataURL("image/png");
+    }
+
+    // =========================================================================
+    // 5. Animated Live Studio Monitor (8s / 15s Commercial Player)
+    // =========================================================================
+    let animRaf = null;
+    let monitorStartMs = 0;
+
+    function speakCommercialLine(text) {
+      if (!sfx.enabled || !("speechSynthesis" in window)) return;
+      try {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        u.rate = 1.06;
+        u.pitch = 1.05;
+        window.speechSynthesis.speak(u);
+      } catch {}
+    }
+
+    function startCommercialMonitor(playVoice = false) {
+      const canvas = document.getElementById("commercialCanvas");
+      if (!canvas || !state.project) return;
+      const proj = state.project;
+      const isVert = proj.aspectRatio === "9:16";
+      canvas.width = isVert ? 340 : 600;
+      canvas.height = isVert ? 604 : 338;
+
+      monitorStartMs = performance.now();
+      if (playVoice) {
+        speakCommercialLine(`${proj.productName}! ${proj.spokenDialogue}`);
+      }
+
+      if (animRaf) cancelAnimationFrame(animRaf);
+      const g = canvas.getContext("2d");
+
+      function draw(now) {
+        if (!state.project || document.getElementById("monitorSection").hidden) return;
+        const p = state.project;
+        const tpl = getTemplate(p.templateId);
+        const cast = p.cast;
+        const totalSec = p.hasOutro ? 15 : 8;
+        const elapsed = ((now - monitorStartMs) / 1000) % totalSec;
+
+        let beatIdx = elapsed < 2.6 ? 0 : elapsed < 5.4 ? 1 : elapsed < 8.0 ? 2 : 3;
+        const w = canvas.width;
+        const h = canvas.height;
+
+        // Animated Background
+        const grad = g.createLinearGradient(0, 0, w, h);
+        if (tpl.id === "infomercial_90s" && beatIdx === 0) {
+          grad.addColorStop(0, "#3f3f46");
+          grad.addColorStop(1, "#09090b");
+        } else if (beatIdx === 3) {
+          grad.addColorStop(0, "#be185d");
+          grad.addColorStop(1, "#1e1b4b");
+        } else {
+          grad.addColorStop(0, tpl.bgPalette[beatIdx % 3]);
+          grad.addColorStop(1, "#070412");
+        }
+        g.fillStyle = grad;
+        g.fillRect(0, 0, w, h);
+
+        // Sweeping spotlight / anamorphic flare
+        const pulse = Math.sin(now * 0.005) * 0.5 + 0.5;
+        g.fillStyle = tpl.color + "26";
+        g.beginPath();
+        g.arc(w * (0.25 + 0.5 * pulse), h * 0.35, w * 0.38, 0, Math.PI * 2);
+        g.fill();
+
+        // Zooming Star Avatar
+        const img = getAvatarImg(cast.avatarUrl);
+        const zoom = 1 + (elapsed % 2.7) * 0.05;
+        const baseSz = Math.min(w, h) * 0.44 * zoom;
+        g.save();
+        g.translate(w / 2, h * 0.4);
+        if (tpl.id === "injury_lawyer" && beatIdx === 2) {
+          g.translate(Math.sin(now * 0.05) * 4, 0);
+        }
+        if (tpl.id === "infomercial_90s" && beatIdx === 0) {
+          g.filter = "grayscale(100%) contrast(140%)";
+        }
+        g.fillStyle = "#fff";
+        g.fillRect(-baseSz / 2 - 4, -baseSz / 2 - 4, baseSz + 8, baseSz + 8);
+        if (img && img.complete && img.naturalWidth > 0) {
+          g.drawImage(img, -baseSz / 2, -baseSz / 2, baseSz, baseSz);
+        }
+        g.restore();
+
+        // Top HUD bar
+        g.fillStyle = "rgba(0,0,0,0.72)";
+        g.fillRect(10, 10, w - 20, 28);
+        g.fillStyle = "#67e8f9";
+        g.font = "bold 11px monospace";
+        const beatName = beatIdx === 3 ? "BONUS +7s BLOOPER OUTRO" : tpl.beats[beatIdx].label;
+        g.fillText(`${p.hasHd ? "1080p MASTER" : "720p VEO"} • ${beatName}`, 18, 28);
+        g.fillStyle = "#fcd34d";
+        g.textAlign = "right";
+        g.fillText(`${elapsed.toFixed(1)}s / ${totalSec}.0s`, w - 18, 28);
+        g.textAlign = "left";
+
+        // Broadcast Lower-Third Banner + Dialogue Captions
+        g.fillStyle = "rgba(10, 6, 24, 0.9)";
+        g.fillRect(12, h - 108, w - 24, 94);
+        g.strokeStyle = tpl.color;
+        g.lineWidth = 2;
+        g.strokeRect(12, h - 108, w - 24, 94);
+
+        g.fillStyle = tpl.color;
+        g.font = "900 14px sans-serif";
+        g.fillText(`${p.productName.toUpperCase()} — STARRING ${cast.name.toUpperCase()}`, 20, h - 86);
+
+        g.fillStyle = "#ffffff";
+        g.font = "italic bold 12px sans-serif";
+        const spoken = beatIdx === 3
+          ? `[BLOOPER OUTRO]: "${cast.name} steals the prop off-script while crew laughs!"`
+          : `"${p.spokenDialogue}"`;
+        g.fillText(spoken.slice(0, isVert ? 40 : 72), 20, h - 64);
+        if (spoken.length > (isVert ? 40 : 72)) {
+          g.fillText(spoken.slice(isVert ? 40 : 72, isVert ? 80 : 144), 20, h - 47);
+        }
+
+        g.fillStyle = "#a5f3fc";
+        g.font = "11px monospace";
+        g.fillText(`GAG: ${p.characterAction.slice(0, isVert ? 42 : 76)}`, 20, h - 24);
+
+        // Conditional Corner Watermark (unless Creator/Studio Pack unlocked!)
+        if (!state.watermarkFree) {
+          g.fillStyle = "rgba(255, 46, 147, 0.86)";
+          g.fillRect(w - 134, 46, 122, 22);
+          g.fillStyle = "#ffffff";
+          g.font = "bold 10px monospace";
+          g.fillText("FOTOTECATECA", w - 124, 61);
+        }
+
+        // Progress bar
+        g.fillStyle = "#ff2e93";
+        g.fillRect(12, h - 12, (w - 24) * (elapsed / totalSec), 4);
+
+        animRaf = requestAnimationFrame(draw);
+      }
+      animRaf = requestAnimationFrame(draw);
+    }
+
+    // =========================================================================
+    // 6. DOM Rendering & Event Wiring
+    // =========================================================================
+    function renderWalletUI() {
+      document.getElementById("navCoinsText").textContent = state.tokenBalance.toLocaleString();
+      const sub = document.getElementById("navEscrowSub");
+      if (state.escrowBalance > 0) {
+        sub.textContent = `🔒 ${state.escrowBalance} IN ESCROW`;
+        sub.style.color = "#67e8f9";
+      } else {
+        sub.textContent = state.watermarkFree ? "✨ WATERMARK-FREE" : "+ SANDBOX TOP-UP";
+        sub.style.color = state.watermarkFree ? "#6ee7b7" : "#cbd5e1";
+      }
+      document.getElementById("modalCoinsVal").textContent = `${state.tokenBalance.toLocaleString()} Coins`;
+      document.getElementById("modalEscrowVal").textContent = `${state.escrowBalance} Coins`;
+
+      const wm = document.getElementById("modalWatermarkBadge");
+      if (state.watermarkFree) {
+        wm.textContent = "✨ Watermark-Free Permanently Unlocked";
+        wm.style.background = "rgba(16,185,129,0.2)";
+        wm.style.color = "#6ee7b7";
+      }
+
+      document.getElementById("ledgerList").innerHTML = state.ledger
+        .map((e) => {
+          const col = e.delta > 0 ? "#34d399" : e.delta < 0 ? "#fcd34d" : "#67e8f9";
+          const sign = e.delta > 0 ? `+${e.delta}` : `${e.delta}`;
+          return `<div style="display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:4px">
+            <span style="color:#cbd5e1">${e.note}</span>
+            <strong style="color:${col}">${sign} (${e.after})</strong>
+          </div>`;
+        })
+        .join("");
+    }
+
+    function renderCatalog() {
+      const grid = document.getElementById("catalogGrid");
+      grid.innerHTML = V1_PARODY_TEMPLATES.map(
+        (tpl, idx) => `
+        <div class="booth-bezel tpl-card" style="border-color:${tpl.color}55">
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px">
+              <span class="badge-mono" style="color:${tpl.color};border-color:${tpl.color}66;background:${tpl.color}1a">${tpl.shortBadge}</span>
+              <span style="font-family:var(--font-mono);font-size:10px;color:#94a3b8">CH. 0${idx + 1} • ${tpl.eraTag}</span>
+            </div>
+            <h3 class="marquee-glow" style="font-size:19px;margin-top:10px">${tpl.name}</h3>
+            <p style="font-size:12px;font-weight:700;color:#a5f3fc;margin-top:4px">${tpl.tagline}</p>
+            <p style="font-size:12px;color:#cbd5e1;margin-top:6px">${tpl.description}</p>
+            <div style="margin-top:10px;padding:9px;border-radius:11px;background:rgba(0,0,0,0.38);border:1px solid rgba(255,255,255,0.08);font-size:11px">
+              <div style="font-family:var(--font-mono);font-size:10px;color:#fcd34d;font-weight:800">SAMPLE HOOK:</div>
+              <div style="font-style:italic;color:#e2e8f0;margin-top:2px">"${tpl.defaultHook}"</div>
+            </div>
+          </div>
+          <button type="button" class="btn-arcade btn-arcade-cyan load-tpl-btn" data-tpl="${tpl.id}" style="width:100%">
+            🎬 Load Cartridge in Booth
+          </button>
+        </div>`
+      ).join("");
+
+      grid.querySelectorAll(".load-tpl-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          sfx.playButtonPress();
+          state.selectedTemplateId = btn.dataset.tpl;
+          switchView("studio");
+          syncSetupInputsToTemplate();
+        });
+      });
+    }
+
+    function renderCastUI() {
+      document.getElementById("navCastCount").textContent = state.castProfiles.length;
+      const row = document.getElementById("studioCastRow");
+      row.innerHTML = state.castProfiles
+        .map((c) => {
+          const active = c.id === state.selectedCastId ? "active" : "";
+          return `<button type="button" class="cast-chip ${active}" data-cast="${c.id}">
+            <img class="cast-avatar" src="${c.avatarUrl}" alt="${c.name}" />
+            <div>
+              <div style="font-size:12px;font-weight:800;color:#fff">${c.name}</div>
+              <div style="font-size:10px;color:#a5f3fc">${c.type === "animal" ? "Pet Star" : "Adult 18+"}</div>
+            </div>
+          </button>`;
+        })
+        .join("");
+
+      row.querySelectorAll(".cast-chip").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          sfx.playDialClick();
+          state.selectedCastId = btn.dataset.cast;
+          renderCastUI();
+        });
+      });
+
+      const list = document.getElementById("castModalList");
+      list.innerHTML = state.castProfiles
+        .map(
+          (c) => `<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;background:rgba(25,17,54,0.9);border:1px solid rgba(255,255,255,0.14)">
+            <div style="display:flex;align-items:center;gap:10px">
+              <img class="cast-avatar" src="${c.avatarUrl}" alt="${c.name}" />
+              <div>
+                <div style="font-size:13px;font-weight:800">${c.name} <span style="font-size:10px;color:#67e8f9">(${c.type === "animal" ? "Pet" : "18+ Adult"})</span></div>
+                <div style="font-size:11px;color:#cbd5e1">${c.vibe}</div>
+              </div>
+            </div>
+            <button type="button" class="btn-arcade btn-arcade-cyan use-cast-modal-btn" data-cast="${c.id}" style="padding:6px 11px;font-size:11px">✓ Use</button>
+          </div>`
+        )
+        .join("");
+
+      list.querySelectorAll(".use-cast-modal-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          sfx.playDialClick();
+          state.selectedCastId = btn.dataset.cast;
+          renderCastUI();
+          document.getElementById("castModal").hidden = true;
+        });
+      });
+    }
+
+    function syncSetupInputsToTemplate() {
+      const tpl = getTemplate(state.selectedTemplateId);
+      document.getElementById("productInput").placeholder = tpl.defaultProduct;
+      document.getElementById("hookInput").placeholder = tpl.defaultHook;
+      renderStudioCartridges();
+    }
+
+    function renderStudioCartridges() {
+      const tplNow = getTemplate(state.selectedTemplateId);
+      const grid = document.getElementById("studioCartridgeGrid");
+      grid.innerHTML = V1_PARODY_TEMPLATES.map((t) => {
+        const active = t.id === state.selectedTemplateId ? "active" : "";
+        return `<button type="button" class="cartridge-btn ${active}" data-tpl="${t.id}">
+          <div style="display:flex;justify-content:space-between;font-size:9px;font-weight:800">
+            <span style="color:#fcd34d">${t.shortBadge}</span>
+            <span style="color:#94a3b8">${t.eraTag}</span>
+          </div>
+          <div class="marquee-glow" style="font-size:14px;margin-top:4px">${t.name}</div>
+          <div style="font-size:11px;color:#cbd5e1;margin-top:3px">${t.tagline}</div>
+        </button>`;
+      }).join("");
+
+      grid.querySelectorAll(".cartridge-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          sfx.playDialClick();
+          state.selectedTemplateId = btn.dataset.tpl;
+          syncSetupInputsToTemplate();
+        });
+      });
+
+      document.getElementById("rigSummaryBox").innerHTML = `
+        <div style="font-family:var(--font-mono);font-size:10px;font-weight:800;color:#f9a8d4">PRE-LOCKED STUDIO RIG (${tplNow.name}):</div>
+        <div style="margin-top:4px"><strong style="color:#a5f3fc">Lighting:</strong> ${tplNow.lightingCue}</div>
+        <div style="margin-top:2px"><strong style="color:#fde68a">Audio/SFX:</strong> ${tplNow.audioCue}</div>
+      `;
+    }
+
+    function switchView(next) {
+      state.view = next;
+      document.getElementById("homeView").hidden = next !== "home";
+      document.getElementById("studioView").hidden = next !== "studio";
+      document.getElementById("switchViewBtn").textContent =
+        next === "home" ? "🎬 Studio Booth" : "🏠 Cartridge Lobby";
+    }
+
+    function showBanner(msg) {
+      const slot = document.getElementById("bannerSlot");
+      if (!msg) {
+        slot.innerHTML = "";
+        return;
+      }
+      slot.innerHTML = `<div style="padding:12px 16px;border-radius:14px;border:1px solid rgba(251,113,133,0.55);background:rgba(136,19,55,0.55);font-size:12px;color:#ffe4e6;font-weight:700">⚠️ ${msg}</div>`;
+    }
+
+    function renderProjectStages() {
+      const proj = state.project;
+      const setupForm = document.getElementById("setupForm");
+      const walkSec = document.getElementById("walkthroughSection");
+      const monSec = document.getElementById("monitorSection");
+
+      if (!proj) {
+        setupForm.hidden = false;
+        walkSec.hidden = true;
+        monSec.hidden = true;
+        return;
+      }
+
+      setupForm.hidden = true;
+      const tpl = getTemplate(proj.templateId);
+
+      if (proj.stage === "walkthrough") {
+        walkSec.hidden = false;
+        monSec.hidden = true;
+        document.getElementById("walkthroughTplLabel").textContent = tpl.name;
+        document.getElementById("stripHeaderLeft").textContent = `FOTOTECATECA BOOTH STRIP // ${proj.aspectRatio}`;
+        document.getElementById("stripHeaderRight").textContent = `STARRING: ${proj.cast.name.toUpperCase()}`;
+
+        document.getElementById("stripFramesGrid").innerHTML = proj.frames
+          .map(
+            (url, idx) => `<div class="frame-card">
+              <img class="frame-img" src="${url}" alt="Beat ${idx + 1}" />
+              <div style="font-family:var(--font-mono);font-size:10px;font-weight:900;color:#be185d;margin-top:7px">${tpl.beats[idx].label}</div>
+              <div style="font-size:11px;color:#334155;margin-top:2px">${tpl.beats[idx].caption}</div>
+            </div>`
+          )
+          .join("");
+
+        document.getElementById("stripScriptCard").innerHTML = `
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px;font-size:11px">
+            <span style="font-weight:800;color:#67e8f9;text-transform:uppercase">🔊 Assembled Commercial Script (${proj.productName})</span>
+            <span style="font-family:var(--font-mono);color:#fcd34d">${proj.vocalDelivery}</span>
+          </div>
+          <div style="margin-top:6px;font-size:14px;font-weight:800;color:#fbcfe8;font-style:italic">"${proj.spokenDialogue}"</div>
+          <div style="margin-top:4px;font-size:12px;color:#cbd5e1"><strong style="color:#a5f3fc">Stunt / Gag:</strong> ${proj.characterAction}</div>
+        `;
+
+        document.getElementById("redoStripBtn").textContent = proj.redoUsed
+          ? "🔄 Redo Storyboard (10 Coins)"
+          : "🔄 1 Free Storyboard Redo (0 Coins)";
+        return;
+      }
+
+      // Stage: 'draft_video' or 'locked'
+      walkSec.hidden = true;
+      monSec.hidden = false;
+
+      document.getElementById("takeNumberText").textContent = proj.version;
+      const left = Math.max(0, 2 - proj.correctionsUsed);
+      document.getElementById("correctionsBadge").textContent =
+        proj.stage === "locked"
+          ? "LOCKED MASTER"
+          : `${left} OF 2 GUIDED CORRECTIONS LEFT`;
+
+      const rebateBox = document.getElementById("rebateBannerBox");
+      const dialsConsole = document.getElementById("dialsConsole");
+      const lockedPanel = document.getElementById("lockedUpgradesPanel");
+
+      if (proj.stage === "draft_video") {
+        rebateBox.hidden = false;
+        lockedPanel.hidden = true;
+        const settle = computeSettlement(proj.correctionsUsed);
+        document.getElementById("rebateHeadline").textContent =
+          settle.rebate > 0
+            ? `🪙 UNUSED-CORRECTION REBATE READY: +${settle.rebate} COINS BACK!`
+            : "🎬 FINAL TAKE READY TO LOCK & SHARE";
+        document.getElementById("rebateSubtext").textContent =
+          settle.rebate > 0
+            ? `Happy with Take #${proj.version}? Lock now to burn ${settle.burned} escrowed coins and drop +${settle.rebate} coins straight back into your slot!`
+            : "All 2 guided corrections used—lock to mint your viral share link & unlock HD/Outro add-ons.";
+        document.getElementById("lockAdBtn").textContent =
+          settle.rebate > 0
+            ? `✨ Lock & Share Final Ad (+${settle.rebate} Coins)`
+            : "✨ Lock & Share Final Ad";
+
+        dialsConsole.hidden = left <= 0;
+        if (left > 0) {
+          document.getElementById("dialDialogueInput").value = proj.spokenDialogue;
+          document.getElementById("dialGagInput").value = proj.characterAction;
+          document.getElementById("applyCorrectionBtn").textContent = `🎛️ Roll Guided Correction (${proj.correctionsUsed + 1}/2)`;
+
+          const vpWrap = document.getElementById("vocalPresetsWrap");
+          vpWrap.innerHTML = tpl.vocalOptions
+            .map(
+              (v, i) =>
+                `<button type="button" class="preset-chip ${proj.vocalDelivery === v ? "active-pink" : ""}" data-vocal="${i}">Ch.${i + 1}: ${v.slice(0, 32)}…</button>`
+            )
+            .join("");
+          vpWrap.querySelectorAll(".preset-chip").forEach((b) => {
+            b.addEventListener("click", () => {
+              sfx.playDialClick();
+              proj.vocalDelivery = tpl.vocalOptions[Number(b.dataset.vocal)];
+              renderProjectStages();
+            });
+          });
+
+          const gpWrap = document.getElementById("gagPresetsWrap");
+          gpWrap.innerHTML = tpl.gagOptions
+            .map(
+              (gOpt, i) =>
+                `<button type="button" class="preset-chip ${proj.characterAction === gOpt ? "active-cyan" : ""}" data-gag="${i}">Gag ${i + 1}: ${gOpt.slice(0, 32)}…</button>`
+            )
+            .join("");
+          gpWrap.querySelectorAll(".preset-chip").forEach((b) => {
+            b.addEventListener("click", () => {
+              sfx.playDialClick();
+              proj.characterAction = tpl.gagOptions[Number(b.dataset.gag)];
+              document.getElementById("dialGagInput").value = proj.characterAction;
+              renderProjectStages();
+            });
+          });
+        }
+      } else {
+        rebateBox.hidden = true;
+        dialsConsole.hidden = true;
+        lockedPanel.hidden = false;
+
+        const toast = document.getElementById("jackpotToast");
+        toast.hidden = !(proj.lastRebate > 0);
+        toast.textContent = `🎰 JACKPOT REBATE! +${proj.lastRebate} COINS dropped back into your coin slot for locking early!`;
+
+        document.getElementById("lockedMasterTitle").textContent = `${proj.productName} — Starring ${proj.cast.name}`;
+        document.getElementById("lockedResBadge").textContent = proj.hasHd ? "1080p HD" : "720p";
+        document.getElementById("lockedDurBadge").textContent = proj.hasOutro ? "15s" : "8s";
+
+        const extBtn = document.getElementById("extendOutroBtn");
+        extBtn.disabled = proj.hasOutro;
+        extBtn.textContent = proj.hasOutro ? "✓ +7s Funny Outro Added!" : "🎞️ Add +7s Funny Outro (30 Coins)";
+
+        const hdBtn = document.getElementById("upgradeHdBtn");
+        hdBtn.disabled = proj.hasHd;
+        hdBtn.textContent = proj.hasHd ? "✓ 1080p Cinema Master Unlocked!" : "✨ Upgrade to 1080p HD (120 Coins)";
+      }
+
+      startCommercialMonitor(false);
+    }
+
+    // =========================================================================
+    // 7. Interactive Button Handlers
+    // =========================================================================
+    document.getElementById("navHomeBtn").addEventListener("click", () => {
+      sfx.playButtonPress();
+      switchView("home");
+    });
+    document.getElementById("switchViewBtn").addEventListener("click", () => {
+      sfx.playButtonPress();
+      switchView(state.view === "home" ? "studio" : "home");
+    });
+    document.getElementById("heroEnterStudioBtn").addEventListener("click", () => {
+      sfx.playButtonPress();
+      switchView("studio");
+    });
+    document.getElementById("heroOpenCoinsBtn").addEventListener("click", () => {
+      sfx.playCoinInsert();
+      document.getElementById("coinModal").hidden = false;
+    });
+    document.getElementById("openCoinsBtn").addEventListener("click", () => {
+      sfx.playCoinInsert();
+      document.getElementById("coinModal").hidden = false;
+    });
+    document.getElementById("closeCoinModalBtn").addEventListener("click", () => {
+      document.getElementById("coinModal").hidden = true;
+    });
+
+    document.getElementById("openCastBtn").addEventListener("click", () => {
+      sfx.playButtonPress();
+      document.getElementById("castModal").hidden = false;
+    });
+    document.getElementById("inlineAddStarBtn").addEventListener("click", () => {
+      sfx.playButtonPress();
+      document.getElementById("castModal").hidden = false;
+    });
+    document.getElementById("closeCastModalBtn").addEventListener("click", () => {
+      document.getElementById("castModal").hidden = true;
+    });
+
+    document.getElementById("openArchBtn").addEventListener("click", () => {
+      sfx.playButtonPress();
+      document.getElementById("archModal").hidden = false;
+    });
+    document.getElementById("closeArchModalBtn").addEventListener("click", () => {
+      document.getElementById("archModal").hidden = true;
+    });
+
+    document.getElementById("sfxToggleBtn").addEventListener("click", (e) => {
+      sfx.enabled = !sfx.enabled;
+      e.currentTarget.textContent = sfx.enabled ? "🔊" : "🔇";
+      if (sfx.enabled) sfx.playDialClick();
+    });
+
+    // Aspect Ratio Buttons
+    document.getElementById("ratio916Btn").addEventListener("click", () => {
+      sfx.playDialClick();
+      state.aspectRatio = "9:16";
+      document.getElementById("ratio916Btn").className = "btn-arcade btn-arcade-cyan";
+      document.getElementById("ratio169Btn").className = "btn-arcade btn-arcade-dark";
+    });
+    document.getElementById("ratio169Btn").addEventListener("click", () => {
+      sfx.playDialClick();
+      state.aspectRatio = "16:9";
+      document.getElementById("ratio169Btn").className = "btn-arcade btn-arcade-cyan";
+      document.getElementById("ratio916Btn").className = "btn-arcade btn-arcade-dark";
+    });
+
+    // Buy Sandbox Coin Packs
+    document.querySelectorAll(".buy-pack-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const tier = btn.dataset.tier;
+        const map = { starter: 200, creator: 550, studio: 1500 };
+        const add = map[tier] || 200;
+        sfx.playCoinInsert();
+        state.tokenBalance += add;
+        if (tier === "creator" || tier === "studio") state.watermarkFree = true;
+        addLedger(`Simulated ${tier.toUpperCase()} Pack Inserted`, +add);
+        showBanner(null);
+      });
+    });
+
+    // Custom Cast Form
+    document.getElementById("typeAnimalBtn").addEventListener("click", () => {
+      sfx.playDialClick();
+      state.newCastType = "animal";
+      document.getElementById("typeAnimalBtn").className = "btn-arcade btn-arcade-cyan";
+      document.getElementById("typeAdultBtn").className = "btn-arcade btn-arcade-dark";
+      document.getElementById("adultCheckWrap").hidden = true;
+    });
+    document.getElementById("typeAdultBtn").addEventListener("click", () => {
+      sfx.playDialClick();
+      state.newCastType = "human_adult";
+      document.getElementById("typeAdultBtn").className = "btn-arcade btn-arcade-pink";
+      document.getElementById("typeAnimalBtn").className = "btn-arcade btn-arcade-dark";
+      document.getElementById("adultCheckWrap").hidden = false;
+    });
+
+    document.getElementById("newCastFile").addEventListener("change", (e) => {
+      const f = e.target.files && e.target.files[0];
+      if (!f) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        state.stagedCustomPhotoUrl = reader.result;
+        document.getElementById("newCastFileStatus").textContent = `✓ Loaded ${f.name}`;
+        sfx.playShutterFlash();
+      };
+      reader.readAsDataURL(f);
+    });
+
+    document.getElementById("addCastForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const errEl = document.getElementById("castFormError");
+      errEl.textContent = "";
+      if (state.newCastType === "human_adult" && !document.getElementById("adultCheckInput").checked) {
+        errEl.textContent = "Please confirm the 18+ adult & likeness permission checkbox.";
+        return;
+      }
+      const name = document.getElementById("newCastName").value.trim();
+      const vibe = document.getElementById("newCastVibe").value.trim();
+      const avatarUrl =
+        state.stagedCustomPhotoUrl ||
+        makePresetAvatarDataUrl(
+          state.newCastType === "animal" ? "🐾" : "🌟",
+          "#ec4899",
+          "#0e7490",
+          name.slice(0, 10).toUpperCase()
+        );
+      const id = "cast_" + Date.now();
+      state.castProfiles.unshift({ id, name, type: state.newCastType, vibe, avatarUrl });
+      getAvatarImg(avatarUrl);
+      state.selectedCastId = id;
+      state.stagedCustomPhotoUrl = null;
+      document.getElementById("newCastName").value = "";
+      document.getElementById("newCastVibe").value = "";
+      document.getElementById("newCastFileStatus").textContent = "Or auto-generates an arcade avatar";
+      sfx.playCoinInsert();
+      renderCastUI();
+      document.getElementById("castModal").hidden = true;
+    });
+
+    // Stage 1 -> Stage 2: Dispense 3-Frame Storyboard Strip
+    document.getElementById("setupForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      showBanner(null);
+      if (state.tokenBalance < 10) {
+        showBanner("Need 10 Coins for a 3-Frame Walkthrough! Insert free Sandbox Coins in the top bar.");
+        document.getElementById("coinModal").hidden = false;
+        return;
+      }
+      const tpl = getTemplate(state.selectedTemplateId);
+      const cast = getSelectedCast();
+      const productName = document.getElementById("productInput").value.trim() || tpl.defaultProduct;
+      const hook = document.getElementById("hookInput").value.trim() || tpl.defaultHook;
+
+      state.tokenBalance -= 10;
+      addLedger(`3-Frame Walkthrough (${productName})`, -10);
+
+      triggerCurtain("SNAPPING 3-FRAME STORYBOARD...", () => {
+        const frames = [0, 1, 2].map((i) =>
+          renderBeatFrameDataUrl(tpl, cast, i, state.aspectRatio, productName, hook)
+        );
+        state.project = {
+          id: "proj_" + Date.now(),
+          stage: "walkthrough",
+          templateId: tpl.id,
+          cast,
+          aspectRatio: state.aspectRatio,
+          productName,
+          spokenDialogue: `${cast.name} presents ${productName}! ${hook}`,
+          vocalDelivery: tpl.vocalOptions[0],
+          characterAction: tpl.gagOptions[0],
+          frames,
+          redoUsed: false,
+          correctionsUsed: 0,
+          version: 1,
+          hasOutro: false,
+          hasHd: false,
+          lastRebate: 0
+        };
+        sfx.playCoinInsert();
+        renderProjectStages();
+      });
+    });
+
+    document.getElementById("backToSetupBtn").addEventListener("click", () => {
+      sfx.playButtonPress();
+      state.project = null;
+      renderProjectStages();
+    });
+
+    document.getElementById("redoStripBtn").addEventListener("click", () => {
+      const p = state.project;
+      if (!p) return;
+      if (p.redoUsed) {
+        if (state.tokenBalance < 10) {
+          document.getElementById("coinModal").hidden = false;
+          return;
+        }
+        state.tokenBalance -= 10;
+        addLedger("Storyboard Redo Debit", -10);
+      } else {
+        p.redoUsed = true;
+        addLedger("Free Storyboard Redo Used", 0);
+      }
+      const tpl = getTemplate(p.templateId);
+      triggerCurtain("RE-SHOOTING 3-FRAME STRIP...", () => {
+        p.vocalDelivery = tpl.vocalOptions[(tpl.vocalOptions.indexOf(p.vocalDelivery) + 1) % tpl.vocalOptions.length];
+        p.frames = [0, 1, 2].map((i) =>
+          renderBeatFrameDataUrl(tpl, p.cast, i, p.aspectRatio, p.productName, p.spokenDialogue)
+        );
+        renderProjectStages();
+      });
+    });
+
+    // Stage 2 -> Stage 3: Escrow 90 Coins & Roll Veo Video
+    document.getElementById("rollVeoBtn").addEventListener("click", () => {
+      const p = state.project;
+      if (!p) return;
+      if (state.tokenBalance < 90) {
+        showBanner("Escrowing Veo 3.1 Video + 2 Guided Takes requires 90 Coins. Grab free Sandbox Coins!");
+        document.getElementById("coinModal").hidden = false;
+        return;
+      }
+      state.tokenBalance -= 90;
+      state.escrowBalance += 90;
+      addLedger("Escrow Locked: Veo 3.1 + 2 Correction Slots", -90);
+
+      triggerCurtain("ROLLING VEO 3.1 CAMERAS + AUDIO...", () => {
+        p.stage = "draft_video";
+        sfx.playCoinInsert();
+        renderProjectStages();
+        speakCommercialLine(`${p.productName}! ${p.spokenDialogue}`);
+      });
+    });
+
+    document.getElementById("replayTakeBtn").addEventListener("click", () => {
+      sfx.playButtonPress();
+      monitorStartMs = performance.now();
+      if (state.project) {
+        speakCommercialLine(`${state.project.productName}! ${state.project.spokenDialogue}`);
+      }
+    });
+
+    // Guided Dial Correction
+    document.getElementById("applyCorrectionBtn").addEventListener("click", () => {
+      const p = state.project;
+      if (!p || p.correctionsUsed >= 2) return;
+      const nextLine = document.getElementById("dialDialogueInput").value.trim();
+      const nextGag = document.getElementById("dialGagInput").value.trim();
+      if (nextLine) p.spokenDialogue = nextLine;
+      if (nextGag) p.characterAction = nextGag;
+      p.correctionsUsed += 1;
+      p.version += 1;
+
+      triggerCurtain(`RE-SHOOTING GUIDED TAKE #${p.version}...`, () => {
+        sfx.playCoinInsert();
+        renderProjectStages();
+        speakCommercialLine(p.spokenDialogue);
+      });
+    });
+
+    // Stage 3 -> Stage 4: Lock & Rebate Unused Corrections
+    document.getElementById("lockAdBtn").addEventListener("click", () => {
+      const p = state.project;
+      if (!p) return;
+      const settle = computeSettlement(p.correctionsUsed);
+      state.escrowBalance = Math.max(0, state.escrowBalance - 90);
+      if (settle.rebate > 0) {
+        state.tokenBalance += settle.rebate;
+        addLedger(`Unused-Correction Rebate (+${settle.rebate} Coins)`, +settle.rebate);
+      } else {
+        addLedger("Final Ad Locked (90 Escrow Burned)", 0);
+      }
+      p.lastRebate = settle.rebate;
+      p.stage = "locked";
+      sfx.playRebateJackpot();
+      renderWalletUI();
+      renderProjectStages();
+    });
+
+    // Post-Lock Sinks
+    document.getElementById("extendOutroBtn").addEventListener("click", () => {
+      const p = state.project;
+      if (!p || p.hasOutro) return;
+      if (state.tokenBalance < 30) {
+        document.getElementById("coinModal").hidden = false;
+        return;
+      }
+      state.tokenBalance -= 30;
+      addLedger("+7s Funny Outro Extension", -30);
+      triggerCurtain("FILMING +7s BLOOPER OUTRO...", () => {
+        p.hasOutro = true;
+        renderProjectStages();
+      });
+    });
+
+    document.getElementById("upgradeHdBtn").addEventListener("click", () => {
+      const p = state.project;
+      if (!p || p.hasHd) return;
+      if (state.tokenBalance < 120) {
+        document.getElementById("coinModal").hidden = false;
+        return;
+      }
+      state.tokenBalance -= 120;
+      addLedger("Cinema Master 1080p HD Upgrade", -120);
+      triggerCurtain("MASTERING 1080P CINEMA PRINT...", () => {
+        p.hasHd = true;
+        renderProjectStages();
+      });
+    });
+
+    document.getElementById("copyViralLinkBtn").addEventListener("click", (e) => {
+      sfx.playButtonPress();
+      const btn = e.currentTarget;
+      const shareUrl = `${window.location.origin}/v/${state.project ? state.project.id : "demo"}`;
+      if (navigator.clipboard) navigator.clipboard.writeText(shareUrl).catch(() => {});
+      btn.textContent = "✓ Copied Viral Remix Share Link!";
+      setTimeout(() => {
+        btn.textContent = "🔗 Copy Viral Remix Share Link";
+      }, 2000);
+    });
+
+    document.getElementById("shootAnotherBtn").addEventListener("click", () => {
+      sfx.playButtonPress();
+      state.project = null;
+      renderProjectStages();
+    });
+
+    // Close modals on backdrop click
+    ["coinModal", "castModal", "archModal"].forEach((id) => {
+      const el = document.getElementById(id);
+      el.addEventListener("click", (e) => {
+        if (e.target === el) el.hidden = true;
+      });
+    });
+
+    // Initialize Booth
+    renderWalletUI();
+    renderCatalog();
+    renderCastUI();
+    syncSetupInputsToTemplate();
+  </script>
+</body>
+</html>

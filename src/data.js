@@ -249,8 +249,8 @@ export const CLASSIC_APPS = [
  * Era 2: Modern Liquid Glass Projects (Playable Games, Official Demos & Interactive Apps)
  * Styled after Apple's Liquid Glass design system (visionOS / macOS Tahoe / iOS 26)
  *
- * Standing Exclusion Note: Do NOT add "RelaisPalais Rework" or empty scaffolds ("Fototecateca")
- * when scanning /Users/max/Local/Projects for future portfolio updates (see AGENTS.md).
+ * Standing Exclusion Note: Do NOT add "RelaisPalais Rework" when scanning
+ * /Users/max/Local/Projects for future portfolio updates (see AGENTS.md).
  */
 export const MODERN_APPS = [
   {
@@ -489,6 +489,23 @@ export const MODERN_APPS = [
       './games/roblox-pipeline/assets/pipeline_infographic.png',
       './games/roblox-pipeline/assets/experience_thumbnail_1920x1080.png'
     ]
+  },
+  {
+    id: 'fototecateca',
+    name: 'Fototecateca',
+    shortName: 'Fototecateca',
+    folder: 'Fototecateca',
+    group: 'apps',
+    badge: 'Interactive Studio',
+    category: 'Glossy Arcade Parody Video Ad Booth • Next.js 15, Veo 3.1, Firebase & Stripe',
+    iconUrl: './assets/icons/fototecateca.svg',
+    playUrl: './games/fototecateca/index.html',
+    playLabel: 'Enter Arcade Ad Booth Sandbox',
+    tldr: 'A mobile-first Glossy Arcade Photo Booth web app (Next.js 15, Firebase App Hosting, Stripe) where users star their pets or verified 18+ adult faces in structured TV parody commercials via Gemini 3.5, Nano Banana 2.1 3-frame storyboards, and Veo 3.1 video + native audio with unused-correction coin rebates.',
+    description:
+      'Turns pet photos or verified 18+ adult faces into hilarious structured TV parody commercials across 5 pre-rigged channels (90s Late-Night Infomercial, Pretentious Luxury Perfume, Aggressive Local Injury Lawyer, Retro Saturday Morning Toy Ad, and Summer Blockbuster Action Trailer):\n• 3-Frame Storyboard Walkthrough (10 Coins + 1 Free Redo): Compiles structured 3-beat scripts via Gemini 3.5 Flash-Lite and renders 3 consistent character keyframes via Nano Banana 2.1 from 1–3 client-resized 1024px WebP Cast Profiles before spending video coins.\n• Veo 3.1 Video + Rebate Escrow Economics: Locks 90 coins in an append-only Firestore wallet ledger for 8s 720p Veo 3.1 video + native audio and up to 2 Guided Arcade-Dial Corrections (Dialogue & Physical Gag). Locking on Take 1 automatically rebates +20 coins (+10 on Take 2), while safety-filter blocks refund 100% of escrow.\n• Post-Lock Mastering & Edge Vault: Supports +7s Funny Outro Extensions (30 coins) and 1080p Cinema Masters (120 coins), FFmpeg H.264 watermarking (unlocked watermark-free via Stripe Creator/Studio packs), Google Drive v3 archiving, and immutable Cloud CDN byte-range streaming.\n\n(Portfolio preview runs a 100% client-side interactive Arcade Booth simulator with WebAudio SFX and zero API keys or real charges.)',
+    tech: ['Next.js 15 & React 19', 'Veo 3.1 & Gemini 3.5', 'Firebase Auth & Firestore', 'Stripe Escrow Ledger', 'FFmpeg & Drive Vault'],
+    screenshots: []
   },
   {
     id: 'ai-airbrush',

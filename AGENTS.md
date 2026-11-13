@@ -4,7 +4,6 @@ When scanning `/Users/max/Local/Projects` to add or update portfolio entries in 
 
 1. **Permanent Exclusions (NEVER Include):**
    - **`RelaisPalais Rework`** (`Relais Palais Rework`): Permanently excluded per user instruction. Never add it to `src/data.js`, `public/games/`, `public/assets/icons/`, or `TLDR` in future portfolio scans or updates.
-   - **`Fototecateca`**: Skip while empty/unpopulated unless the user explicitly asks to showcase it.
 2. **Playable vs. Demo Policy:**
    - All new projects from `/Users/max/Local/Projects` belong in the **Modern (Liquid Glass)** section (`MODERN_APPS` in `src/data.js`).
    - If a project has a playable build, bundle/upload it under `public/games/<slug>/`.
