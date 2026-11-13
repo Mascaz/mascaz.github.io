@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Rooms — visionOS 26 Spatial Glitch & Backrooms Portal Preview</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%; height: 100%; overflow: hidden;
+      background: #07080d; color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+      user-select: none;
+    }
+    #viewport { position: fixed; inset: 0; }
+    canvas { display: block; width: 100%; height: 100%; cursor: grab; }
+    canvas:active { cursor: grabbing; }
+
+    /* visionOS Spatial Glass HUD */
+    .hud-top {
+      position: fixed; top: 14px; left: 14px; right: 14px;
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;
+      pointer-events: none; z-index: 10;
+    }
+    .glass-pill {
+      pointer-events: auto;
+      background: rgba(18, 22, 34, 0.72);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), 0 12px 32px rgba(0,0,0,0.5);
+      border-radius: 999px;
+      padding: 8px 16px;
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 12.5px;
+    }
+    .badge-vision {
+      font-size: 10px; font-weight: 800; letter-spacing: 0.06em;
+      padding: 3px 8px; border-radius: 999px;
+      background: rgba(250, 204, 21, 0.2); border: 1px solid rgba(250, 204, 21, 0.5);
+      color: #fef08a;
+    }
+    .hud-bottom {
+      position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+      width: min(860px, 95vw);
+      background: rgba(15, 18, 28, 0.78);
+      backdrop-filter: blur(28px) saturate(190%);
+      -webkit-backdrop-filter: blur(28px) saturate(190%);
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      border-radius: 24px;
+      padding: 14px 18px;
+      display: flex; flex-direction: column; gap: 10px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.65);
+      z-index: 10;
+    }
+    .controls-row {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px;
+    }
+    .btn-group { display: flex; flex-wrap: wrap; gap: 7px; }
+    button {
+      font-family: inherit; font-size: 12px; font-weight: 600;
+      padding: 7px 13px; border-radius: 999px; cursor: pointer;
+      color: #f8fafc; background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.24);
+      transition: background 0.15s ease, transform 0.12s ease;
+    }
+    button:hover { background: rgba(255,255,255,0.2); }
+    button.primary {
+      background: linear-gradient(135deg, rgba(250,204,21,0.32), rgba(234,179,8,0.18));
+      border-color: rgba(250,204,21,0.65); color: #fef9c3;
+    }
+    button.active {
+      background: rgba(56, 189, 248, 0.28); border-color: #38bdf8; color: #e0f2fe;
+    }
+    .timeline-row {
+      display: flex; align-items: center; gap: 12px; font-size: 11.5px; color: #cbd5e1;
+    }
+    input[type="range"] {
+      flex: 1; accent-color: #eab308; cursor: pointer;
+    }
+    .phase-readout {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 11.5px; color: #fde047;
+    }
+    .hint-bar {
+      font-size: 11px; color: #94a3b8; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div id="viewport"></div>
+
+  <div class="hud-top">
+    <div class="glass-pill">
+      <span class="badge-vision">visionOS 26 + RealityKit</span>
+      <strong>Your Rooms</strong>
+      <span style="color:#94a3b8;font-size:11.5px">Interactive 3D Spatial Glitch &amp; Portal Slice</span>
+    </div>
+    <div class="glass-pill phase-readout" id="statusReadout">
+      Phase 0: Scanned Living Room (4.2m × 5.0m) • 0.0s / 25.0s
+    </div>
+  </div>
+
+  <div class="hud-bottom">
+    <div class="controls-row">
+      <div class="btn-group">
+        <button type="button" class="primary" id="btnPlayPause">&#9654; Start 25s Room Glitch</button>
+        <button type="button" id="btnSkipPortal">&#9197; Skip to Open Portal (25s)</button>
+        <button type="button" id="btnCrossPortal">&#128682; Walk Through Portal</button>
+        <button type="button" id="btnReset">&#8634; Reset Room</button>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="active" id="btnArMesh">ARKit Scan Wireframe: ON</button>
+        <button type="button" class="active" id="btnAudio">60Hz Spatial Audio: ON</button>
+      </div>
+    </div>
+
+    <div class="timeline-row">
+      <span>GlitchDirector Timeline</span>
+      <input type="range" id="timeScrubber" min="0" max="25" step="0.05" value="0" aria-label="Glitch timeline seconds" />
+      <span id="timeLabel" style="min-width:68px;text-align:right">0.0s / 25s</span>
+    </div>
+
+    <div class="hint-bar">
+      <span>Drag to look around &bull; <strong>WASD / Arrow Keys</strong> to walk &bull; Click floor beyond portal to blink-teleport</span>
+      <span>Merged showcase of <code>Your Rooms</code> (visionOS 26) &amp; <code>Rooms</code> (Reality Composer Pro)</span>
+    </div>
+  </div>
+
+  <script type="module">
+    import * as THREE from '../../assets/vendor/three.min.js';
+
+    const container = document.getElementById('viewport');
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.05;
+    container.appendChild(renderer.domElement);
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x111520);
+    scene.fog = new THREE.FogExp2(0x1a170c, 0.045);
+
+    const camera = new THREE.PerspectiveCamera(68, window.innerWidth / window.innerHeight, 0.08, 60);
+    camera.position.set(0, 1.62, 1.55);
+
+    // Load authentic procedural textures from Your Rooms
+    const loader = new THREE.TextureLoader();
+    function loadTex(url, rx = 2, ry = 2) {
+      const t = loader.load(url);
+      t.wrapS = t.wrapT = THREE.RepeatWrapping;
+      t.repeat.set(rx, ry);
+      t.colorSpace = THREE.SRGBColorSpace;
+      return t;
+    }
+    const texWallpaper = loadTex('./assets/wallpaper_yellow.png', 2, 1.5);
+    const texCarpet = loadTex('./assets/carpet_damp.png', 3, 3);
+    const texCeiling = loadTex('./assets/ceiling_tiles.png', 3, 3);
+    const texLight = loadTex('./assets/light_panel.png', 1, 1);
+    const texDoorPlain = loadTex('./assets/door_plain.png', 1, 1);
+    const texDoorExit = loadTex('./assets/door_exit.png', 1, 1);
+
+    // Audio setup using Your Rooms WAV assets
+    let audioEnabled = true;
+    const humAudio = new Audio('./assets/hum_60hz.wav');
+    humAudio.loop = true;
+    humAudio.volume = 0;
+    const glitchSfx = new Audio('./assets/glitch_burst.wav');
+    glitchSfx.volume = 0.4;
+    const slamSfx = new Audio('./assets/door_slam.wav');
+    slamSfx.volume = 0.55;
+    const stepSfx = new Audio('./assets/footsteps_distant.wav');
+    stepSfx.volume = 0.35;
+
+    function tryPlay(aud) {
+      if (!audioEnabled) return;
+      aud.currentTime = 0;
+      aud.play().catch(() => {});
+    }
+
+    // =========================================================================
+    // 1. Scanned Physical Living Room (SampleRoom.roomfixture.json: 4.2m x 5.0m x 2.5m)
+    // =========================================================================
+    const roomGroup = new THREE.Group();
+    scene.add(roomGroup);
+
+    const roomWallMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.85 });
+    const roomFloorMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.9 });
+
+    // Floor & Ceiling of scanned room (z from -2.5 to +2.5, x from -2.1 to +2.1)
+    const realFloor = new THREE.Mesh(new THREE.PlaneGeometry(4.2, 5.0), roomFloorMat);
+    realFloor.rotation.x = -Math.PI / 2;
+    roomGroup.add(realFloor);
+
+    const realCeil = new THREE.Mesh(new THREE.PlaneGeometry(4.2, 5.0), roomWallMat);
+    realCeil.rotation.x = Math.PI / 2;
+    realCeil.position.y = 2.5;
+    roomGroup.add(realCeil);
+
+    // Back wall (z = +2.5), Left (x = -2.1), Right (x = +2.1)
+    const southWall = new THREE.Mesh(new THREE.PlaneGeometry(4.2, 2.5), roomWallMat);
+    southWall.position.set(0, 1.25, 2.5);
+    southWall.rotation.y = Math.PI;
+    roomGroup.add(southWall);
+
+    const westWall = new THREE.Mesh(new THREE.PlaneGeometry(5.0, 2.5), roomWallMat);
+    westWall.position.set(-2.1, 1.25, 0);
+    westWall.rotation.y = Math.PI / 2;
+    roomGroup.add(westWall);
+
+    const eastWall = new THREE.Mesh(new THREE.PlaneGeometry(5.0, 2.5), roomWallMat);
+    eastWall.position.set(2.1, 1.25, 0);
+    eastWall.rotation.y = -Math.PI / 2;
+    roomGroup.add(eastWall);
+
+    // North wall (z = -2.5) split around a 1.0m x 2.05m doorway opening at x = 0
+    const northLeft = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 2.5), roomWallMat);
+    northLeft.position.set(-1.3, 1.25, -2.5);
+    roomGroup.add(northLeft);
+
+    const northRight = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 2.5), roomWallMat);
+    northRight.position.set(1.3, 1.25, -2.5);
+    roomGroup.add(northRight);
+
+    const northHeader = new THREE.Mesh(new THREE.PlaneGeometry(1.0, 0.45), roomWallMat);
+    northHeader.position.set(0, 2.275, -2.5);
+    roomGroup.add(northHeader);
+
+    // Scanned Real-World Furniture Occlusion Proxies (ARKit Scene Reconstruction style)
+    const furnMat = new THREE.MeshStandardMaterial({ color: 0x1e2638, roughness: 0.75 });
+    const sofaBase = new THREE.Mesh(new THREE.BoxGeometry(1.7, 0.45, 0.8), furnMat);
+    sofaBase.position.set(-1.15, 0.225, 0.6);
+    const sofaBack = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.85, 1.7), furnMat);
+    sofaBack.position.set(-1.9, 0.425, 0.6);
+    const deskTop = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.74, 1.3), furnMat);
+    deskTop.position.set(1.65, 0.37, -0.4);
+    roomGroup.add(sofaBase, sofaBack, deskTop);
+
+    // ARKit Spatial Reconstruction Cyan Wireframe Overlay
+    const arWireGroup = new THREE.Group();
+    const wireMat = new THREE.MeshBasicMaterial({
+      color: 0x38bdf8, wireframe: true, transparent: true, opacity: 0.22
+    });
+    const wireRoom = new THREE.Mesh(new THREE.BoxGeometry(4.18, 2.48, 4.98, 12, 8, 14), wireMat);
+    wireRoom.position.y = 1.25;
+    const wireSofa = new THREE.Mesh(new THREE.BoxGeometry(1.72, 0.47, 0.82, 4, 2, 2), wireMat);
+    wireSofa.position.copy(sofaBase.position);
+    const wireDesk = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.76, 1.32, 2, 2, 4), wireMat);
+    wireDesk.position.copy(deskTop.position);
+    arWireGroup.add(wireRoom, wireSofa, wireDesk);
+    scene.add(arWireGroup);
+
+    // =========================================================================
+    // 2. GlitchDirector Progressive Backrooms Overlay Tiles (12 distance groups)
+    // =========================================================================
+    const glitchTiles = [];
+    function addGlitchTile(w, h, pos, rot, tex, distRank) {
+      const mat = new THREE.MeshStandardMaterial({
+        map: tex, transparent: true, opacity: 0, roughness: 0.88, side: THREE.FrontSide
+      });
+      const mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, h), mat);
+      mesh.position.copy(pos);
+      mesh.rotation.set(rot.x, rot.y, rot.z);
+      scene.add(mesh);
+      glitchTiles.push({ mesh, mat, distRank });
+    }
+
+    // Tile grid across walls, floor, and ceiling spreading from door (0, 1, -2.5)
+    for (let ix = 0; ix < 4; ix++) {
+      for (let iz = 0; iz < 5; iz++) {
+        const x = -1.575 + ix * 1.05;
+        const z = -2.0 + iz * 1.0;
+        const d = Math.hypot(x, z + 2.5) / 5.6;
+        addGlitchTile(1.04, 0.99, new THREE.Vector3(x, 0.006, z), new THREE.Vector3(-Math.PI / 2, 0, 0), texCarpet, d);
+        addGlitchTile(1.04, 0.99, new THREE.Vector3(x, 2.494, z), new THREE.Vector3(Math.PI / 2, 0, 0), texCeiling, d);
+      }
+    }
+    for (let iz = 0; iz < 5; iz++) {
+      const z = -2.0 + iz * 1.0;
+      const d = Math.abs(z + 2.5) / 5.2;
+      addGlitchTile(0.99, 2.48, new THREE.Vector3(-2.092, 1.25, z), new THREE.Vector3(0, Math.PI / 2, 0), texWallpaper, d);
+      addGlitchTile(0.99, 2.48, new THREE.Vector3(2.092, 1.25, z), new THREE.Vector3(0, -Math.PI / 2, 0), texWallpaper, d);
+    }
+    addGlitchTile(1.58, 2.48, new THREE.Vector3(-1.3, 1.25, -2.492), new THREE.Vector3(0, 0, 0), texWallpaper, 0.06);
+    addGlitchTile(1.58, 2.48, new THREE.Vector3(1.3, 1.25, -2.492), new THREE.Vector3(0, 0, 0), texWallpaper, 0.06);
+
+    // Drifting Door Frame + Hinged Door Panel (GlitchDirector 18s -> 25s)
+    const doorRig = new THREE.Group();
+    doorRig.position.set(0, 0, -2.48);
+    scene.add(doorRig);
+
+    const frameMat = new THREE.MeshStandardMaterial({ color: 0x78562b, roughness: 0.7 });
+    const jambL = new THREE.Mesh(new THREE.BoxGeometry(0.08, 2.1, 0.12), frameMat);
+    jambL.position.set(-0.52, 1.05, 0);
+    const jambR = new THREE.Mesh(new THREE.BoxGeometry(0.08, 2.1, 0.12), frameMat);
+    jambR.position.set(0.52, 1.05, 0);
+    const jambTop = new THREE.Mesh(new THREE.BoxGeometry(1.12, 0.08, 0.12), frameMat);
+    jambTop.position.set(0, 2.09, 0);
+    doorRig.add(jambL, jambR, jambTop);
+
+    const doorHinge = new THREE.Group();
+    doorHinge.position.set(-0.48, 0, 0);
+    doorRig.add(doorHinge);
+
+    const doorPanelMat = new THREE.MeshStandardMaterial({ map: texDoorPlain, roughness: 0.8 });
+    const doorPanel = new THREE.Mesh(new THREE.BoxGeometry(0.96, 2.04, 0.05), doorPanelMat);
+    doorPanel.position.set(0.48, 1.02, 0);
+    doorHinge.add(doorPanel);
+
+    // =========================================================================
+    // 3. Endless Liminal Backrooms World Beyond North Threshold (z < -2.5)
+    // =========================================================================
+    const backroomsGroup = new THREE.Group();
+    scene.add(backroomsGroup);
+
+    const brWallMat = new THREE.MeshStandardMaterial({
+      map: loadTex('./assets/wallpaper_yellow.png', 12, 1.5), roughness: 0.88
+    });
+    const brSingleWallMat = new THREE.MeshStandardMaterial({
+      map: loadTex('./assets/wallpaper_yellow.png', 2, 1.5), roughness: 0.88
+    });
+    const brFloorMat = new THREE.MeshStandardMaterial({
+      map: loadTex('./assets/carpet_damp.png', 14, 14), roughness: 0.95
+    });
+    const brCeilMat = new THREE.MeshStandardMaterial({
+      map: loadTex('./assets/ceiling_tiles.png', 14, 14), roughness: 0.9
+    });
+    const lightPanelMat = new THREE.MeshBasicMaterial({ map: texLight, color: 0xfef9c3 });
+
+    const brFloor = new THREE.Mesh(new THREE.PlaneGeometry(24, 26), brFloorMat);
+    brFloor.rotation.x = -Math.PI / 2;
+    brFloor.position.set(0, 0, -15.5);
+    backroomsGroup.add(brFloor);
+
+    const brCeil = new THREE.Mesh(new THREE.PlaneGeometry(24, 26), brCeilMat);
+    brCeil.rotation.x = Math.PI / 2;
+    brCeil.position.set(0, 2.5, -15.5);
+    backroomsGroup.add(brCeil);
+
+    // Partition pillars & liminal labyrinth walls inside Backrooms
+    const partitionCoords = [
+      [-3.2, -6.0, 0.4, 7.0], [3.2, -6.0, 0.4, 7.0],
+      [-1.8, -9.5, 2.6, 0.4], [2.4, -12.0, 3.0, 0.4],
+      [-3.5, -14.5, 0.4, 6.0], [0.4, -15.5, 0.4, 5.2],
+      [3.8, -16.5, 0.4, 6.5], [-1.5, -19.5, 5.0, 0.4],
+      [0, -25.0, 18.0, 0.4], [-9.0, -15.5, 0.4, 20.0], [9.0, -15.5, 0.4, 20.0]
+    ];
+    partitionCoords.forEach(([x, z, w, d]) => {
+      const m = new THREE.Mesh(new THREE.BoxGeometry(w, 2.5, d), w > 4 || d > 4 ? brWallMat : brSingleWallMat);
+      m.position.set(x, 1.25, z);
+      backroomsGroup.add(m);
+    });
+
+    // Exit door mystery prop deep inside Backrooms
+    const exitDoor = new THREE.Mesh(
+      new THREE.PlaneGeometry(1.0, 2.05),
+      new THREE.MeshStandardMaterial({ map: texDoorExit, roughness: 0.75 })
+    );
+    exitDoor.position.set(-1.5, 1.025, -19.28);
+    backroomsGroup.add(exitDoor);
+
+    // Fluorescent ceiling light panels + PointLights
+    const brLights = [];
+    for (let z = -4.2; z >= -22; z -= 4.2) {
+      for (const x of [-2.2, 0, 2.2]) {
+        const panel = new THREE.Mesh(new THREE.PlaneGeometry(0.9, 0.45), lightPanelMat);
+        panel.rotation.x = Math.PI / 2;
+        panel.position.set(x, 2.49, z);
+        backroomsGroup.add(panel);
+        if (x === 0) {
+          const pl = new THREE.PointLight(0xfff0aa, 2.2, 9.5, 1.6);
+          pl.position.set(0, 2.35, z);
+          backroomsGroup.add(pl);
+          brLights.push(pl);
+        }
+      }
+    }
+
+    // Room Lighting
+    const ambient = new THREE.AmbientLight(0x94a3b8, 0.85);
+    scene.add(ambient);
+    const roomBulb = new THREE.PointLight(0xe2e8f0, 1.8, 10);
+    roomBulb.position.set(0, 2.3, 0.2);
+    scene.add(roomBulb);
+
+    // =========================================================================
+    // 4. GlitchDirector State & Locomotion Controls
+    // =========================================================================
+    let glitchTime = 0;
+    let isPlaying = false;
+    let doorSlamPlayed = false;
+    let glitchBurstCount = 0;
+
+    let yaw = 0;
+    let pitch = -0.04;
+    let dragging = false;
+    let lastX = 0, lastY = 0;
+    const keys = {};
+
+    renderer.domElement.addEventListener('pointerdown', (e) => {
+      dragging = true; lastX = e.clientX; lastY = e.clientY;
+    });
+    window.addEventListener('pointerup', (e) => {
+      if (dragging && Math.hypot(e.clientX - lastX, e.clientY - lastY) < 5) {
+        // Raycast floor blink-teleport (8m range like visionOS pinch-teleport)
+        const rect = renderer.domElement.getBoundingClientRect();
+        const ndc = new THREE.Vector2(
+          ((e.clientX - rect.left) / rect.width) * 2 - 1,
+          -((e.clientY - rect.top) / rect.height) * 2 + 1
+        );
+        const ray = new THREE.Raycaster();
+        ray.setFromCamera(ndc, camera);
+        const hits = ray.intersectObjects([realFloor, brFloor]);
+        if (hits.length > 0 && hits[0].distance < 8.5) {
+          const pt = hits[0].point;
+          if (pt.z > -2.3 || glitchTime >= 22.5) {
+            camera.position.set(pt.x, 1.62, pt.z);
+            tryPlay(stepSfx);
+          }
+        }
+      }
+      dragging = false;
+    });
+    window.addEventListener('pointermove', (e) => {
+      if (!dragging) return;
+      yaw -= (e.clientX - lastX) * 0.0042;
+      pitch = Math.max(-1.1, Math.min(1.1, pitch - (e.clientY - lastY) * 0.0042));
+      lastX = e.clientX; lastY = e.clientY;
+    });
+    window.addEventListener('keydown', (e) => { keys[e.code] = true; });
+    window.addEventListener('keyup', (e) => { keys[e.code] = false; });
+
+    const btnPlayPause = document.getElementById('btnPlayPause');
+    const btnSkipPortal = document.getElementById('btnSkipPortal');
+    const btnCrossPortal = document.getElementById('btnCrossPortal');
+    const btnReset = document.getElementById('btnReset');
+    const btnArMesh = document.getElementById('btnArMesh');
+    const btnAudio = document.getElementById('btnAudio');
+    const timeScrubber = document.getElementById('timeScrubber');
+    const timeLabel = document.getElementById('timeLabel');
+    const statusReadout = document.getElementById('statusReadout');
+
+    function applyTimeline(t) {
+      glitchTime = Math.max(0, Math.min(25, t));
+      timeScrubber.value = glitchTime.toFixed(2);
+      timeLabel.textContent = `${glitchTime.toFixed(1)}s / 25s`;
+
+      // 1s -> 18s: Progressive Backrooms tile reveal spreading from doorway
+      const revealProgress = Math.max(0, Math.min(1, (glitchTime - 1.0) / 17.0));
+      glitchTiles.forEach((tile) => {
+        const local = Math.max(0, Math.min(1, (revealProgress - tile.distRank * 0.72) / 0.28));
+        tile.mat.opacity = local;
+      });
+
+      // Sodium-yellow tint ramp + fluorescent flicker
+      const flicker = glitchTime > 2 && glitchTime < 22
+        ? 0.92 + 0.08 * Math.sin(glitchTime * 27.0) * Math.cos(glitchTime * 13.0)
+        : 1.0;
+      roomBulb.color.lerpColors(new THREE.Color(0xe2e8f0), new THREE.Color(0xffe07d), revealProgress);
+      roomBulb.intensity = (1.6 + revealProgress * 0.6) * flicker;
+      ambient.color.lerpColors(new THREE.Color(0x94a3b8), new THREE.Color(0xd4b146), revealProgress * 0.8);
+
+      // 18s -> 22s: Door frame detaches & drifts ~0.95m into the physical room
+      const slideT = Math.max(0, Math.min(1, (glitchTime - 18.0) / 4.0));
+      const smoothSlide = slideT * slideT * (3 - 2 * slideT);
+      doorRig.position.z = -2.48 + smoothSlide * 0.92;
+
+      // 22s -> 25s: Door swings open into the Backrooms portal
+      const openT = Math.max(0, Math.min(1, (glitchTime - 22.0) / 3.0));
+      doorHinge.rotation.y = openT * 1.95;
+
+      // Hide solid north wall center once portal opens; Backrooms is visible behind doorway!
+      if (audioEnabled && isPlaying) {
+        humAudio.volume = Math.min(0.45, revealProgress * 0.45);
+      }
+
+      let phaseText = 'Phase 0: Scanned Living Room (4.2m × 5.0m)';
+      if (camera.position.z < -2.55) {
+        phaseText = 'Full Immersion: Inside Procedural Backrooms Chunks';
+      } else if (glitchTime >= 22) {
+        phaseText = 'Phase 3: Portal Open (PortalComponent Active)';
+      } else if (glitchTime >= 18) {
+        phaseText = 'Phase 2: Doorway Detaching Into Room';
+      } else if (glitchTime >= 1) {
+        phaseText = `Phase 1: Surface Material Glitch (${Math.round(revealProgress * 100)}%)`;
+      }
+      statusReadout.textContent = `${phaseText} • ${glitchTime.toFixed(1)}s / 25.0s`;
+    }
+
+    btnPlayPause.addEventListener('click', () => {
+      isPlaying = !isPlaying;
+      if (isPlaying) {
+        if (glitchTime >= 25) glitchTime = 0;
+        if (audioEnabled) humAudio.play().catch(() => {});
+        tryPlay(glitchSfx);
+      } else {
+        humAudio.pause();
+      }
+      btnPlayPause.innerHTML = isPlaying ? '&#10074;&#10074; Pause Glitch' : '&#9654; Resume Room Glitch';
+    });
+
+    btnSkipPortal.addEventListener('click', () => {
+      isPlaying = false;
+      btnPlayPause.innerHTML = '&#9654; Replay Glitch';
+      applyTimeline(25);
+      tryPlay(slamSfx);
+    });
+
+    let walkAnim = null;
+    btnCrossPortal.addEventListener('click', () => {
+      if (glitchTime < 25) applyTimeline(25);
+      tryPlay(stepSfx);
+      walkAnim = {
+        startPos: camera.position.clone(),
+        endPos: new THREE.Vector3(0, 1.62, -5.2),
+        t: 0
+      };
+      yaw = 0; pitch = -0.02;
+    });
+
+    btnReset.addEventListener('click', () => {
+      isPlaying = false;
+      doorSlamPlayed = false;
+      glitchBurstCount = 0;
+      humAudio.pause();
+      camera.position.set(0, 1.62, 1.55);
+      yaw = 0; pitch = -0.04;
+      btnPlayPause.innerHTML = '&#9654; Start 25s Room Glitch';
+      applyTimeline(0);
+    });
+
+    btnArMesh.addEventListener('click', () => {
+      arWireGroup.visible = !arWireGroup.visible;
+      btnArMesh.classList.toggle('active', arWireGroup.visible);
+      btnArMesh.textContent = `ARKit Scan Wireframe: ${arWireGroup.visible ? 'ON' : 'OFF'}`;
+    });
+
+    btnAudio.addEventListener('click', () => {
+      audioEnabled = !audioEnabled;
+      btnAudio.classList.toggle('active', audioEnabled);
+      btnAudio.textContent = `60Hz Spatial Audio: ${audioEnabled ? 'ON' : 'OFF'}`;
+      if (!audioEnabled) humAudio.pause();
+      else if (isPlaying) humAudio.play().catch(() => {});
+    });
+
+    timeScrubber.addEventListener('input', (e) => {
+      applyTimeline(parseFloat(e.target.value));
+    });
+
+    let prev = performance.now();
+    function animate(now) {
+      requestAnimationFrame(animate);
+      const dt = Math.min(0.05, (now - prev) / 1000);
+      prev = now;
+
+      if (isPlaying) {
+        const nextT = glitchTime + dt;
+        if (Math.floor(nextT / 6) > glitchBurstCount && nextT < 20) {
+          glitchBurstCount = Math.floor(nextT / 6);
+          tryPlay(glitchSfx);
+        }
+        if (nextT >= 22 && !doorSlamPlayed) {
+          doorSlamPlayed = true;
+          tryPlay(slamSfx);
+        }
+        if (nextT >= 25) {
+          isPlaying = false;
+          btnPlayPause.innerHTML = '&#9654; Replay Glitch';
+        }
+        applyTimeline(nextT);
+      }
+
+      if (walkAnim) {
+        walkAnim.t = Math.min(1, walkAnim.t + dt * 0.75);
+        const s = walkAnim.t * walkAnim.t * (3 - 2 * walkAnim.t);
+        camera.position.lerpVectors(walkAnim.startPos, walkAnim.endPos, s);
+        if (walkAnim.t >= 1) {
+          walkAnim = null;
+          applyTimeline(glitchTime);
+        }
+      } else {
+        const speed = 2.6 * dt;
+        const fwd = new THREE.Vector3(-Math.sin(yaw), 0, -Math.cos(yaw));
+        const right = new THREE.Vector3(Math.cos(yaw), 0, -Math.sin(yaw));
+        const next = camera.position.clone();
+        if (keys['KeyW'] || keys['ArrowUp']) next.addScaledVector(fwd, speed);
+        if (keys['KeyS'] || keys['ArrowDown']) next.addScaledVector(fwd, -speed);
+        if (keys['KeyD'] || keys['ArrowRight']) next.addScaledVector(right, speed);
+        if (keys['KeyA'] || keys['ArrowLeft']) next.addScaledVector(right, -speed);
+
+        // Constrain inside room unless portal is open
+        next.x = Math.max(-8.2, Math.min(8.2, next.x));
+        const minZ = glitchTime >= 22.2 ? -24.0 : -2.1;
+        next.z = Math.max(minZ, Math.min(2.2, next.z));
+        if (next.z > -2.5) {
+          next.x = Math.max(-1.85, Math.min(1.85, next.x));
+        }
+        camera.position.copy(next);
+      }
+
+      camera.rotation.order = 'YXZ';
+      camera.rotation.y = yaw;
+      camera.rotation.x = pitch;
+
+      renderer.render(scene, camera);
+    }
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    applyTimeline(0);
+    requestAnimationFrame(animate);
+  </script>
+</body>
+</html>

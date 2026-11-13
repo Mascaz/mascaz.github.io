@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#14101e" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>Wild Peak</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: #14101e;
+        overflow: hidden;
+        overscroll-behavior: none;
+        -webkit-user-select: none;
+        user-select: none;
+        -webkit-touch-callout: none;
+      }
+      #app {
+        position: fixed;
+        inset: 0;
+      }
+      #app canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      #app canvas.hud {
+        image-rendering: pixelated;
+        touch-action: none;
+      }
+      #rotate {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 10;
+        background: #14101e;
+        color: #ffd83a;
+        font: bold 28px monospace;
+        align-items: center;
+        justify-content: center;
+      }
+      @media (orientation: portrait) and (pointer: coarse) {
+        #rotate {
+          display: flex;
+        }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/index-CoNu-AGj.js"></script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <div id="rotate" aria-label="Rotate your device">⟳</div>
+  </body>
+</html>

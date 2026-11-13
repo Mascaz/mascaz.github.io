@@ -1,0 +1,18 @@
+<svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="ds-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="50%" stop-color="#047857"/>
+      <stop offset="100%" stop-color="#022c22"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="56" fill="url(#ds-bg)"/>
+  <!-- Isometric Package Cube -->
+  <polygon points="128,46 198,84 128,122 58,84" fill="#a7f3d0"/>
+  <polygon points="58,84 128,122 128,198 58,160" fill="#34d399"/>
+  <polygon points="198,84 128,122 128,198 198,160" fill="#059669"/>
+  <line x1="93" y1="65" x2="163" y2="103" stroke="#022c22" stroke-width="6" stroke-linecap="round" opacity="0.45"/>
+  <!-- Rising Profit Spark Arrow -->
+  <path d="M56,192 L106,158 L142,174 L202,116" fill="none" stroke="#fef08a" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <polyline points="174,114 204,114 204,144" fill="none" stroke="#fef08a" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

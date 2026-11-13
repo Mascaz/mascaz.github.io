@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Cat Capsules" />
+    <meta name="theme-color" content="#dcd6f7" />
+    <title>Cat Capsules</title>
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png" />
+    <link rel="shortcut icon" href="./favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png" />
+    <link rel="manifest" href="./site.webmanifest" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script type="module" crossorigin src="./assets/index-JLMBrMWh.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-BayYX4uG.css">
+  </head>
+  <body>
+    <div id="app-shell">
+      <div id="game-frame">
+        <!-- Top HUD Bar -->
+        <header id="hud-header">
+          <div class="score-cards">
+            <div class="score-pill" id="score-box">
+              <span class="pill-label">SCORE</span>
+              <span class="pill-value" id="score-val">0</span>
+            </div>
+            <div class="score-pill best-pill" id="best-box">
+              <span class="pill-label">
+                <span class="sprite-slot" data-icon="crown" data-size="13"></span>
+                BEST
+              </span>
+              <span class="pill-value" id="best-val">0</span>
+            </div>
+          </div>
+
+          <div class="title-badge">
+            <h1>CAT CAPSULES</h1>
+            <button type="button" class="treats-pill-btn" id="btn-treats-hud" title="Open Cosmetic Boutique">
+              <span class="sprite-slot" data-icon="treat" data-size="16"></span>
+              <span id="hud-treats-val">0</span>
+              <span class="treats-unit">TREATS</span>
+            </button>
+            <span class="combo-tag hidden" id="combo-badge">COMBO x2!</span>
+          </div>
+
+          <div class="hud-right">
+            <div class="next-bubble" id="next-bubble-card" title="Next Cat Capsule">
+              <span class="next-label">NEXT</span>
+              <canvas id="next-preview-canvas" width="68" height="68"></canvas>
+              <span class="next-tier-name" id="next-tier-name">Munchkin</span>
+            </div>
+          </div>
+        </header>
+
+        <!-- Action Toolbar -->
+        <div id="toolbar-row">
+          <!-- Secret Cat Rig Lab button: hidden by default, toggled via 5-finger tap or holding C+A+T -->
+          <button
+            type="button"
+            class="tactile-btn hidden"
+            id="btn-rig-lab"
+            title="Secret Cat Rig Lab (Hold C+A+T or 5-finger tap)"
+          >
+            <span class="sprite-slot" data-icon="paw" data-size="16"></span>
+            <span>Rig Lab</span>
+          </button>
+
+          <button type="button" class="tactile-btn store-btn" id="btn-store" title="Cosmetic Store">
+            <span class="sprite-slot" data-icon="store" data-size="17"></span>
+            <span>Boutique</span>
+          </button>
+
+          <button type="button" class="tactile-btn" id="btn-jiggle" title="Gentle Container Nudge">
+            <span class="sprite-slot" data-icon="nudge" data-size="17"></span>
+            <span>Nudge</span>
+            <span class="nudge-badge" id="nudge-count-badge">∞</span>
+          </button>
+
+          <!-- Mobile-only button shown when nudges run out -->
+          <button
+            type="button"
+            class="tactile-btn iap-gold-btn hidden"
+            id="btn-toolbar-iap"
+            title="Unlock Infinite Nudges ($2.99)"
+          >
+            <span class="sprite-slot" data-icon="infinity" data-size="15"></span>
+            <span data-iap-price="short">$2.99</span>
+          </button>
+
+          <div class="toolbar-right-group">
+            <button type="button" class="tactile-btn icon-only" id="btn-audio" title="Toggle Audio">
+              <span id="audio-icon" class="sprite-slot" data-icon="soundOn" data-size="18"></span>
+            </button>
+            <button type="button" class="tactile-btn icon-only" id="btn-reset" title="End Run & Restart">
+              <span class="sprite-slot" data-icon="reset" data-size="18"></span>
+            </button>
+          </div>
+        </div>
+
+        <!-- PixiJS v8 Interactive Canvas Stage -->
+        <main id="canvas-stage-wrap">
+          <div id="pixi-container"></div>
+          <!-- Danger warning toast -->
+          <div id="danger-banner" class="hidden">
+            <span class="sprite-slot" data-icon="warning" data-size="16"></span>
+            <span>OVERFLOW WARNING!</span>
+            <span id="danger-timer">3.0s</span>
+          </div>
+        </main>
+
+        <!-- Bottom Evolution Tier Bar -->
+        <footer id="tier-evolution-bar" aria-label="Cat Breed Evolution Progression">
+          <div class="evo-label">EVOLUTION</div>
+          <div class="evo-track" id="evo-track"></div>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Cosmetic Boutique Store Modal (Always Available, Light-Dismiss enabled) -->
+    <dialog id="cosmetic-store-dialog" closedby="any" aria-labelledby="store-title">
+      <div class="modal-card store-modal-card">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <span class="sprite-slot" data-icon="store" data-size="24"></span>
+            <h2 id="store-title">Cat Capsules Boutique</h2>
+          </div>
+          <div class="store-header-right">
+            <div class="store-balance-pill">
+              <span class="sprite-slot" data-icon="treat" data-size="18"></span>
+              <strong id="store-treats-val">0</strong>
+              <span>TREATS</span>
+            </div>
+            <form method="dialog">
+              <button type="submit" class="close-pill-btn" aria-label="Close Store">
+                <span class="sprite-slot" data-icon="close" data-size="16"></span>
+              </button>
+            </form>
+          </div>
+        </div>
+        <p class="modal-subtitle">
+          Earn <strong>1 Cat Treat per 1,000 Score</strong> at the end of every run! Equip items anytime while playing.
+        </p>
+
+        <div class="store-tabs" role="tablist">
+          <button type="button" class="store-tab active" data-tab="color">
+            <span class="sprite-slot" data-icon="paw" data-size="15"></span>
+            <span>Cat Colors (100)</span>
+          </button>
+          <button type="button" class="store-tab" data-tab="background">
+            <span class="sprite-slot" data-icon="sparkle" data-size="15"></span>
+            <span>Backgrounds (200)</span>
+          </button>
+          <button type="button" class="store-tab" data-tab="sound">
+            <span class="sprite-slot" data-icon="soundOn" data-size="15"></span>
+            <span>Sound Packs (400)</span>
+          </button>
+        </div>
+
+        <div class="store-items-grid" id="store-items-container"></div>
+      </div>
+    </dialog>
+
+    <!-- Mobile $2.99 Infinite Nudges IAP Modal (Light-Dismiss enabled) -->
+    <dialog id="iap-nudge-dialog" closedby="any" aria-labelledby="iap-nudge-title">
+      <div class="modal-card iap-modal-card">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <span class="sprite-slot" data-icon="nudge" data-size="24"></span>
+            <h2 id="iap-nudge-title">Out of Container Nudges!</h2>
+          </div>
+          <form method="dialog">
+            <button type="submit" class="close-pill-btn" aria-label="Close IAP Prompt">
+              <span class="sprite-slot" data-icon="close" data-size="16"></span>
+            </button>
+          </form>
+        </div>
+        <p class="modal-subtitle">
+          You used all <strong>5 free nudges</strong> for this run. Unlock <strong>Infinite Nudges</strong> forever on mobile!
+        </p>
+        <div class="iap-offer-box">
+          <div class="iap-badge-icon">
+            <span class="sprite-slot" data-icon="infinity" data-size="36"></span>
+          </div>
+          <div class="iap-offer-details">
+            <h3>Unlimited Container Nudges</h3>
+            <p>Shake &amp; jostle your cat capsules whenever a merge is just out of reach!</p>
+          </div>
+        </div>
+        <div class="modal-footer-btns iap-modal-actions">
+          <button type="button" class="tactile-btn iap-gold-btn large-btn" id="btn-confirm-iap">
+            <span class="sprite-slot" data-icon="crown" data-size="18"></span>
+            <span data-iap-price="full">Unlock Infinite Nudges — $2.99</span>
+          </button>
+          <button type="button" class="tactile-btn iap-restore-btn" id="btn-restore-iap">
+            <span>Restore Purchases</span>
+          </button>
+          <p id="iap-status-msg" class="iap-status-msg hidden" aria-live="polite"></p>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- Secret Cat Rig Lab & Breed Encyclopedia Modal (Light-Dismiss enabled) -->
+    <dialog id="rig-lab-dialog" closedby="any" aria-labelledby="rig-lab-title">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <span class="sprite-slot" data-icon="paw" data-size="22"></span>
+            <h2 id="rig-lab-title">Cat Capsules Rig &amp; Breed Lab</h2>
+          </div>
+          <form method="dialog">
+            <button type="submit" class="close-pill-btn" aria-label="Close Dialog">
+              <span class="sprite-slot" data-icon="close" data-size="16"></span>
+            </button>
+          </form>
+        </div>
+        <p class="modal-subtitle">
+          Secret Developer Lab (`C+A+T` or 5-finger tap). Test the 5-layer procedural animation rig!
+        </p>
+
+        <div class="rig-inspector-layout">
+          <div class="rig-preview-column">
+            <div id="inspector-pixi-Mount"></div>
+            <div class="inspector-breed-badge" id="inspector-breed-title">Tier 1: Colorpoint Munchkin</div>
+            <p class="inspector-breed-desc" id="inspector-breed-desc"></p>
+          </div>
+
+          <div class="rig-controls-column">
+            <div class="control-group">
+              <label>Select Breed (`tierSkin` 1–7):</label>
+              <div class="tier-selector-grid" id="lab-tier-buttons"></div>
+            </div>
+
+            <div class="control-group">
+              <label>Emotion State (`emotionState` 0–5):</label>
+              <div class="emotion-selector-grid" id="lab-emotion-buttons">
+                <button type="button" class="mini-btn active" data-emotion="0">0: Calm</button>
+                <button type="button" class="mini-btn" data-emotion="1">1: Curious</button>
+                <button type="button" class="mini-btn" data-emotion="2">
+                  <span class="sprite-slot" data-icon="sparkle" data-size="12"></span>
+                  <span>2: Excited</span>
+                </button>
+                <button type="button" class="mini-btn" data-emotion="3">
+                  <span class="sprite-slot" data-icon="sweat" data-size="12"></span>
+                  <span>3: Intimidated</span>
+                </button>
+                <button type="button" class="mini-btn" data-emotion="4">
+                  <span class="sprite-slot" data-icon="dizzy" data-size="12"></span>
+                  <span>4: Dizzy</span>
+                </button>
+                <button type="button" class="mini-btn" data-emotion="5">
+                  <span class="sprite-slot" data-icon="warning" data-size="12"></span>
+                  <span>5: Panicked</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="control-group sliders-group">
+              <label>
+                <span>Gaze X (`lookX`): <strong id="val-lookx">0.00</strong></span>
+                <input type="range" id="slider-lookx" min="-1" max="1" step="0.05" value="0" />
+              </label>
+              <label>
+                <span>Gaze Y (`lookY`): <strong id="val-looky">0.00</strong></span>
+                <input type="range" id="slider-looky" min="-1" max="1" step="0.05" value="0" />
+              </label>
+              <label>
+                <span>Spin Speed (`spinSpeed`): <strong id="val-spin">0.00</strong></span>
+                <input type="range" id="slider-spin" min="0" max="1" step="0.05" value="0" />
+              </label>
+              <label>
+                <span>Impact Angle (`squishAngle`): <strong id="val-sangle">90°</strong></span>
+                <input type="range" id="slider-sangle" min="-180" max="180" step="5" value="90" />
+              </label>
+            </div>
+
+            <div class="lab-action-row">
+              <button type="button" class="tactile-btn accent" id="btn-lab-hit">
+                <span class="sprite-slot" data-icon="hit" data-size="15"></span>
+                <span>Impact Hit</span>
+              </button>
+              <button type="button" class="tactile-btn" id="btn-lab-blink">
+                <span class="sprite-slot" data-icon="blink" data-size="15"></span>
+                <span>Blink</span>
+              </button>
+              <button type="button" class="tactile-btn" id="btn-lab-spawn">
+                <span class="sprite-slot" data-icon="drop" data-size="15"></span>
+                <span>Set Next Drop</span>
+              </button>
+              <button type="button" class="tactile-btn" id="btn-lab-treats" title="Grant +200 Cat Treats for testing">
+                <span class="sprite-slot" data-icon="treat" data-size="15"></span>
+                <span>+200 Treats</span>
+              </button>
+              <button type="button" class="tactile-btn" id="btn-lab-mobile-sim">
+                <span>Mobile IAP Sim: OFF</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- Game Over Modal (Light-Dismiss enabled) -->
+    <dialog id="game-over-dialog" closedby="any" aria-labelledby="game-over-title">
+      <div class="modal-card game-over-card">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <span class="sprite-slot" data-icon="sadCat" data-size="28"></span>
+            <h2 id="game-over-title">Capsule Container Full!</h2>
+          </div>
+        </div>
+        <p class="modal-subtitle">The gachapon jar overflowed with fluffy cats!</p>
+
+        <div class="final-score-display">
+          <div class="final-stat">
+            <span>FINAL SCORE</span>
+            <strong id="final-score-val">0</strong>
+          </div>
+          <div class="final-stat">
+            <span>HIGH SCORE</span>
+            <strong id="final-best-val">0</strong>
+          </div>
+          <div class="final-stat">
+            <span>HIGHEST BREED</span>
+            <strong id="final-tier-val">Tier 1</strong>
+          </div>
+        </div>
+
+        <div class="treats-earned-banner">
+          <span class="sprite-slot" data-icon="treat" data-size="22"></span>
+          <span>Earned <strong id="final-treats-earned">+0</strong> Cat Treats! (Total: <strong id="final-treats-total">0</strong>)</span>
+        </div>
+
+        <div class="modal-footer-btns gameover-actions">
+          <!-- Mobile-only IAP button on Game Over screen when Infinite Nudges not yet purchased -->
+          <button
+            type="button"
+            class="tactile-btn iap-gold-btn large-btn hidden"
+            id="btn-gameover-iap"
+          >
+            <span class="sprite-slot" data-icon="infinity" data-size="18"></span>
+            <span data-iap-price="full">Unlock Infinite Nudges — $2.99</span>
+          </button>
+
+          <div class="gameover-bottom-row">
+            <button type="button" class="tactile-btn large-btn" id="btn-gameover-store">
+              <span class="sprite-slot" data-icon="store" data-size="18"></span>
+              <span>Boutique</span>
+            </button>
+            <button type="button" class="tactile-btn accent large-btn" id="btn-play-again">
+              <span class="sprite-slot" data-icon="paw" data-size="18"></span>
+              <span>Play Again</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
+  </body>
+</html>

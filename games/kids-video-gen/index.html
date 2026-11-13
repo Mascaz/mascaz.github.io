@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reading Spanish — Automated Story JSON to Bilingual Video Pipeline</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at 20% 0%, #2e1065 0%, #090d16 65%);
+      color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+      padding: 18px;
+    }
+    .shell { max-width: 1120px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+    .header {
+      padding: 14px 18px; border-radius: 20px;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.16);
+      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px;
+    }
+    .badge {
+      font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 999px;
+      background: rgba(251, 191, 36, 0.2); border: 1px solid rgba(251, 191, 36, 0.5); color: #fef08a;
+    }
+    .main-grid {
+      display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 16px;
+    }
+    @media (max-width: 860px) { .main-grid { grid-template-columns: 1fr; } }
+
+    .card {
+      background: rgba(15, 23, 42, 0.78);
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 22px; padding: 16px;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    video {
+      width: 100%; border-radius: 14px; background: #000;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .scene-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    @media (max-width: 560px) { .scene-cards { grid-template-columns: 1fr; } }
+    .scene-btn {
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 14px; padding: 9px; color: #f8fafc; cursor: pointer; text-align: left;
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+    .scene-btn.active { border-color: #fbbf24; background: rgba(251, 191, 36, 0.16); }
+    .scene-btn img { width: 100%; height: 74px; object-fit: cover; border-radius: 9px; margin-bottom: 6px; }
+
+    pre {
+      background: #060911; border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 14px; padding: 14px; overflow: auto; max-height: 360px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 11.5px; line-height: 1.55; color: #bae6fd;
+    }
+    .pipeline-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+    .step-pill {
+      font-size: 11.5px; padding: 6px 11px; border-radius: 10px;
+      background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.35); color: #e0f2fe;
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="header">
+      <div>
+        <div style="font-size:11px;color:#f472b6;font-weight:700;letter-spacing:0.06em">PYTHON + EDGE-TTS + PILLOW + FFMPEG PIPELINE</div>
+        <h1 style="font-size:18px;margin-top:2px">Automated Kids' Bilingual Story Video Generator (<em>Reading Spanish</em>)</h1>
+      </div>
+      <span class="badge">story.json &rarr; Dual Neural TTS &rarr; 1080p MP4</span>
+    </header>
+
+    <div class="main-grid">
+      <!-- Left: Rendered MP4 Output + Storyboard Scene Jumpers -->
+      <div class="card">
+        <h2 style="font-size:14.5px">Rendered Pipeline Output (<code>output/sample_reading_spanish.mp4</code>)</h2>
+        <video id="storyVideo" controls playsinline preload="metadata" poster="./assets/page_rainbow.png">
+          <source src="./assets/sample_reading_spanish.mp4" type="video/mp4" />
+        </video>
+
+        <h3 style="font-size:12.5px;color:#cbd5e1;margin-top:4px">Click a Storyboard Scene to Inspect Input Spec &amp; Seek Video:</h3>
+        <div class="scene-cards" id="sceneCards"></div>
+
+        <div class="pipeline-pills">
+          <span class="step-pill">1. Declarative <code>story.json</code></span>
+          <span class="step-pill">2. <code>es-MX-DaliaNeural</code> + <code>en-US-AnaNeural</code> TTS</span>
+          <span class="step-pill">3. Dynamic Vocab &amp; Picture-in-Picture Teacher Compositing</span>
+          <span class="step-pill">4. Automated MP4 Audio/Frame Sync</span>
+        </div>
+      </div>
+
+      <!-- Right: Live Synchronized story.json Inspector -->
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h2 style="font-size:14.5px">Declarative Input Spec (<code>story.json</code>)</h2>
+          <span style="font-size:11.5px;color:#fde047" id="activeSceneBadge">Scene: Portada • Cover</span>
+        </div>
+        <p style="font-size:12.5px;line-height:1.55;color:#cbd5e1">
+          <code>generate_story_video.py</code> ingests a structured JSON script specifying bilingual book lines, prosody rates (<code>-5%</code> to <code>-15%</code> for repeat-after-me pauses), shape highlights, and teacher host overlays (`teacher_scene.png`), automatically synthesizing a ready-to-upload YouTube episode.
+        </p>
+        <pre id="jsonView"></pre>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STORY_DATA = {
+      channel_name: "Reading Spanish",
+      book_title_es: "¡Un Arcoíris de Amigos y Formas!",
+      book_title_en: "A Rainbow of Friends and Shapes!",
+      voice_es: "es-MX-DaliaNeural",
+      voice_en: "en-US-AnaNeural",
+      scenes: [
+        {
+          id: "intro",
+          seekSec: 0,
+          page_number: "Portada • Cover",
+          img: "./assets/page_rainbow.png",
+          spanish_text: "¡Hola amigos! Bienvenidos a Reading Spanish.",
+          english_text: "Read along with me! The best way to learn Spanish is by seeing and repeating.",
+          vocab_line1: "¡Vamos a leer juntos!",
+          vocab_line2: "Let's read together!",
+          segments: [
+            { lang: "es", voice: "es-MX-DaliaNeural", rate: "-5%", text: "¡Hola amigos! Bienvenidos a Reading Spanish." },
+            { lang: "en", voice: "en-US-AnaNeural", rate: "+0%", text: "Read along with me! The best way to learn Spanish is by seeing and repeating." }
+          ]
+        },
+        {
+          id: "page1",
+          seekSec: 11,
+          page_number: "Página 1 • Page 1",
+          img: "./assets/page_shapes.png",
+          spanish_text: "Mira el círculo rojo y el triángulo amarillo.",
+          english_text: "Look at the red circle and the yellow triangle.",
+          vocab_line1: "¡Repite! • el círculo rojo",
+          vocab_line2: "Repeat! • the red circle",
+          segments: [
+            { lang: "es", voice: "es-MX-DaliaNeural", rate: "-10%", text: "Mira el círculo rojo y el triángulo amarillo." },
+            { lang: "en", voice: "en-US-AnaNeural", rate: "+0%", text: "Look at the red circle and the yellow triangle. Repeat with me:" },
+            { lang: "es", voice: "es-MX-DaliaNeural", rate: "-15%", text: "¡El círculo rojo!", is_repeat_prompt: true }
+          ]
+        },
+        {
+          id: "page2",
+          seekSec: 25,
+          page_number: "Página 2 • Page 2",
+          img: "./assets/page_rainbow.png",
+          spanish_text: "Todos juntos somos un arcoíris de amigos.",
+          english_text: "All together we are a rainbow of friends! What is your favorite color?",
+          vocab_line1: "¡Repite! • un arcoíris de amigos",
+          vocab_line2: "Repeat! • a rainbow of friends",
+          segments: [
+            { lang: "es", voice: "es-MX-DaliaNeural", rate: "-10%", text: "Todos juntos somos un arcoíris de amigos." },
+            { lang: "en", voice: "en-US-AnaNeural", rate: "+0%", text: "All together we are a rainbow of friends! What is your favorite color?" },
+            { lang: "es", voice: "es-MX-DaliaNeural", rate: "-5%", text: "¡Hasta luego, amigos!", is_repeat_prompt: true }
+          ]
+        }
+      ]
+    };
+
+    const video = document.getElementById('storyVideo');
+    const sceneCards = document.getElementById('sceneCards');
+    const jsonView = document.getElementById('jsonView');
+    const activeSceneBadge = document.getElementById('activeSceneBadge');
+
+    function selectScene(idx, seekVideo = false) {
+      const sc = STORY_DATA.scenes[idx];
+      sceneCards.querySelectorAll('.scene-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
+      activeSceneBadge.textContent = `Scene: ${sc.page_number}`;
+      const { img, seekSec, ...cleanScene } = sc;
+      jsonView.textContent = JSON.stringify(cleanScene, null, 2);
+      if (seekVideo) {
+        video.currentTime = sc.seekSec;
+        video.play().catch(() => {});
+      }
+    }
+
+    STORY_DATA.scenes.forEach((sc, i) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'scene-btn';
+      btn.innerHTML = `
+        <img src="${sc.img}" alt="${sc.page_number}" />
+        <div style="font-size:12px;font-weight:700">${sc.page_number}</div>
+        <div style="font-size:11px;color:#cbd5e1;margin-top:2px">${sc.spanish_text}</div>
+      `;
+      btn.onclick = () => selectScene(i, true);
+      sceneCards.appendChild(btn);
+    });
+
+    video.addEventListener('timeupdate', () => {
+      const t = video.currentTime;
+      const idx = t >= 24 ? 2 : t >= 10.5 ? 1 : 0;
+      selectScene(idx, false);
+    });
+
+    selectScene(0, false);
+  </script>
+</body>
+</html>

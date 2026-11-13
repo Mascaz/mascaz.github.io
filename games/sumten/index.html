@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>SumTen — Retro Number Puzzle</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #120d24;
+      --panel: #1f1738;
+      --border: #4a3a7a;
+      --accent: #ffcc00;
+      --green: #38e078;
+      --cyan: #4deeea;
+      --red: #ff4d6d;
+      --tile-bg: #2b214c;
+      --tile-hi: #3f316e;
+    }
+    * { box-sizing: border-box; user-select: none; -webkit-user-select: none; margin: 0; padding: 0; }
+    body {
+      background: radial-gradient(circle at 50% 20%, #241945 0%, #0d081a 100%);
+      color: #f8f6ff;
+      font-family: 'Press Start 2P', monospace;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 12px;
+    }
+    .hud {
+      width: min(96vw, 840px);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: var(--panel);
+      border: 3px solid var(--border);
+      box-shadow: 0 6px 0 #090514;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      border-radius: 6px;
+    }
+    .stat {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 10px;
+      color: #b5a6e0;
+    }
+    .stat strong {
+      font-size: 14px;
+      color: #fff;
+    }
+    .stat strong.gold { color: var(--accent); }
+    .stat strong.cyan { color: var(--cyan); }
+    .controls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    button.retro-btn {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 10px;
+      padding: 8px 10px;
+      background: #35285e;
+      color: #fff;
+      border: 2px solid #6c56b5;
+      box-shadow: 0 4px 0 #150e2b;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: transform 0.08s;
+    }
+    button.retro-btn:hover:not(:disabled) {
+      background: #46367a;
+    }
+    button.retro-btn:active:not(:disabled) {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 #150e2b;
+    }
+    button.retro-btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+    .board-wrap {
+      position: relative;
+      width: min(96vw, 840px);
+      aspect-ratio: 16 / 10;
+      max-height: calc(100vh - 130px);
+      background: #160f29;
+      border: 4px solid var(--border);
+      box-shadow: 0 10px 0 #080412, inset 0 0 24px rgba(0,0,0,0.7);
+      border-radius: 8px;
+      padding: 8px;
+      touch-action: none;
+    }
+    .grid {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: repeat(16, 1fr);
+      grid-template-rows: repeat(10, 1fr);
+      gap: 4px;
+    }
+    .tile {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--tile-bg);
+      border: 2px solid #49387d;
+      box-shadow: inset 0 2px 0 rgba(255,255,255,0.12), 0 2px 0 #120b24;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 800;
+      font-size: clamp(11px, 1.8vw, 18px);
+      color: #fff;
+      transition: transform 0.1s, background 0.1s, opacity 0.18s;
+    }
+    .tile.empty {
+      opacity: 0.08;
+      border-color: transparent;
+      background: transparent;
+      box-shadow: none;
+    }
+    .tile.in-rect {
+      background: #473880;
+      border-color: #a992ff;
+      transform: scale(0.96);
+    }
+    .tile.sum-ten {
+      background: #1b5e3c;
+      border-color: var(--green);
+      color: #afffd0;
+      box-shadow: 0 0 10px rgba(56, 224, 120, 0.5);
+    }
+    .tile.sum-over {
+      background: #5e1b2e;
+      border-color: var(--red);
+    }
+    .tile.hinted {
+      animation: pulseHint 0.65s infinite alternate;
+      border-color: var(--accent);
+      background: #5c4b14;
+    }
+    @keyframes pulseHint {
+      from { transform: scale(0.94); }
+      to { transform: scale(1.04); }
+    }
+    .selection-box {
+      position: absolute;
+      pointer-events: none;
+      border: 2px dashed var(--cyan);
+      background: rgba(77, 238, 234, 0.12);
+      border-radius: 4px;
+      display: none;
+      z-index: 10;
+    }
+    .selection-badge {
+      position: absolute;
+      top: -24px;
+      right: -4px;
+      background: #0e091c;
+      border: 2px solid var(--cyan);
+      color: #fff;
+      font-size: 10px;
+      padding: 3px 6px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+    .footer-tip {
+      margin-top: 10px;
+      font-size: 9px;
+      color: #9e8ec9;
+      text-align: center;
+      line-height: 1.5;
+    }
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(14, 9, 28, 0.88);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      z-index: 20;
+      text-align: center;
+      padding: 20px;
+    }
+    .overlay.visible { display: flex; }
+    .overlay h2 { color: var(--accent); font-size: 20px; }
+    .overlay p { font-size: 11px; color: #d6ccf5; line-height: 1.7; max-width: 440px; }
+  </style>
+</head>
+<body>
+  <div class="hud">
+    <div class="stat">
+      <span>SCORE</span>
+      <strong id="scoreVal" class="gold">0</strong>
+    </div>
+    <div class="stat">
+      <span>COMBO</span>
+      <strong id="comboVal" class="cyan">x1</strong>
+    </div>
+    <div class="stat">
+      <span>CLEARED</span>
+      <strong id="clearedVal">0%</strong>
+    </div>
+    <div class="stat">
+      <span>TIME</span>
+      <strong id="timeVal">02:00</strong>
+    </div>
+    <div class="controls">
+      <button class="retro-btn" id="hintBtn">HINT (2)</button>
+      <button class="retro-btn" id="shuffleBtn">SHUFFLE (2)</button>
+      <button class="retro-btn" id="newBtn">NEW RUN</button>
+    </div>
+  </div>
+
+  <div class="board-wrap" id="boardWrap">
+    <div class="grid" id="grid"></div>
+    <div class="selection-box" id="selBox">
+      <div class="selection-badge" id="selBadge">SUM: 0</div>
+    </div>
+    <div class="overlay" id="overlay">
+      <h2 id="overlayTitle">RUN COMPLETE!</h2>
+      <p id="overlayDesc"></p>
+      <button class="retro-btn" id="playAgainBtn">PLAY AGAIN</button>
+    </div>
+  </div>
+
+  <div class="footer-tip">
+    DRAG A RECTANGLE OVER NUMBERS THAT ADD UP TO EXACTLY <span style="color:#38e078">10</span> TO CLEAR THEM!
+  </div>
+
+  <script>
+    const COLS = 16;
+    const ROWS = 10;
+    const TOTAL = COLS * ROWS;
+    let board = [];
+    let score = 0;
+    let combo = 1;
+    let comboTimer = 0;
+    let remainingSec = 120;
+    let hintsLeft = 2;
+    let shufflesLeft = 2;
+    let hintRect = null;
+    let dragStart = null;
+    let dragCurrent = null;
+    let gameActive = true;
+    let audioCtx = null;
+
+    const COLORS = {
+      1: '#8be9fd', 2: '#50fa7b', 3: '#ffb86c',
+      4: '#ff79c6', 5: '#bd93f9', 6: '#f1fa8c',
+      7: '#ff5555', 8: '#6be5fd', 9: '#ffd166'
+    };
+
+    function beep(freq = 440, dur = 0.08, type = 'square') {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + dur);
+      } catch {}
+    }
+
+    // Generate a guaranteed solvable board by pairing cells to sum to 10
+    function generateBoard() {
+      board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
+      const coords = [];
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) coords.push([r, c]);
+      }
+      // Shuffle coords in small local neighborhoods so rectangles are always abundant
+      for (let i = 0; i < coords.length; i += 2) {
+        const a = coords[i];
+        const b = coords[i + 1];
+        const v = 1 + Math.floor(Math.random() * 9);
+        board[a[0]][a[1]] = v;
+        board[b[0]][b[1]] = 10 - v;
+      }
+      // Light local swap for variety
+      for (let k = 0; k < 80; k++) {
+        const r = Math.floor(Math.random() * ROWS);
+        const c = Math.floor(Math.random() * (COLS - 1));
+        const tmp = board[r][c];
+        board[r][c] = board[r][c + 1];
+        board[r][c + 1] = tmp;
+      }
+    }
+
+    function rectBounds(a, b) {
+      return {
+        r1: Math.min(a.r, b.r),
+        r2: Math.max(a.r, b.r),
+        c1: Math.min(a.c, b.c),
+        c2: Math.max(a.c, b.c)
+      };
+    }
+
+    function getRectStats(rect) {
+      let sum = 0, count = 0;
+      for (let r = rect.r1; r <= rect.r2; r++) {
+        for (let c = rect.c1; c <= rect.c2; c++) {
+          if (board[r][c] > 0) {
+            sum += board[r][c];
+            count++;
+          }
+        }
+      }
+      return { sum, count };
+    }
+
+    function findAnyMove() {
+      for (let r1 = 0; r1 < ROWS; r1++) {
+        for (let c1 = 0; c1 < COLS; c1++) {
+          for (let r2 = r1; r2 < Math.min(ROWS, r1 + 5); r2++) {
+            for (let c2 = c1; c2 < Math.min(COLS, c1 + 6); c2++) {
+              const st = getRectStats({ r1, r2, c1, c2 });
+              if (st.count >= 2 && st.sum === 10) return { r1, r2, c1, c2 };
+            }
+          }
+        }
+      }
+      return null;
+    }
+
+    const gridEl = document.getElementById('grid');
+    const tileEls = [];
+
+    function initDOM() {
+      gridEl.innerHTML = '';
+      tileEls.length = 0;
+      for (let r = 0; r < ROWS; r++) {
+        const rowArr = [];
+        for (let c = 0; c < COLS; c++) {
+          const d = document.createElement('div');
+          d.className = 'tile';
+          d.dataset.r = r;
+          d.dataset.c = c;
+          gridEl.appendChild(d);
+          rowArr.push(d);
+        }
+        tileEls.push(rowArr);
+      }
+    }
+
+    function renderBoard() {
+      const sel = (dragStart && dragCurrent) ? rectBounds(dragStart, dragCurrent) : null;
+      const selStats = sel ? getRectStats(sel) : null;
+      let cleared = 0;
+
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          const val = board[r][c];
+          const el = tileEls[r][c];
+          if (val === 0) {
+            cleared++;
+            el.className = 'tile empty';
+            el.textContent = '';
+          } else {
+            el.textContent = val;
+            el.style.color = COLORS[val] || '#fff';
+            let cls = 'tile';
+            if (sel && r >= sel.r1 && r <= sel.r2 && c >= sel.c1 && c <= sel.c2) {
+              cls += ' in-rect';
+              if (selStats.sum === 10) cls += ' sum-ten';
+              else if (selStats.sum > 10) cls += ' sum-over';
+            } else if (hintRect && r >= hintRect.r1 && r <= hintRect.r2 && c >= hintRect.c1 && c <= hintRect.c2) {
+              cls += ' hinted';
+            }
+            el.className = cls;
+          }
+        }
+      }
+
+      const pct = Math.round((cleared / TOTAL) * 100);
+      document.getElementById('scoreVal').textContent = score.toLocaleString();
+      document.getElementById('comboVal').textContent = 'x' + combo;
+      document.getElementById('clearedVal').textContent = pct + '%';
+      document.getElementById('hintBtn').textContent = `HINT (${hintsLeft})`;
+      document.getElementById('hintBtn').disabled = hintsLeft <= 0 || !gameActive;
+      document.getElementById('shuffleBtn').textContent = `SHUFFLE (${shufflesLeft})`;
+      document.getElementById('shuffleBtn').disabled = shufflesLeft <= 0 || !gameActive;
+
+      const selBadge = document.getElementById('selBadge');
+      if (selStats) {
+        selBadge.textContent = `SUM: ${selStats.sum}`;
+        selBadge.style.borderColor = selStats.sum === 10 ? '#38e078' : (selStats.sum > 10 ? '#ff4d6d' : '#4deeea');
+      }
+
+      if (cleared === TOTAL && gameActive) {
+        endGame('BOARD CLEARED!', `You cleared 100% of the board with ${remainingSec}s remaining! Final Score: ${score.toLocaleString()}`);
+      }
+    }
+
+    function cellFromPoint(clientX, clientY) {
+      const rect = gridEl.getBoundingClientRect();
+      const x = Math.max(0, Math.min(rect.width - 1, clientX - rect.left));
+      const y = Math.max(0, Math.min(rect.height - 1, clientY - rect.top));
+      const c = Math.floor((x / rect.width) * COLS);
+      const r = Math.floor((y / rect.height) * ROWS);
+      return { r: Math.max(0, Math.min(ROWS - 1, r)), c: Math.max(0, Math.min(COLS - 1, c)) };
+    }
+
+    const wrapEl = document.getElementById('boardWrap');
+    const selBox = document.getElementById('selBox');
+
+    wrapEl.addEventListener('pointerdown', (e) => {
+      if (!gameActive || e.target.tagName === 'BUTTON') return;
+      wrapEl.setPointerCapture(e.pointerId);
+      dragStart = cellFromPoint(e.clientX, e.clientY);
+      dragCurrent = dragStart;
+      const wRect = wrapEl.getBoundingClientRect();
+      selBox.style.display = 'block';
+      selBox.style.left = (e.clientX - wRect.left) + 'px';
+      selBox.style.top = (e.clientY - wRect.top) + 'px';
+      selBox.style.width = '2px';
+      selBox.style.height = '2px';
+      selBox.dataset.sx = e.clientX - wRect.left;
+      selBox.dataset.sy = e.clientY - wRect.top;
+      beep(320, 0.04, 'triangle');
+      renderBoard();
+    });
+
+    wrapEl.addEventListener('pointermove', (e) => {
+      if (!dragStart || !gameActive) return;
+      dragCurrent = cellFromPoint(e.clientX, e.clientY);
+      const wRect = wrapEl.getBoundingClientRect();
+      const cx = Math.max(0, Math.min(wRect.width, e.clientX - wRect.left));
+      const cy = Math.max(0, Math.min(wRect.height, e.clientY - wRect.top));
+      const sx = parseFloat(selBox.dataset.sx);
+      const sy = parseFloat(selBox.dataset.sy);
+      selBox.style.left = Math.min(sx, cx) + 'px';
+      selBox.style.top = Math.min(sy, cy) + 'px';
+      selBox.style.width = Math.abs(cx - sx) + 'px';
+      selBox.style.height = Math.abs(cy - sy) + 'px';
+      renderBoard();
+    });
+
+    function finishDrag() {
+      if (!dragStart || !dragCurrent) return;
+      const rect = rectBounds(dragStart, dragCurrent);
+      const st = getRectStats(rect);
+      if (st.count >= 2 && st.sum === 10) {
+        for (let r = rect.r1; r <= rect.r2; r++) {
+          for (let c = rect.c1; c <= rect.c2; c++) {
+            board[r][c] = 0;
+          }
+        }
+        score += st.count * 100 * combo;
+        combo = Math.min(8, combo + 1);
+        comboTimer = 3.5;
+        hintRect = null;
+        beep(520 + combo * 60, 0.14, 'square');
+      } else {
+        beep(180, 0.08, 'sawtooth');
+      }
+      dragStart = null;
+      dragCurrent = null;
+      selBox.style.display = 'none';
+      renderBoard();
+    }
+
+    wrapEl.addEventListener('pointerup', finishDrag);
+    wrapEl.addEventListener('pointercancel', finishDrag);
+
+    document.getElementById('hintBtn').addEventListener('click', () => {
+      if (hintsLeft <= 0 || !gameActive) return;
+      const move = findAnyMove();
+      if (move) {
+        hintsLeft--;
+        hintRect = move;
+        beep(660, 0.1, 'sine');
+        renderBoard();
+      }
+    });
+
+    document.getElementById('shuffleBtn').addEventListener('click', () => {
+      if (shufflesLeft <= 0 || !gameActive) return;
+      shufflesLeft--;
+      const vals = [];
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          if (board[r][c] > 0) vals.push(board[r][c]);
+        }
+      }
+      vals.sort(() => Math.random() - 0.5);
+      let idx = 0;
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          if (board[r][c] > 0) board[r][c] = vals[idx++];
+        }
+      }
+      hintRect = null;
+      beep(440, 0.12, 'triangle');
+      renderBoard();
+    });
+
+    function startNewRun() {
+      score = 0;
+      combo = 1;
+      comboTimer = 0;
+      remainingSec = 120;
+      hintsLeft = 2;
+      shufflesLeft = 2;
+      hintRect = null;
+      gameActive = true;
+      document.getElementById('overlay').classList.remove('visible');
+      generateBoard();
+      renderBoard();
+    }
+
+    function endGame(title, desc) {
+      gameActive = false;
+      document.getElementById('overlayTitle').textContent = title;
+      document.getElementById('overlayDesc').textContent = desc;
+      document.getElementById('overlay').classList.add('visible');
+    }
+
+    document.getElementById('newBtn').addEventListener('click', startNewRun);
+    document.getElementById('playAgainBtn').addEventListener('click', startNewRun);
+
+    setInterval(() => {
+      if (!gameActive) return;
+      if (comboTimer > 0) {
+        comboTimer -= 0.25;
+        if (comboTimer <= 0) {
+          combo = 1;
+          renderBoard();
+        }
+      }
+    }, 250);
+
+    setInterval(() => {
+      if (!gameActive) return;
+      remainingSec = Math.max(0, remainingSec - 1);
+      const m = String(Math.floor(remainingSec / 60)).padStart(2, '0');
+      const s = String(remainingSec % 60).padStart(2, '0');
+      document.getElementById('timeVal').textContent = `${m}:${s}`;
+      if (remainingSec === 0) {
+        endGame('TIME UP!', `Final Score: ${score.toLocaleString()} — Try chaining faster combos to reach x8 multiplier!`);
+      }
+    }, 1000);
+
+    initDOM();
+    startNewRun();
+  </script>
+</body>
+</html>

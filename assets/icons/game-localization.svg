@@ -1,0 +1,19 @@
+<svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gl-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="55%" stop-color="#312e81"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="56" fill="url(#gl-bg)"/>
+  <!-- EN Dialogue Bubble -->
+  <rect x="38" y="48" width="116" height="74" rx="20" fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.65)" stroke-width="4"/>
+  <text x="96" y="96" font-family="-apple-system, BlinkMacSystemFont, 'Inter', sans-serif" font-weight="800" font-size="34" fill="#ffffff" text-anchor="middle">EN</text>
+  <!-- ES Localized Dialogue Bubble -->
+  <rect x="102" y="128" width="116" height="76" rx="20" fill="#fbbf24" stroke="#fef3c7" stroke-width="4"/>
+  <text x="160" y="176" font-family="-apple-system, BlinkMacSystemFont, 'Inter', sans-serif" font-weight="900" font-size="34" fill="#1e1b4b" text-anchor="middle">¡ES!</text>
+  <!-- Pipeline Arrow -->
+  <path d="M164,82 C188,82 194,96 194,116" fill="none" stroke="#38bdf8" stroke-width="6" stroke-linecap="round"/>
+  <polyline points="184,108 194,118 204,108" fill="none" stroke="#38bdf8" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

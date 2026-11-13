@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#14331b" />
+    <link rel="manifest" href="./manifest.json" />
+    <title>Pikmin: PNF-404 Simulator (Mobile Top-Down Edition)</title>
+    <script type="module" crossorigin src="./assets/index-nKQHqiTX.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-BztmDIoD.css">
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="game-canvas"></canvas>
+
+      <!-- Title Screen Overlay (Pikmin 1 Menu Structure + Sim-Bay Narrative) -->
+      <section id="title-screen" class="title-screen-overlay">
+        <div class="title-card">
+          <div class="title-sim-badge">HOCOTATE FREIGHT HQ • SIM-POD #04 • OUTER-RIM TRAINING</div>
+          <h1 class="title-logo">PIKMIN: PNF-404 SIM</h1>
+          <p class="title-tagline">
+            Complete the 15-Part Deep-Space Salvage Certification so Captain Olimar can clock out and get home to his family!
+          </p>
+
+          <div id="title-save-summary" class="title-save-box">
+            Saved Sim Progress: Cycle 1 / 30 • ★ 0 / 15 Modules
+          </div>
+
+          <div class="title-menu-buttons">
+            <button id="start-normal-btn" type="button" class="title-btn primary-title-btn">
+              <span>▶ Story Simulation (Normal Mode)</span>
+              <small id="start-normal-sub">30-Cycle Quota • 5 Sectors • Full Story</small>
+            </button>
+
+            <button id="start-hard-btn" type="button" class="title-btn hard-title-btn">
+              <span>🔥 Executive Evaluation (Hard Mode)</span>
+              <small>15-Cycle Deadline • 1.5× Enemy HP & Speed • Harsher Hazards</small>
+            </button>
+
+            <button id="start-time-attack-btn" type="button" class="title-btn challenge-title-btn">
+              <span>⏱️ Time Attack / Challenge Mode</span>
+              <small>4-Minute Sector Speed Drills • Personal Best Records</small>
+            </button>
+
+            <div class="title-sub-row">
+              <button id="title-coop-btn" type="button" class="secondary-btn full-width-btn">
+                👥 Co-op Lobby (1–4 Players)
+              </button>
+              <button id="title-story-btn" type="button" class="secondary-btn full-width-btn">
+                🎬 Story & Endings
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Top HUD: Day Counter, Sun Meter, Population Counter, and Minimap -->
+      <header class="top-hud">
+        <div class="top-left-panel">
+          <div class="day-sun-bar">
+            <span id="day-badge" class="day-badge">DAY 1</span>
+            <div class="sun-track" title="Daylight Timer">
+              <div class="sun-markers">
+                <span>☀</span>
+                <span>◐</span>
+                <span>☾</span>
+              </div>
+              <div id="sun-pip" class="sun-pip">☀</div>
+            </div>
+          </div>
+
+          <div class="stats-pill-row">
+            <div class="stat-pill" title="Captain Suit Integrity (Repair at S.S. Dolphin)">
+              <span class="stat-label">SUIT HP</span>
+              <span id="captain-hp-text" class="stat-value" style="color: #4ade80;">♥ 100%</span>
+            </div>
+            <div class="stat-pill" title="Squad / Field / Total Pikmin">
+              <span class="stat-label">SQUAD / FIELD / TOTAL</span>
+              <span id="pikmin-counts-text" class="stat-value">0 / 0 / 5</span>
+            </div>
+            <button id="parts-log-btn" class="stat-pill interactive-pill" type="button">
+              <span class="stat-label">SHIP PARTS</span>
+              <span id="parts-count-text" class="stat-value">★ 0 / 15</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="top-right-panel">
+          <div id="minimap-wrapper" class="minimap-wrapper" title="Tap Minimap to view Orbital Sector Map">
+            <canvas id="minimap-canvas" width="116" height="116"></canvas>
+            <div id="minimap-caption" class="minimap-caption">SECTOR 01</div>
+          </div>
+          <div class="utility-btns">
+            <button id="pause-btn" class="icon-btn pause-btn" type="button" aria-label="Pause & Settings">
+              ⏸ Pause
+            </button>
+            <button id="coop-btn" class="icon-btn coop-btn" type="button" aria-label="Multiplayer Co-op">
+              👥 Co-op
+            </button>
+            <button id="onion-quick-btn" class="icon-btn" type="button" aria-label="Manage Onions">
+              🧅 Onions
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Co-op End Day Early Vote Banner -->
+      <div id="vote-banner" class="vote-banner" hidden>
+        <span id="vote-banner-text">🗳️ End Shift Early Vote: 1 / 2 Ready</span>
+        <button id="vote-banner-btn" type="button" class="vote-yes-btn">Vote Yes</button>
+      </div>
+
+      <!-- Contextual Prompt Button (Pluck Sprouts / Open Onion / End Day at Ship) -->
+      <div id="context-action-bar" class="context-action-bar" hidden>
+        <button id="context-action-btn" class="context-action-btn" type="button">
+          🌱 Pluck Sprouts
+        </button>
+      </div>
+
+      <!-- Touch Hint Banner (Dismissible / Auto-fades) -->
+      <div id="touch-hint-banner" class="touch-hint-banner">
+        <strong>TOUCH CONTROLS:</strong> Left Stick = Walk • <strong>Tap World</strong> = Throw / Pluck • <strong>Hold World</strong> = Whistle • Right Pad = Swarm
+      </div>
+
+      <!-- Bottom Thumb Controls (Adapts to Portrait & Landscape) -->
+      <footer class="bottom-controls">
+        <!-- Centered Pikmin Type Switcher Bar -->
+        <div class="squad-selector-row">
+          <button id="select-red-btn" class="pikmin-type-btn red active" type="button" data-color="red">
+            <span class="pikmin-shape-icon red-shape"></span>
+            <span class="type-name">Red</span>
+            <span id="squad-red-count" class="type-count">0</span>
+          </button>
+          <button id="select-yellow-btn" class="pikmin-type-btn yellow" type="button" data-color="yellow">
+            <span class="pikmin-shape-icon yellow-shape"></span>
+            <span class="type-name">Ylw</span>
+            <span id="squad-yellow-count" class="type-count">0</span>
+          </button>
+          <button id="select-blue-btn" class="pikmin-type-btn blue" type="button" data-color="blue">
+            <span class="pikmin-shape-icon blue-shape"></span>
+            <span class="type-name">Blu</span>
+            <span id="squad-blue-count" class="type-count">0</span>
+          </button>
+          <button id="toggle-bomb-btn" class="pikmin-type-btn bomb-btn" type="button" title="Prioritize Bomb Rock Carriers">
+            <span>💣</span>
+            <span id="squad-bomb-count" class="type-count">0</span>
+          </button>
+        </div>
+
+        <!-- Left & Right Thumb Joysticks with generous right-edge clearance -->
+        <div class="thumb-sticks-row">
+          <!-- Left Thumb: Captain Movement Virtual Joystick -->
+          <div class="thumb-left">
+            <div id="move-stick-zone" class="virtual-stick-zone move-zone">
+              <div class="stick-ring"></div>
+              <div id="move-stick-knob" class="stick-knob move-knob">MOVE</div>
+            </div>
+          </div>
+
+          <!-- Right Thumb: Quick Actions + Swarm C-Stick (inset from right screen edge) -->
+          <div class="thumb-right">
+            <div class="action-buttons-row">
+              <button id="dismiss-btn" class="action-btn dismiss-btn" type="button">
+                ✕ DISMISS
+              </button>
+              <button id="whistle-self-btn" class="action-btn call-btn" type="button">
+                📣 CALL
+              </button>
+            </div>
+
+            <div id="swarm-stick-zone" class="virtual-stick-zone swarm-zone">
+              <div class="stick-ring swarm-ring"></div>
+              <div id="swarm-stick-knob" class="stick-knob swarm-knob">SWARM</div>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+      <!-- Modal 1: Onion Pikmin Manager (Light-Dismiss enabled) -->
+      <dialog id="onion-dialog" closedby="any" aria-labelledby="onion-dialog-title">
+        <div class="dialog-card">
+          <header class="dialog-header">
+            <h2 id="onion-dialog-title">🧅 Onion Pikmin Manager</h2>
+            <p class="dialog-subtitle">
+              Field Limit: <strong id="onion-modal-field-count">0 / 100</strong> Pikmin on field
+            </p>
+          </header>
+
+          <div class="onion-rows">
+            <div class="onion-control-row red-row">
+              <div class="onion-info">
+                <span class="onion-badge red">Red Onion</span>
+                <span id="onion-red-stats" class="onion-stats-text">In Squad: 0 | Stored: 0</span>
+              </div>
+              <div class="onion-btn-group">
+                <button type="button" class="onion-adj-btn" data-color="red" data-delta="-5">-5</button>
+                <button type="button" class="onion-adj-btn" data-color="red" data-delta="-1">-1</button>
+                <button type="button" class="onion-adj-btn" data-color="red" data-delta="1">+1</button>
+                <button type="button" class="onion-adj-btn" data-color="red" data-delta="5">+5</button>
+              </div>
+            </div>
+
+            <div id="onion-yellow-row" class="onion-control-row yellow-row">
+              <div class="onion-info">
+                <span class="onion-badge yellow">Yellow Onion</span>
+                <span id="onion-yellow-stats" class="onion-stats-text">In Squad: 0 | Stored: 0</span>
+              </div>
+              <div class="onion-btn-group">
+                <button type="button" class="onion-adj-btn" data-color="yellow" data-delta="-5">-5</button>
+                <button type="button" class="onion-adj-btn" data-color="yellow" data-delta="-1">-1</button>
+                <button type="button" class="onion-adj-btn" data-color="yellow" data-delta="1">+1</button>
+                <button type="button" class="onion-adj-btn" data-color="yellow" data-delta="5">+5</button>
+              </div>
+            </div>
+
+            <div id="onion-blue-row" class="onion-control-row blue-row">
+              <div class="onion-info">
+                <span class="onion-badge blue">Blue Onion</span>
+                <span id="onion-blue-stats" class="onion-stats-text">In Squad: 0 | Stored: 0</span>
+              </div>
+              <div class="onion-btn-group">
+                <button type="button" class="onion-adj-btn" data-color="blue" data-delta="-5">-5</button>
+                <button type="button" class="onion-adj-btn" data-color="blue" data-delta="-1">-1</button>
+                <button type="button" class="onion-adj-btn" data-color="blue" data-delta="1">+1</button>
+                <button type="button" class="onion-adj-btn" data-color="blue" data-delta="5">+5</button>
+              </div>
+            </div>
+          </div>
+
+          <footer class="dialog-footer">
+            <button id="end-day-from-onion-btn" type="button" class="secondary-btn">
+              ☾ End Shift Early at Ship
+            </button>
+            <button id="close-onion-dialog-btn" type="button" class="primary-btn">
+              Done
+            </button>
+          </footer>
+        </div>
+      </dialog>
+
+      <!-- Modal 2: Pause Screen, Audio Settings & Collected Treasures (Pauses Single Player Only) -->
+      <dialog id="guide-dialog" closedby="any" aria-labelledby="guide-dialog-title">
+        <div class="dialog-card">
+          <header class="dialog-header">
+            <h2 id="guide-dialog-title">⏸ Pause & Collected Treasures</h2>
+            <p id="pause-status-subtitle" class="dialog-subtitle">
+              Single Player Paused • Progress is saved at the end of each day.
+            </p>
+          </header>
+
+          <!-- Sound & Music Settings -->
+          <div class="audio-settings-box">
+            <div class="audio-setting-row">
+              <button id="bgm-toggle-btn" class="secondary-btn audio-toggle-btn" type="button">
+                🎵 Music: ON
+              </button>
+              <input
+                id="bgm-volume-slider"
+                class="volume-slider"
+                type="range"
+                min="0"
+                max="100"
+                value="80"
+                aria-label="Music Volume"
+              />
+              <span id="bgm-volume-val" class="volume-val">80%</span>
+            </div>
+
+            <div class="audio-setting-row">
+              <button id="sound-toggle-btn" class="secondary-btn audio-toggle-btn" type="button">
+                🔊 SFX: ON
+              </button>
+              <input
+                id="sfx-volume-slider"
+                class="volume-slider"
+                type="range"
+                min="0"
+                max="100"
+                value="85"
+                aria-label="Sound Effects Volume"
+              />
+              <span id="sfx-volume-val" class="volume-val">85%</span>
+            </div>
+          </div>
+
+          <button id="sector-map-btn" type="button" class="secondary-btn full-width-btn">
+            🪐 View Orbital Sector Map
+          </button>
+
+          <div class="treasure-section-header">
+            <span class="stat-label">COLLECTED TREASURES / SHIP MODULES</span>
+            <span id="pause-treasure-count" class="stat-label" style="color: #fde047;">★ 0 / 15</span>
+          </div>
+          <div id="ship-parts-checklist" class="parts-checklist"></div>
+
+          <footer class="dialog-footer">
+            <button id="return-title-btn" type="button" class="secondary-btn">
+              🏠 Title Screen
+            </button>
+            <button id="restart-day-btn" type="button" class="danger-btn">
+              ↺ Restart Day
+            </button>
+            <button id="close-guide-dialog-btn" type="button" class="primary-btn">
+              ▶ Resume
+            </button>
+          </footer>
+        </div>
+      </dialog>
+
+      <!-- Modal 7: Save File Select Screen (3 Save Files per Game Mode) -->
+      <dialog id="file-select-dialog" closedby="any" aria-labelledby="file-select-title">
+        <div class="dialog-card">
+          <header class="dialog-header">
+            <h2 id="file-select-title">💾 Select Save File</h2>
+            <p id="file-select-subtitle" class="dialog-subtitle">
+              Progress is saved automatically at the end of each completed day.
+            </p>
+          </header>
+
+          <div class="file-mode-tabs" id="file-mode-tabs">
+            <button type="button" class="theatre-tab-btn active" data-mode="story_normal">
+              Normal Story
+            </button>
+            <button type="button" class="theatre-tab-btn" data-mode="story_hard">
+              Hard Mode
+            </button>
+            <button type="button" class="theatre-tab-btn" data-mode="time_attack">
+              Time Attack
+            </button>
+          </div>
+
+          <div id="save-slots-list" class="save-slots-list"></div>
+
+          <footer class="dialog-footer">
+            <button id="close-file-select-btn" type="button" class="secondary-btn full-width-btn">
+              Back to Title Screen
+            </button>
+          </footer>
+        </div>
+      </dialog>
+
+      <!-- Modal 3: End-of-Day Summary Report + Olimar's Sim-Bay Work Log -->
+      <dialog id="day-summary-dialog" aria-labelledby="day-summary-title">
+        <div class="dialog-card">
+          <header class="dialog-header">
+            <h2 id="day-summary-title">☾ End of Cycle 1 Report</h2>
+            <p id="day-summary-subtitle" class="dialog-subtitle">Sim-Pod #04 Telemetry Saved</p>
+          </header>
+
+          <div id="day-work-log-box" class="work-log-box"></div>
+
+          <div id="day-summary-body" class="summary-grid"></div>
+
+          <footer class="dialog-footer">
+            <button id="next-day-btn" type="button" class="primary-btn full-width-btn">
+              🗺️ Proceed to Orbital Sector Map
+            </button>
+          </footer>
+        </div>
+      </dialog>
+
+      <!-- Modal 4: Co-op Multiplayer Room Manager (Light-Dismiss enabled) -->
+      <dialog id="coop-dialog" closedby="any" aria-labelledby="coop-dialog-title">
+        <div class="dialog-card">
+          <header class="dialog-header">
+            <h2 id="coop-dialog-title">👥 Co-op Multiplayer (Online & LAN)</h2>
+            <p class="dialog-subtitle">
+              Up to 4 coworkers drop into the simulator! Host chooses the Sector on the Orbital Map. Squad Pikmin stay locked to your Captain until thrown or dismissed.
+            </p>
+          </header>
+
+          <div id="coop-error-box" class="coop-error-box" hidden></div>
+
+          <!-- Active Room Panel (shown when inside a room) -->
+          <div id="coop-active-room-panel" class="coop-section" hidden>
+            <div class="room-code-banner">
+              <div>
+                <span class="stat-label">ACTIVE ROOM CODE</span>
+                <div id="coop-room-code-display" class="room-code-big">----</div>
+              </div>
+              <div class="room-code-actions">
+                <button id="copy-invite-btn" type="button" class="secondary-btn">🔗 Copy Code / Link</button>
+                <button id="leave-room-btn" type="button" class="danger-btn">Leave</button>
+              </div>
+            </div>
+
+            <div class="roster-box">
+              <span class="stat-label">CONNECTED CAPTAINS (MAX 4)</span>
+              <div id="coop-roster-list" class="coop-roster-list"></div>
+            </div>
+          </div>
+
+          <!-- Lobby Join/Host Panel (shown when in Solo mode) -->
+          <div id="coop-lobby-panel" class="coop-section">
+            <button id="host-room-btn" type="button" class="primary-btn full-width-btn">
+              📡 Host New Co-op Room (Up to 4 Players)
+            </button>
+
+            <div class="join-code-row">
+              <input
+                id="join-code-input"
+                type="text"
+                maxlength="4"
+                placeholder="4-Letter Room Code (e.g. PIKM)"
+                class="room-code-input"
+                autocomplete="off"
+              />
+              <button id="join-code-btn" type="button" class="secondary-btn">Join Room</button>
+            </div>
+
+            <div class="lan-rooms-box">
+              <div class="lan-rooms-header">
+                <span class="stat-label">OPEN ROOMS ON THIS SERVER / WI-FI</span>
+                <button id="refresh-rooms-btn" type="button" class="mini-link-btn">↻ Refresh</button>
+              </div>
+              <div id="lan-rooms-list" class="lan-rooms-list">
+                <span class="empty-rooms-text">No local rooms announced — or enter any 4-letter online code above!</span>
+              </div>
+            </div>
+          </div>
+
+          <footer class="dialog-footer">
+            <button id="close-coop-dialog-btn" type="button" class="secondary-btn full-width-btn">
+              Back
+            </button>
+          </footer>
+        </div>
+      </dialog>
+
+      <!-- Modal 5: Orbital Sector Map / Level Select (Host Decides in Co-op!) -->
+      <dialog id="area-select-dialog" closedby="any" aria-labelledby="area-select-title">
+        <div class="dialog-card">
+          <header class="dialog-header">
+            <h2 id="area-select-title">🪐 PNF-404 Orbital Sector Select</h2>
+            <p id="area-select-subtitle" class="dialog-subtitle">
+              Select a training sector to deploy the S.S. Dolphin. (In Co-op, Host P1 selects the destination.)
+            </p>
+          </header>
+
+          <div id="area-select-list" class="area-select-list"></div>
+
+          <div id="early-launch-box" class="early-launch-box" hidden>
+            <button id="launch-normal-ending-btn" type="button" class="secondary-btn full-width-btn" style="border: 1.5px solid #facc15; color: #fde047;">
+              🚀 Launch S.S. Dolphin Now (12/12 Mandatory Parts — Complete Certification!)
+            </button>
+          </div>
+
+          <footer class="dialog-footer">
+            <button id="close-area-select-btn" type="button" class="secondary-btn">
+              Cancel
+            </button>
+            <button id="deploy-sector-btn" type="button" class="primary-btn">
+              ☀ Deploy to Selected Sector
+            </button>
+          </footer>
+        </div>
+      </dialog>
+
+      <!-- Modal 6: Story Cutscene & Ending Theatre -->
+      <dialog id="cutscene-dialog" closedby="any" aria-labelledby="cutscene-title">
+        <div class="dialog-card cutscene-card">
+          <div class="cutscene-theatre-tabs" id="cutscene-theatre-tabs">
+            <button type="button" class="theatre-tab-btn active" data-seq="intro">Intro Briefing</button>
+            <button type="button" class="theatre-tab-btn" data-seq="best">Best Ending</button>
+            <button type="button" class="theatre-tab-btn" data-seq="normal">Normal Ending</button>
+            <button type="button" class="theatre-tab-btn" data-seq="bad">Bad Ending</button>
+          </div>
+
+          <div class="cutscene-canvas-wrap">
+            <canvas id="cutscene-canvas" width="380" height="186"></canvas>
+            <span id="cutscene-badge" class="cutscene-badge">HOCOTATE FREIGHT HQ</span>
+          </div>
+
+          <div class="cutscene-text-box">
+            <h2 id="cutscene-title">The Late-Night Reassignment</h2>
+            <p id="cutscene-body" class="cutscene-body"></p>
+          </div>
+
+          <footer class="dialog-footer">
+            <button id="cutscene-skip-btn" type="button" class="secondary-btn">
+              Skip / Close
+            </button>
+            <button id="cutscene-next-btn" type="button" class="primary-btn">
+              Next ▶
+            </button>
+          </footer>
+        </div>
+      </dialog>
+    </div>
+
+  </body>
+</html>

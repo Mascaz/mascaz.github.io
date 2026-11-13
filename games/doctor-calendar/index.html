@@ -1,0 +1,2466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book Orthopedic Appointment | Dr. Luis Montes, MD, FAAOS</title>
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Modern Web Guidance: Accessible Focus, Deferred :user-invalid, Responsive @container Table, Native <dialog> & [switch] -->
+  <style>
+    .visually-hidden:where(:not(:focus-within, :active)) {
+      position: absolute !important;
+      clip-path: inset(50%) !important;
+      overflow: hidden !important;
+      width: 1px !important;
+      height: 1px !important;
+      margin: -1px !important;
+      padding: 0 !important;
+      border: 0 !important;
+      white-space: nowrap !important;
+    }
+
+    :where(a:any-link, button, input, select, textarea):focus-visible {
+      outline: 3px solid #0284c7;
+      outline-offset: 2px;
+    }
+
+    /* Deferred validation styling after user interaction (:user-invalid & fallback) */
+    .ortho-input:user-invalid,
+    .ortho-input.user-invalid-fallback {
+      border-color: #dc2626 !important;
+      background-color: #fef2f2 !important;
+    }
+
+    .ortho-input:user-valid,
+    .ortho-input.user-valid-fallback {
+      border-color: #16a34a !important;
+    }
+
+    .ortho-error-msg {
+      display: none;
+    }
+
+    .ortho-input:user-invalid ~ .ortho-error-msg,
+    .ortho-input.user-invalid-fallback ~ .ortho-error-msg {
+      display: flex;
+    }
+
+    input[type="checkbox"],
+    input[type="radio"] {
+      accent-color: #0284c7;
+    }
+
+    /* Native Switch Control Styling (modern-web-guidance: switch) */
+    input[type="checkbox"][switch] {
+      accent-color: var(--accent-color, #0284c7);
+      margin: 0;
+      cursor: pointer;
+    }
+
+    input[type="checkbox"][switch]:focus-visible {
+      outline: 3px solid var(--focus-color, #0284c7);
+      outline-offset: 4px;
+    }
+
+    /* Native Modal Dialog Scroll Containment & Backdrop (modern-web-guidance: dialog & light-dismiss-a-dialog) */
+    dialog:modal {
+      overscroll-behavior: contain;
+    }
+
+    dialog::backdrop {
+      overflow: hidden;
+      overscroll-behavior: contain;
+      background-color: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(3px);
+    }
+
+    /* Responsive Roster Table with Sticky Headers & @container Stacked Layout (modern-web-guidance: responsive-table) */
+    .table-wrapper {
+      overflow: auto;
+      max-inline-size: 100%;
+      max-block-size: min(640px, 82vh);
+      container-type: inline-size;
+    }
+
+    .roster-table {
+      border-collapse: separate;
+      border-spacing: 0;
+      width: 100%;
+    }
+
+    .roster-table thead {
+      position: sticky;
+      inset-block-start: 0;
+      z-index: 2;
+    }
+
+    .roster-table tbody th {
+      position: sticky;
+      inset-inline-start: 0;
+      background: #ffffff;
+      z-index: 1;
+    }
+
+    .roster-table tbody tr:hover th {
+      background: #f8fafc;
+    }
+
+    @container (width < 600px) {
+      .roster-table,
+      .roster-table thead,
+      .roster-table tbody,
+      .roster-table tr,
+      .roster-table th,
+      .roster-table td {
+        display: block;
+      }
+
+      .roster-table thead {
+        display: none;
+      }
+
+      .roster-table tbody tr {
+        margin-block-end: 1rem;
+        border: 1px solid #cbd5e1;
+        border-radius: 0.75rem;
+        overflow: hidden;
+        background: #ffffff;
+      }
+
+      .roster-table tbody th {
+        position: sticky;
+        inset-block-start: 0;
+        z-index: 2;
+        background: #f1f5f9;
+        border-bottom: 1px solid #e2e8f0;
+      }
+
+      .roster-table td {
+        padding: 0.625rem 1rem !important;
+        border-bottom: 1px solid #f1f5f9;
+      }
+
+      .roster-table td:nth-child(2)::before {
+        content: var(--label-2) ": ";
+        font-weight: 700;
+        color: #475569;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        display: block;
+        margin-bottom: 0.15rem;
+      }
+
+      .roster-table td:nth-child(3)::before {
+        content: var(--label-3) ": ";
+        font-weight: 700;
+        color: #475569;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        display: inline-block;
+        margin-right: 0.35rem;
+      }
+
+      .roster-table td:nth-child(4)::before {
+        content: var(--label-4) ": ";
+        font-weight: 700;
+        color: #475569;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        display: inline-block;
+        margin-right: 0.35rem;
+      }
+
+      .roster-table td:nth-child(5)::before {
+        content: var(--label-5) ": ";
+        font-weight: 700;
+        color: #475569;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        display: inline-block;
+        margin-right: 0.35rem;
+      }
+
+      .roster-table td:nth-child(6)::before {
+        content: var(--label-6) ": ";
+        font-weight: 700;
+        color: #475569;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        display: block;
+        margin-bottom: 0.35rem;
+      }
+    }
+  </style>
+
+  <!-- Conditional Switch Polyfill Loader (only when native <input type="checkbox" switch> is absent) -->
+  <script type="module">
+    if (!('switch' in HTMLInputElement.prototype)) {
+      import('https://unpkg.com/input-switch-polyfill@latest/index.js').catch(() => {});
+    }
+  </script>
+
+  <!-- 1. Load Clinic Mock Data First -->
+  <script src="./mockData.js"></script>
+
+  <!-- 2. Load React 18 UMD & Babel Standalone -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body class="bg-slate-100 text-slate-900 antialiased selection:bg-sky-600 selection:text-white min-h-screen flex flex-col">
+  <a href="#main-workspace" class="visually-hidden focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:bg-sky-700 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:shadow-lg">
+    Skip to main booking workspace
+  </a>
+
+  <div id="root" class="flex-1 flex flex-col"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useMemo, useRef } = React;
+
+    // Inline SVG Icon Set (Zero external icon CDN dependencies)
+    const Icons = {
+      ShieldCheck: ({ className = "w-4 h-4" }) => (
+        <svg aria-hidden="true" className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          <path d="m9 12 2 2 4-4" />
+        </svg>
+      ),
+      MapPin: ({ className = "w-4 h-4" }) => (
+        <svg aria-hidden="true" className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+          <circle cx="12" cy="10" r="3" />
+        </svg>
+      ),
+      Clock: ({ className = "w-4 h-4" }) => (
+        <svg aria-hidden="true" className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <polyline points="12 6 12 12 16 14" />
+        </svg>
+      ),
+      Calendar: ({ className = "w-4 h-4" }) => (
+        <svg aria-hidden="true" className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
+          <line x1="16" x2="16" y1="2" y2="6" />
+          <line x1="8" x2="8" y1="2" y2="6" />
+          <line x1="3" x2="21" y1="10" y2="10" />
+        </svg>
+      ),
+      CheckCircle: ({ className = "w-5 h-5" }) => (
+        <svg aria-hidden="true" className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+          <polyline points="22 4 12 14.01 9 11.01" />
+        </svg>
+      ),
+      ChevronDown: ({ className = "w-4 h-4" }) => (
+        <svg aria-hidden="true" className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="m6 9 6 6 6-6" />
+        </svg>
+      ),
+      ChevronLeft: ({ className = "w-4 h-4" }) => (
+        <svg aria-hidden="true" className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="m15 18-6-6 6-6" />
+        </svg>
+      ),
+      ChevronRight: ({ className = "w-4 h-4" }) => (
+        <svg aria-hidden="true" className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="m9 18 6-6-6-6" />
+        </svg>
+      ),
+      Video: ({ className = "w-4 h-4" }) => (
+        <svg aria-hidden="true" className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="m22 8-6 4 6 4V8Z" />
+          <rect width="14" height="12" x="2" y="6" rx="2" ry="2" />
+        </svg>
+      ),
+      Stethoscope: ({ className = "w-4 h-4" }) => (
+        <svg aria-hidden="true" className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3" />
+          <path d="M8 15v1a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6v-4" />
+          <circle cx="20" cy="10" r="2" />
+        </svg>
+      ),
+      Info: ({ className = "w-4 h-4" }) => (
+        <svg aria-hidden="true" className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 16v-4" />
+          <path d="M12 8h.01" />
+        </svg>
+      ),
+      Eye: ({ className = "w-3.5 h-3.5" }) => (
+        <svg aria-hidden="true" className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+      ),
+      MessageCircle: ({ className = "w-3.5 h-3.5" }) => (
+        <svg aria-hidden="true" className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+        </svg>
+      ),
+      Sliders: ({ className = "w-4 h-4" }) => (
+        <svg aria-hidden="true" className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <line x1="4" x2="4" y1="21" y2="14" />
+          <line x1="4" x2="4" y1="10" y2="3" />
+          <line x1="12" x2="12" y1="21" y2="12" />
+          <line x1="12" x2="12" y1="8" y2="3" />
+          <line x1="20" x2="20" y1="21" y2="16" />
+          <line x1="20" x2="20" y1="12" y2="3" />
+          <line x1="2" x2="6" y1="14" y2="14" />
+          <line x1="10" x2="14" y1="8" y2="8" />
+          <line x1="18" x2="22" y1="16" y2="16" />
+        </svg>
+      )
+    };
+
+    // Helper to build calendar grid for a given year and month (0-indexed)
+    function buildMonthDays(year, month) {
+      const firstDayOfWeek = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const cells = [];
+      for (let i = 0; i < firstDayOfWeek; i++) {
+        cells.push(null);
+      }
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dateObj = new Date(year, month, day);
+        const dayOfWeek = dateObj.getDay();
+        const isSunday = dayOfWeek === 0;
+        const isClosedSaturday = dayOfWeek === 6 && day !== 14 && day !== 21;
+        const isPast = year === 2026 && month === 10 && day < 7;
+        const available = !isSunday && !isClosedSaturday && !isPast;
+        cells.push({
+          day,
+          dateObj,
+          iso: `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`,
+          available
+        });
+      }
+      return cells;
+    }
+
+    function App() {
+      const clinicData = window.CLINIC_DATA;
+
+      // Top Demo Bar States
+      const [lang, setLang] = useState("en");
+      const [activeView, setActiveView] = useState("patient"); // "patient" | "admin"
+
+      // 4-Step Patient Booking Wizard State
+      const [step, setStep] = useState(1);
+      const [selectedVisitId, setSelectedVisitId] = useState("new-patient-eval");
+      const [expandedPrepId, setExpandedPrepId] = useState("new-patient-eval");
+
+      // Calendar & Slot State (Defaulting to November 2026)
+      const [calYear, setCalYear] = useState(2026);
+      const [calMonth, setCalMonth] = useState(10);
+      const [selectedDateIso, setSelectedDateIso] = useState("2026-11-10");
+      const [selectedSlotId, setSelectedSlotId] = useState("10:00");
+
+      // Step 3 Patient Intake State
+      const [patientForm, setPatientForm] = useState({
+        fullName: "",
+        email: "",
+        phone: "",
+        insuranceId: "bcbs",
+        memberId: "",
+        injuredJoint: "knee",
+        injurySide: "Right",
+        clinicalNotes: "",
+        hasImaging: true,
+        smsOptIn: true
+      });
+      const [isSubmitting, setIsSubmitting] = useState(false);
+      const [statusToast, setStatusToast] = useState("");
+      const formRef = useRef(null);
+      const dirtyFieldsRef = useRef(new WeakMap());
+
+      // Admin View States (Roster, Modal Preview & Schedule Settings)
+      const [rosterFilter, setRosterFilter] = useState("all"); // "all" | "post-op" | "es"
+      const [whatsappSentMap, setWhatsappSentMap] = useState({});
+      const [activeModalPatient, setActiveModalPatient] = useState(null);
+      const intakeDialogRef = useRef(null);
+
+      // Schedule & Operating Room Settings State
+      const [weeklySchedule, setWeeklySchedule] = useState(
+        clinicData.adminDashboard.weeklyScheduleDefault
+      );
+      const [slotBufferMin, setSlotBufferMin] = useState(10);
+      const [reserveUrgentFractureSlots, setReserveUrgentFractureSlots] = useState(true);
+      const [autoBilingualSms, setAutoBilingualSms] = useState(true);
+
+      const t = clinicData.translations[lang];
+      const doctor = clinicData.doctor;
+
+      // Keep <html lang="..."> and <title> synchronized with language & view transitions
+      useEffect(() => {
+        document.documentElement.lang = lang;
+        const stepSuffix =
+          activeView === "admin"
+            ? t.adminView.title
+            : step === 4
+            ? t.wizard.step4Badge
+            : t.pageTitle;
+        document.title = `${stepSuffix} | ${doctor.name}`;
+      }, [lang, activeView, step, t, doctor.name]);
+
+      // Attach mandatory light-dismiss fallback & returnValue reset for native <dialog closedby="any">
+      useEffect(() => {
+        const dialogEl = intakeDialogRef.current;
+        if (!dialogEl) return;
+
+        const handleClose = () => {
+          dialogEl.returnValue = "";
+        };
+        dialogEl.addEventListener("close", handleClose);
+
+        let handleBackdropClick = null;
+        if (!("closedBy" in HTMLDialogElement.prototype)) {
+          handleBackdropClick = (event) => {
+            if (event.target !== dialogEl) return;
+            const rect = dialogEl.getBoundingClientRect();
+            const isDialogContent =
+              rect.top <= event.clientY &&
+              event.clientY <= rect.top + rect.height &&
+              rect.left <= event.clientX &&
+              event.clientX <= rect.left + rect.width;
+            if (isDialogContent) return;
+            dialogEl.close();
+          };
+          dialogEl.addEventListener("click", handleBackdropClick);
+        }
+
+        return () => {
+          dialogEl.removeEventListener("close", handleClose);
+          if (handleBackdropClick) {
+            dialogEl.removeEventListener("click", handleBackdropClick);
+          }
+        };
+      }, []);
+
+      // Open Native Modal Dialog when viewing patient intake & imaging
+      const handleOpenPatientModal = (patient) => {
+        setActiveModalPatient(patient);
+        const dialogEl = intakeDialogRef.current;
+        if (dialogEl && !dialogEl.open) {
+          dialogEl.showModal();
+        }
+      };
+
+      const handleClosePatientModal = () => {
+        const dialogEl = intakeDialogRef.current;
+        if (dialogEl && dialogEl.open) {
+          dialogEl.close();
+        }
+      };
+
+      // Send WhatsApp Reminder Action on Roster Row
+      const handleSendRosterWhatsapp = (patient) => {
+        setWhatsappSentMap((prev) => ({ ...prev, [patient.id]: true }));
+        triggerToast(t.adminView.whatsappToast(patient.patientName, patient.langBadge));
+      };
+
+      // Toggle Clinic Day vs. Operating Room (Quirófano) Day
+      const handleToggleClinicDay = (dayCode) => {
+        setWeeklySchedule((prev) =>
+          prev.map((d) =>
+            d.dayCode === dayCode ? { ...d, inClinic: !d.inClinic } : d
+          )
+        );
+      };
+
+      // Filtered Roster Patients
+      const filteredRoster = useMemo(() => {
+        const list = clinicData.adminDashboard.roster;
+        if (rosterFilter === "post-op") {
+          return list.filter((p) => p.visitType.en === "Post-Op Follow-Up");
+        }
+        if (rosterFilter === "es") {
+          return list.filter((p) => p.langBadge === "ES");
+        }
+        return list;
+      }, [rosterFilter, clinicData.adminDashboard.roster]);
+
+      // Selected Objects for Patient Booking View
+      const selectedVisit = useMemo(
+        () =>
+          clinicData.appointmentTypes.find((v) => v.id === selectedVisitId) ||
+          clinicData.appointmentTypes[0],
+        [selectedVisitId, clinicData.appointmentTypes]
+      );
+
+      const allSlots = useMemo(
+        () => [...clinicData.timeSlots.morning, ...clinicData.timeSlots.afternoon],
+        [clinicData.timeSlots]
+      );
+
+      const selectedSlot = useMemo(
+        () => allSlots.find((s) => s.id === selectedSlotId) || allSlots[0],
+        [selectedSlotId, allSlots]
+      );
+
+      const selectedJointObj = useMemo(
+        () =>
+          clinicData.injuredJoints.find((j) => j.id === patientForm.injuredJoint) ||
+          clinicData.injuredJoints[0],
+        [patientForm.injuredJoint, clinicData.injuredJoints]
+      );
+
+      const selectedInsuranceObj = useMemo(
+        () =>
+          clinicData.insurances.find((ins) => ins.id === patientForm.insuranceId) ||
+          clinicData.insurances[0],
+        [patientForm.insuranceId, clinicData.insurances]
+      );
+
+      const monthCells = useMemo(
+        () => buildMonthDays(calYear, calMonth),
+        [calYear, calMonth]
+      );
+
+      const formattedSelectedDate = useMemo(() => {
+        if (!selectedDateIso) return "";
+        const [y, m, d] = selectedDateIso.split("-").map(Number);
+        const dateObj = new Date(y, m - 1, d);
+        const weekdayName = t.weekdaysShort[dateObj.getDay()];
+        const monthName = t.months[m - 1];
+        return lang === "es"
+          ? `${weekdayName}, ${d} de ${monthName} ${y}`
+          : `${weekdayName}, ${monthName} ${d}, ${y}`;
+      }, [selectedDateIso, lang, t]);
+
+      const triggerToast = (message) => {
+        setStatusToast(message);
+        setTimeout(() => {
+          setStatusToast("");
+        }, 3500);
+      };
+
+      // Deferred validation sync (:user-invalid + ARIA + fallback)
+      const syncInputAriaAndFallback = (inputEl, eventType) => {
+        if (!inputEl || typeof inputEl.checkValidity !== "function") return;
+        const map = dirtyFieldsRef.current;
+        const state = map.get(inputEl) || { hasInteracted: false, hasBlurred: false };
+
+        if (eventType === "input" || eventType === "change") {
+          state.hasInteracted = true;
+          map.set(inputEl, state);
+          if (state.hasBlurred) {
+            const valid = inputEl.checkValidity();
+            inputEl.classList.toggle("user-invalid-fallback", !valid);
+            inputEl.classList.toggle("user-valid-fallback", valid);
+            inputEl.setAttribute("aria-invalid", valid ? "false" : "true");
+          } else if (inputEl.hasAttribute("aria-invalid")) {
+            const valid = inputEl.checkValidity();
+            inputEl.setAttribute("aria-invalid", valid ? "false" : "true");
+          }
+        } else if (eventType === "blur") {
+          state.hasBlurred = true;
+          map.set(inputEl, state);
+          if (state.hasInteracted) {
+            const valid = inputEl.checkValidity();
+            inputEl.classList.toggle("user-invalid-fallback", !valid);
+            inputEl.classList.toggle("user-valid-fallback", valid);
+            inputEl.setAttribute("aria-invalid", valid ? "false" : "true");
+          }
+        }
+      };
+
+      const handleAutoFill = () => {
+        const sample = clinicData.samplePatients[lang];
+        setPatientForm({
+          fullName: sample.fullName,
+          email: sample.email,
+          phone: sample.phone,
+          insuranceId: sample.insuranceId,
+          memberId: sample.memberId,
+          injuredJoint: sample.injuredJoint,
+          injurySide: sample.injurySide,
+          clinicalNotes: sample.clinicalNotes,
+          hasImaging: sample.hasImaging,
+          smsOptIn: sample.smsOptIn
+        });
+
+        if (formRef.current) {
+          const inputs = formRef.current.querySelectorAll(".ortho-input");
+          inputs.forEach((el) => {
+            el.classList.remove("user-invalid-fallback");
+            el.classList.add("user-valid-fallback");
+            el.setAttribute("aria-invalid", "false");
+          });
+        }
+        triggerToast(t.wizard.autoFillToast);
+      };
+
+      const handleIntakeSubmit = (e) => {
+        e.preventDefault();
+        const formEl = e.currentTarget;
+        if (!formEl.checkValidity()) {
+          const inputs = formEl.querySelectorAll(".ortho-input");
+          inputs.forEach((el) => {
+            const valid = el.checkValidity();
+            el.classList.toggle("user-invalid-fallback", !valid);
+            el.setAttribute("aria-invalid", valid ? "false" : "true");
+          });
+          const firstInvalid = formEl.querySelector(":invalid");
+          if (firstInvalid) firstInvalid.focus();
+          return;
+        }
+        setIsSubmitting(true);
+        setTimeout(() => {
+          setIsSubmitting(false);
+          setStep(4);
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }, 180);
+      };
+
+      const handleDownloadIcs = () => {
+        const [y, m, d] = selectedDateIso.split("-");
+        const startHour = parseInt(selectedSlot.id.split(":")[0], 10);
+        const startMin = parseInt(selectedSlot.id.split(":")[1], 10);
+        const dtStart = `${y}${m}${d}T${String(startHour).padStart(2, "0")}${String(startMin).padStart(2, "0")}00`;
+        const endTotalMin = startHour * 60 + startMin + selectedVisit.durationMinutes;
+        const endHour = Math.floor(endTotalMin / 60);
+        const endMin = endTotalMin % 60;
+        const dtEnd = `${y}${m}${d}T${String(endHour).padStart(2, "0")}${String(endMin).padStart(2, "0")}00`;
+
+        const icsContent = [
+          "BEGIN:VCALENDAR",
+          "VERSION:2.0",
+          "PRODID:-//Montes Orthopedics//Bilingual Booking//EN",
+          "BEGIN:VEVENT",
+          `UID:MON-4092@montesortho.example.com`,
+          `DTSTART:${dtStart}`,
+          `DTEND:${dtEnd}`,
+          `SUMMARY:${selectedVisit.title[lang]} - ${doctor.name}`,
+          `LOCATION:${doctor.clinic.name}, ${doctor.clinic.addressLine1}, ${doctor.clinic.cityStateZip}`,
+          `DESCRIPTION:Ref #MON-4092 | Joint: ${selectedJointObj.label[lang]} | Prep: ${selectedVisit.prepInstructions[lang]}`,
+          "END:VEVENT",
+          "END:VCALENDAR"
+        ].join("\r\n");
+
+        const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "Dr-Luis-Montes-Appointment-MON-4092.ics";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        triggerToast(t.wizard.calendarAddedToast);
+      };
+
+      const handlePrevMonth = () => {
+        if (calMonth === 0) {
+          setCalYear((y) => y - 1);
+          setCalMonth(11);
+        } else {
+          setCalMonth((m) => m - 1);
+        }
+      };
+
+      const handleNextMonth = () => {
+        if (calMonth === 11) {
+          setCalYear((y) => y + 1);
+          setCalMonth(0);
+        } else {
+          setCalMonth((m) => m + 1);
+        }
+      };
+
+      const sideDisplayLabel = useMemo(() => {
+        if (patientForm.injurySide === "Left") return t.wizard.sideLeft;
+        if (patientForm.injurySide === "Right") return t.wizard.sideRight;
+        return t.wizard.sideBilateral;
+      }, [patientForm.injurySide, t]);
+
+      // Helper for Imaging Status Badge Styling
+      const getImagingBadgeStyle = (tone) => {
+        if (tone === "emerald") return "bg-emerald-50 text-emerald-800 border-emerald-200";
+        if (tone === "amber") return "bg-amber-50 text-amber-900 border-amber-300";
+        if (tone === "sky") return "bg-sky-50 text-sky-800 border-sky-200";
+        if (tone === "indigo") return "bg-indigo-50 text-indigo-800 border-indigo-200";
+        return "bg-violet-50 text-violet-800 border-violet-200";
+      };
+
+      return (
+        <div className="min-h-screen flex flex-col bg-slate-100">
+          {/* Live Polite Region for Screen Reader Announcements & Visual Toast */}
+          <div aria-live="polite" aria-atomic="true" className="fixed bottom-5 right-5 z-50 pointer-events-none">
+            {statusToast && (
+              <div className="pointer-events-auto flex items-center gap-2.5 bg-slate-900 text-white text-sm font-medium px-4 py-3 rounded-xl shadow-xl border border-slate-700">
+                <span aria-hidden="true" className="text-emerald-400">✓</span>
+                <span>{statusToast}</span>
+              </div>
+            )}
+          </div>
+
+          {/* Native <dialog closedby="any"> Modal for "View Intake & Imaging" */}
+          <dialog
+            ref={intakeDialogRef}
+            id="patient-intake-modal"
+            closedby="any"
+            aria-labelledby="intake-modal-title"
+            className="rounded-2xl border border-slate-200 shadow-2xl p-0 w-full max-w-2xl bg-white text-slate-900 backdrop:bg-slate-900/60"
+          >
+            {activeModalPatient && (
+              <div className="p-6 sm:p-7 space-y-5">
+                <div className="flex items-start justify-between gap-4 border-b border-slate-200 pb-4">
+                  <div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-sky-100 text-sky-800">
+                        {t.adminView.modalBadge}
+                      </span>
+                      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white">
+                        {activeModalPatient.time}
+                      </span>
+                      <span
+                        className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-bold border ${
+                          activeModalPatient.langBadge === "ES"
+                            ? "bg-emerald-50 text-emerald-800 border-emerald-300"
+                            : "bg-sky-50 text-sky-800 border-sky-300"
+                        }`}
+                      >
+                        {activeModalPatient.langBadge === "ES" ? "🇲🇽 ES" : "🇺🇸 EN"}
+                      </span>
+                    </div>
+                    <h2 id="intake-modal-title" className="mt-2 text-xl sm:text-2xl font-bold text-slate-900 flex items-center gap-2">
+                      <span aria-hidden="true">{activeModalPatient.jointIcon}</span>
+                      <span>{activeModalPatient.patientName}</span>
+                    </h2>
+                    <p className="text-sm font-medium text-sky-800 mt-0.5">
+                      {activeModalPatient.visitType[lang]} • {activeModalPatient.condition[lang]}
+                    </p>
+                  </div>
+
+                  <form method="dialog">
+                    <button
+                      type="submit"
+                      autofocus
+                      className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors"
+                    >
+                      ✕ {t.adminView.modalCloseBtn}
+                    </button>
+                  </form>
+                </div>
+
+                {/* Patient Metadata Strip */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                    <div className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">
+                      {t.adminView.modalRoomLabel}
+                    </div>
+                    <div className="font-bold text-slate-900 mt-0.5">
+                      {activeModalPatient.room} • {activeModalPatient.phone}
+                    </div>
+                  </div>
+                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                    <div className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">
+                      {t.adminView.modalPainLabel}
+                    </div>
+                    <div className="font-bold text-slate-900 mt-0.5">
+                      {activeModalPatient.painScore}
+                    </div>
+                  </div>
+                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                    <div className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">
+                      {t.adminView.modalInsuranceLabel}
+                    </div>
+                    <div className="font-bold text-emerald-800 mt-0.5">
+                      {activeModalPatient.insuranceDetail}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Clinical Intake & Physical Exam Triage */}
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                    🩺 {t.adminView.modalClinicalNotesTitle}
+                  </h3>
+                  <p className="text-sm text-slate-800 leading-relaxed">
+                    {activeModalPatient.intakeSummary[lang]}
+                  </p>
+                </div>
+
+                {/* PACS / DICOM Imaging Status & Findings */}
+                <div className="p-4 rounded-xl bg-sky-50/70 border border-sky-200 space-y-2">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <h3 className="text-xs font-bold uppercase tracking-wider text-sky-900">
+                      🩻 {t.adminView.modalImagingTitle}
+                    </h3>
+                    <span
+                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold border ${getImagingBadgeStyle(
+                        activeModalPatient.imagingTone
+                      )}`}
+                    >
+                      {activeModalPatient.imagingStatus[lang]}
+                    </span>
+                  </div>
+                  <p className="text-sm text-slate-800 leading-relaxed">
+                    {activeModalPatient.imagingFindings[lang]}
+                  </p>
+                </div>
+
+                <div className="pt-2 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
+                  <button
+                    type="button"
+                    onClick={() => handleSendRosterWhatsapp(activeModalPatient)}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition-colors"
+                  >
+                    <Icons.MessageCircle className="w-4 h-4" />
+                    <span>{t.adminView.sendWhatsappBtn} ({activeModalPatient.langBadge})</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleClosePatientModal}
+                    className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-colors"
+                  >
+                    {t.adminView.modalCloseBtn}
+                  </button>
+                </div>
+              </div>
+            )}
+          </dialog>
+
+          {/* Floating Top Demo Bar */}
+          <header className="sticky top-0 z-40 bg-slate-900/95 backdrop-blur-md text-white border-b border-slate-800 shadow-md">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-3">
+              {/* Brand & Prototype Pill */}
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-sky-500/20 border border-sky-400/40 flex items-center justify-center text-sky-300 font-bold text-sm">
+                  🦴
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-semibold text-sm tracking-tight text-white">
+                      Montes Orthopedics
+                    </span>
+                    <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-sky-500/20 text-sky-300 border border-sky-400/30">
+                      {t.demoBar.badge}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-400 hidden md:block">
+                    {doctor.name} • {doctor.clinic.name}
+                  </p>
+                </div>
+              </div>
+
+              {/* View Switcher & Instant Bilingual Toggle */}
+              <div className="flex items-center gap-2 sm:gap-3 ml-auto">
+                {/* View Switcher: Patient Booking View vs. Dr. Montes Admin View */}
+                <nav
+                  aria-label="Workspace View Switcher"
+                  className="inline-flex rounded-lg bg-slate-800 p-1 border border-slate-700"
+                >
+                  <button
+                    type="button"
+                    onClick={() => setActiveView("patient")}
+                    aria-pressed={activeView === "patient"}
+                    className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all flex items-center gap-1.5 ${
+                      activeView === "patient"
+                        ? "bg-sky-600 text-white shadow-sm"
+                        : "text-slate-300 hover:text-white"
+                    }`}
+                  >
+                    <Icons.Calendar className="w-3.5 h-3.5" />
+                    <span>{t.demoBar.patientView}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveView("admin")}
+                    aria-pressed={activeView === "admin"}
+                    className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all flex items-center gap-1.5 ${
+                      activeView === "admin"
+                        ? "bg-sky-600 text-white shadow-sm"
+                        : "text-slate-300 hover:text-white"
+                    }`}
+                  >
+                    <Icons.Stethoscope className="w-3.5 h-3.5" />
+                    <span>{t.demoBar.adminView}</span>
+                  </button>
+                </nav>
+
+                {/* Instant Language Toggle ("🇺🇸 EN | 🇲🇽 ES") */}
+                <div
+                  role="group"
+                  aria-label={t.demoBar.langLabel}
+                  className="inline-flex items-center rounded-lg bg-slate-800 p-1 border border-slate-700"
+                >
+                  <button
+                    type="button"
+                    onClick={() => setLang("en")}
+                    aria-pressed={lang === "en"}
+                    className={`px-2.5 py-1 rounded-md text-xs font-semibold transition-all ${
+                      lang === "en"
+                        ? "bg-white text-slate-900 shadow-sm"
+                        : "text-slate-300 hover:text-white"
+                    }`}
+                  >
+                    🇺🇸 EN
+                  </button>
+                  <span aria-hidden="true" className="text-slate-600 text-xs px-0.5">|</span>
+                  <button
+                    type="button"
+                    onClick={() => setLang("es")}
+                    aria-pressed={lang === "es"}
+                    className={`px-2.5 py-1 rounded-md text-xs font-semibold transition-all ${
+                      lang === "es"
+                        ? "bg-white text-slate-900 shadow-sm"
+                        : "text-slate-300 hover:text-white"
+                    }`}
+                  >
+                    🇲🇽 ES
+                  </button>
+                </div>
+              </div>
+            </div>
+          </header>
+
+          {/* Main Workspace Container */}
+          <main id="main-workspace" tabIndex="-1" className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
+            {activeView === "admin" ? (
+              /* DR. LUIS MONTES — ORTHOPEDIC SCHEDULE & ADMIN VIEW */
+              <div className="space-y-6">
+                {/* Admin Header Banner */}
+                <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-sky-950 rounded-2xl p-6 text-white shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                  <div>
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/20 border border-sky-400/30 text-sky-300 text-xs font-semibold">
+                      <Icons.Stethoscope className="w-3.5 h-3.5" />
+                      <span>{t.adminView.headerBadge}</span>
+                    </div>
+                    <h1 className="mt-2 text-2xl sm:text-3xl font-bold tracking-tight">
+                      {t.adminView.title}
+                    </h1>
+                    <p className="mt-1 text-xs sm:text-sm text-slate-300 max-w-2xl">
+                      {t.adminView.subtitle}
+                    </p>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-3 shrink-0">
+                    <div className="px-3.5 py-2 rounded-xl bg-white/10 border border-white/15 text-xs">
+                      <div className="text-slate-300 font-medium">
+                        {lang === "es" ? "Tiempo de Margen Activo" : "Active Slot Buffer"}
+                      </div>
+                      <div className="font-bold text-emerald-300 mt-0.5">
+                        +{slotBufferMin} min ({weeklySchedule.filter((d) => d.inClinic).length} {lang === "es" ? "días en clínica" : "clinic days"})
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setActiveView("patient")}
+                      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs shadow-sm transition-colors"
+                    >
+                      <Icons.Calendar className="w-4 h-4" />
+                      <span>{t.adminView.switchToBookingBtn}</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* 1. 4-Card Orthopedic KPI Row */}
+                <section aria-label="Orthopedic Daily KPIs" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {clinicData.adminDashboard.kpis.map((kpi) => {
+                    const dynamicValue =
+                      kpi.id === "whatsapp-confirmed" && whatsappSentMap["pt-marcus-thorne"]
+                        ? 16
+                        : kpi.value;
+                    return (
+                      <div
+                        key={kpi.id}
+                        className="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-sm flex flex-col justify-between"
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                            {kpi.label[lang]}
+                          </span>
+                          <span
+                            aria-hidden="true"
+                            className="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-lg shrink-0"
+                          >
+                            {kpi.icon}
+                          </span>
+                        </div>
+                        <div className="mt-3 flex items-baseline gap-2">
+                          <span className="text-3xl font-extrabold text-slate-900 tracking-tight">
+                            {dynamicValue}
+                          </span>
+                          {kpi.id === "whatsapp-confirmed" && (
+                            <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                              /{clinicData.adminDashboard.kpis[0].value}
+                            </span>
+                          )}
+                        </div>
+                        <p className="mt-2 text-xs text-slate-500 font-medium">
+                          {kpi.subtext[lang]}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </section>
+
+                {/* Main Admin Split Grid: Left (Daily Patient Roster Table) + Right (Clinic & Surgery Day Schedule Settings) */}
+                <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
+                  {/* 2. Interactive Daily Patient Roster Table (8 cols on XL) */}
+                  <section
+                    aria-labelledby="roster-section-heading"
+                    className="xl:col-span-8 bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden"
+                  >
+                    <div className="p-5 sm:p-6 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3">
+                      <div>
+                        <h2 id="roster-section-heading" className="text-lg sm:text-xl font-bold text-slate-900">
+                          {t.adminView.rosterTitle}
+                        </h2>
+                        <p className="text-xs text-slate-500 mt-0.5">
+                          {t.adminView.rosterSubtitle}
+                        </p>
+                      </div>
+
+                      {/* Quick Roster Filter Pills */}
+                      <div role="group" aria-label="Filter patient roster" className="inline-flex flex-wrap gap-1.5">
+                        {[
+                          { id: "all", label: t.adminView.filterAll },
+                          { id: "post-op", label: t.adminView.filterPostOp },
+                          { id: "es", label: t.adminView.filterSpanish }
+                        ].map((tab) => (
+                          <button
+                            key={tab.id}
+                            type="button"
+                            aria-pressed={rosterFilter === tab.id}
+                            onClick={() => setRosterFilter(tab.id)}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                              rosterFilter === tab.id
+                                ? "bg-slate-900 text-white shadow-sm"
+                                : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                            }`}
+                          >
+                            {tab.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Accessible Responsive Table Wrapper with @container query support */}
+                    <div
+                      tabIndex="0"
+                      role="region"
+                      aria-labelledby="roster-table-caption"
+                      className="table-wrapper"
+                    >
+                      <table
+                        className="roster-table text-left text-xs sm:text-sm"
+                        style={{
+                          "--label-1": `"${t.adminView.colTimePatient}"`,
+                          "--label-2": `"${t.adminView.colVisitCondition}"`,
+                          "--label-3": `"${t.adminView.colLang}"`,
+                          "--label-4": `"${t.adminView.colImaging}"`,
+                          "--label-5": `"${t.adminView.colInsurance}"`,
+                          "--label-6": `"${t.adminView.colActions}"`
+                        }}
+                      >
+                        <caption id="roster-table-caption" className="visually-hidden">
+                          {t.adminView.rosterTitle} — {doctor.name}
+                        </caption>
+                        <thead className="bg-slate-50 text-slate-500 text-[11px] font-bold uppercase tracking-wider">
+                          <tr>
+                            <th scope="col" className="py-3.5 px-4 border-b border-slate-200">
+                              {t.adminView.colTimePatient}
+                            </th>
+                            <th scope="col" className="py-3.5 px-4 border-b border-slate-200">
+                              {t.adminView.colVisitCondition}
+                            </th>
+                            <th scope="col" className="py-3.5 px-3 border-b border-slate-200">
+                              {t.adminView.colLang}
+                            </th>
+                            <th scope="col" className="py-3.5 px-4 border-b border-slate-200">
+                              {t.adminView.colImaging}
+                            </th>
+                            <th scope="col" className="py-3.5 px-4 border-b border-slate-200">
+                              {t.adminView.colInsurance}
+                            </th>
+                            <th scope="col" className="py-3.5 px-4 border-b border-slate-200 text-right">
+                              {t.adminView.colActions}
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-200/80">
+                          {filteredRoster.map((pt) => {
+                            const isWhatsappSent = Boolean(whatsappSentMap[pt.id]);
+                            return (
+                              <tr key={pt.id} className="hover:bg-slate-50/90 transition-colors">
+                                {/* Sticky Row Header: Time & Patient Name */}
+                                <th scope="row" className="py-3.5 px-4 font-semibold text-slate-900 align-top whitespace-nowrap">
+                                  <div className="flex items-center gap-2">
+                                    <span className="inline-flex items-center px-2 py-0.5 rounded bg-slate-900 text-white text-[11px] font-mono font-bold">
+                                      {pt.time}
+                                    </span>
+                                    <span aria-hidden="true" className="text-base">
+                                      {pt.jointIcon}
+                                    </span>
+                                  </div>
+                                  <div className="mt-1 font-bold text-slate-900 text-sm">
+                                    {pt.patientName}
+                                  </div>
+                                  <div className="text-[11px] font-normal text-slate-500">
+                                    {pt.room}
+                                  </div>
+                                </th>
+
+                                {/* Visit Type & Orthopedic Condition */}
+                                <td className="py-3.5 px-4 align-top">
+                                  <div className="font-bold text-slate-900">
+                                    {pt.visitType[lang]}
+                                  </div>
+                                  <div className="text-xs text-slate-600 mt-0.5">
+                                    {pt.condition[lang]}
+                                  </div>
+                                </td>
+
+                                {/* Bilingual Badge (EN / ES) */}
+                                <td className="py-3.5 px-3 align-top whitespace-nowrap">
+                                  <span
+                                    className={`inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-bold border ${
+                                      pt.langBadge === "ES"
+                                        ? "bg-emerald-50 text-emerald-800 border-emerald-300"
+                                        : "bg-sky-50 text-sky-800 border-sky-300"
+                                    }`}
+                                  >
+                                    {pt.langBadge}
+                                  </span>
+                                </td>
+
+                                {/* Imaging Status Pill */}
+                                <td className="py-3.5 px-4 align-top whitespace-nowrap">
+                                  <span
+                                    className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold border ${getImagingBadgeStyle(
+                                      pt.imagingTone
+                                    )}`}
+                                  >
+                                    <span aria-hidden="true">🩻</span>
+                                    <span>{pt.imagingStatus[lang]}</span>
+                                  </span>
+                                </td>
+
+                                {/* Insurance / Verification Badge */}
+                                <td className="py-3.5 px-4 align-top whitespace-nowrap">
+                                  <span
+                                    className={`inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold border ${
+                                      pt.insuranceBadge.en.includes("✓")
+                                        ? "bg-emerald-50/80 text-emerald-900 border-emerald-200"
+                                        : "bg-slate-100 text-slate-800 border-slate-200"
+                                    }`}
+                                  >
+                                    {pt.insuranceBadge[lang]}
+                                  </span>
+                                </td>
+
+                                {/* Clickable Action Pills: "View Intake & Imaging" + "Send WhatsApp Reminder" */}
+                                <td className="py-3.5 px-4 align-top text-right whitespace-nowrap">
+                                  <div className="flex flex-wrap sm:justify-end gap-1.5">
+                                    <button
+                                      type="button"
+                                      onClick={() => handleOpenPatientModal(pt)}
+                                      aria-label={`${t.adminView.viewIntakeBtn} - ${pt.patientName}`}
+                                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-sky-50 hover:bg-sky-100 text-sky-800 border border-sky-200 text-xs font-bold transition-colors"
+                                    >
+                                      <Icons.Eye className="w-3.5 h-3.5" />
+                                      <span>{t.adminView.viewIntakeBtn}</span>
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => handleSendRosterWhatsapp(pt)}
+                                      aria-label={`${t.adminView.sendWhatsappBtn} - ${pt.patientName}`}
+                                      className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-bold border transition-colors ${
+                                        isWhatsappSent
+                                          ? "bg-emerald-600 text-white border-emerald-600"
+                                          : "bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border-emerald-300"
+                                      }`}
+                                    >
+                                      <Icons.MessageCircle className="w-3.5 h-3.5" />
+                                      <span>
+                                        {isWhatsappSent
+                                          ? t.adminView.sentWhatsappBadge
+                                          : t.adminView.sendWhatsappBtn}
+                                      </span>
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  </section>
+
+                  {/* 3. "Clinic & Surgery Day Schedule Settings" Side Card (4 cols on XL) */}
+                  <aside
+                    aria-labelledby="schedule-settings-heading"
+                    className="xl:col-span-4 bg-white rounded-2xl border border-slate-200/90 shadow-sm p-5 sm:p-6 space-y-5"
+                  >
+                    <div>
+                      <div className="flex items-center gap-2 text-sky-700 font-bold text-xs uppercase tracking-wider">
+                        <Icons.Sliders className="w-4 h-4" />
+                        <span>Suite 410 & OR Control</span>
+                      </div>
+                      <h2 id="schedule-settings-heading" className="mt-1 text-lg font-bold text-slate-900">
+                        {t.adminView.settingsTitle}
+                      </h2>
+                      <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">
+                        {t.adminView.settingsSubtitle}
+                      </p>
+                    </div>
+
+                    {/* Weekly Clinic vs. Operating Room / Quirófano Toggles */}
+                    <fieldset className="space-y-2.5">
+                      <legend className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">
+                        {t.adminView.weeklyToggleLegend}
+                      </legend>
+
+                      {weeklySchedule.map((dayItem) => {
+                        const switchId = `switch-day-${dayItem.dayCode}`;
+                        return (
+                          <div
+                            key={dayItem.dayCode}
+                            className={`p-3 rounded-xl border transition-all flex items-center justify-between gap-3 ${
+                              dayItem.inClinic
+                                ? "bg-sky-50/60 border-sky-200"
+                                : "bg-amber-50/60 border-amber-200"
+                            }`}
+                          >
+                            <div className="min-w-0">
+                              <label
+                                htmlFor={switchId}
+                                className="font-bold text-xs sm:text-sm text-slate-900 cursor-pointer block"
+                              >
+                                {dayItem.dayLabel[lang]}
+                              </label>
+                              <div className="flex flex-wrap items-center gap-1.5 mt-0.5">
+                                <span
+                                  className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold ${
+                                    dayItem.inClinic
+                                      ? "bg-sky-600 text-white"
+                                      : "bg-amber-600 text-white"
+                                  }`}
+                                >
+                                  {dayItem.inClinic
+                                    ? `🏥 ${t.adminView.clinicBadge}`
+                                    : `😷 ${t.adminView.orBadge}`}
+                                </span>
+                                <span className="text-[11px] text-slate-500 font-medium">
+                                  {dayItem.hours}
+                                </span>
+                              </div>
+                            </div>
+
+                            {/* Native HTML <input type="checkbox" switch> */}
+                            <input
+                              id={switchId}
+                              type="checkbox"
+                              {...{ switch: "" }}
+                              checked={dayItem.inClinic}
+                              onChange={() => handleToggleClinicDay(dayItem.dayCode)}
+                              aria-label={`${dayItem.dayLabel[lang]}: ${
+                                dayItem.inClinic ? t.adminView.clinicBadge : t.adminView.orBadge
+                              }`}
+                              className="w-5 h-5 shrink-0"
+                            />
+                          </div>
+                        );
+                      })}
+                    </fieldset>
+
+                    {/* Appointment Slot Buffer Adjustment */}
+                    <div className="pt-4 border-t border-slate-200 space-y-2">
+                      <label
+                        htmlFor="slot-buffer-select"
+                        className="block text-xs font-bold text-slate-800"
+                      >
+                        ⏱️ {t.adminView.bufferLabel}
+                      </label>
+                      <span id="slot-buffer-hint" className="block text-[11px] text-slate-500">
+                        {t.adminView.bufferHint}
+                      </span>
+                      <select
+                        id="slot-buffer-select"
+                        aria-describedby="slot-buffer-hint"
+                        value={slotBufferMin}
+                        onChange={(e) => setSlotBufferMin(Number(e.target.value))}
+                        className="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-xs sm:text-sm font-semibold text-slate-900 bg-white focus:border-sky-600"
+                      >
+                        {t.adminView.bufferOptions.map((opt) => (
+                          <option key={opt.value} value={opt.value}>
+                            {opt.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Additional Clinic Triage Switches */}
+                    <div className="pt-3 border-t border-slate-200 space-y-3">
+                      <label
+                        htmlFor="urgent-fracture-switch"
+                        className="flex items-start justify-between gap-3 cursor-pointer text-xs text-slate-800"
+                      >
+                        <span className="font-medium leading-snug">
+                          🚑 {t.adminView.urgentSlotsLabel}
+                        </span>
+                        <input
+                          id="urgent-fracture-switch"
+                          type="checkbox"
+                          {...{ switch: "" }}
+                          checked={reserveUrgentFractureSlots}
+                          onChange={(e) => setReserveUrgentFractureSlots(e.target.checked)}
+                          className="w-4 h-4 mt-0.5 shrink-0"
+                        />
+                      </label>
+
+                      <label
+                        htmlFor="auto-sms-switch"
+                        className="flex items-start justify-between gap-3 cursor-pointer text-xs text-slate-800"
+                      >
+                        <span className="font-medium leading-snug">
+                          💬 {t.adminView.autoSmsToggleLabel}
+                        </span>
+                        <input
+                          id="auto-sms-switch"
+                          type="checkbox"
+                          {...{ switch: "" }}
+                          checked={autoBilingualSms}
+                          onChange={(e) => setAutoBilingualSms(e.target.checked)}
+                          className="w-4 h-4 mt-0.5 shrink-0"
+                        />
+                      </label>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => triggerToast(t.adminView.settingsSavedToast)}
+                      className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-sm transition-colors flex items-center justify-center gap-2"
+                    >
+                      <Icons.CheckCircle className="w-4 h-4 text-emerald-400" />
+                      <span>{t.adminView.saveSettingsBtn}</span>
+                    </button>
+                  </aside>
+                </div>
+              </div>
+            ) : (
+              /* RESPONSIVE SPLIT-SCREEN PATIENT BOOKING VIEW */
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+                {/* LEFT PANEL: Doctor Profile, Credentials, Clinic Location, Insurances & Live Booking Summary */}
+                <aside
+                  aria-label={doctor.name}
+                  className="lg:col-span-5 xl:col-span-4 space-y-5 lg:sticky lg:top-20"
+                >
+                  {/* Doctor Profile & Orthopedic Credentials Card */}
+                  <div className="bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden">
+                    <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-sky-950 p-5 text-white">
+                      <div className="flex items-start gap-4">
+                        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-sky-400 to-sky-600 flex items-center justify-center text-white font-bold text-xl shadow-md border-2 border-white/20 shrink-0">
+                          LM
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex flex-wrap items-center gap-1.5">
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
+                              <Icons.ShieldCheck className="w-3.5 h-3.5" />
+                              {t.leftPanel.verifiedBadge}
+                            </span>
+                            <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-amber-400/20 text-amber-200 border border-amber-300/30">
+                              ★ {doctor.rating} ({doctor.reviewCount}+)
+                            </span>
+                          </div>
+                          <h1 className="mt-1.5 text-lg sm:text-xl font-bold tracking-tight text-white">
+                            {doctor.name}
+                          </h1>
+                          <p className="text-xs sm:text-sm text-sky-200 font-medium leading-snug mt-0.5">
+                            {doctor.specialty[lang]}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="mt-4 pt-3.5 border-t border-white/10 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-300">
+                        <span className="inline-flex items-center gap-1.5 text-emerald-300 font-medium">
+                          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                          {t.leftPanel.acceptingNew}
+                        </span>
+                        <span className="text-slate-300 font-medium">
+                          🗣️ {doctor.languagesSpoken[lang]}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="p-5 space-y-4">
+                      {/* Clinic Location */}
+                      <div>
+                        <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+                          <Icons.MapPin className="w-3.5 h-3.5 text-sky-600" />
+                          <span>{t.leftPanel.clinicHeading}</span>
+                        </h2>
+                        <div className="mt-1.5 text-sm font-semibold text-slate-900">
+                          {doctor.clinic.name}
+                        </div>
+                        <p className="text-xs text-slate-600 mt-0.5">
+                          {doctor.clinic.addressLine1} • {doctor.clinic.cityStateZip}
+                        </p>
+                        <p className="text-xs text-slate-500 mt-1.5 bg-slate-50 p-2.5 rounded-lg border border-slate-200/70">
+                          🅿️ {doctor.clinic.parkingNote[lang]}
+                        </p>
+                      </div>
+
+                      {/* Accepted Insurances */}
+                      <div className="pt-3 border-t border-slate-100">
+                        <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+                          {t.leftPanel.insurancesHeading}
+                        </h2>
+                        <div className="flex flex-wrap gap-1.5">
+                          {clinicData.insurances.map((ins) => {
+                            const isSelected = patientForm.insuranceId === ins.id;
+                            return (
+                              <span
+                                key={ins.id}
+                                className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium border transition-colors ${
+                                  isSelected
+                                    ? "bg-sky-50 border-sky-300 text-sky-800 font-semibold"
+                                    : "bg-slate-50 border-slate-200 text-slate-700"
+                                }`}
+                              >
+                                {isSelected && <span aria-hidden="true" className="text-sky-600">✓</span>}
+                                {ins.label[lang]}
+                              </span>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* LIVE BOOKING SUMMARY CARD */}
+                  <div className="bg-white rounded-2xl border-2 border-sky-600/20 shadow-sm overflow-hidden">
+                    <div className="bg-sky-50/80 border-b border-sky-100 px-5 py-3 flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2.5 h-2.5 rounded-full bg-sky-600" />
+                        <h2 className="text-xs font-bold uppercase tracking-wider text-sky-950">
+                          {t.leftPanel.liveSummaryHeading}
+                        </h2>
+                      </div>
+                      <span className="text-xs font-mono font-semibold text-sky-700 bg-white px-2 py-0.5 rounded border border-sky-200">
+                        #MON-4092
+                      </span>
+                    </div>
+
+                    <div className="p-5 space-y-3.5 text-sm">
+                      {/* Selected Visit Type */}
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <div className="text-xs font-medium text-slate-400">
+                            {t.leftPanel.visitTypeLabel}
+                          </div>
+                          <div className="font-semibold text-slate-900 mt-0.5">
+                            {selectedVisit ? selectedVisit.title[lang] : t.leftPanel.notSelectedYet}
+                          </div>
+                          <div className="flex flex-wrap items-center gap-2 mt-1 text-xs text-slate-600">
+                            <span className="inline-flex items-center gap-1 font-medium text-sky-700">
+                              <Icons.Clock className="w-3.5 h-3.5" />
+                              {selectedVisit.durationMinutes} min
+                            </span>
+                            <span>•</span>
+                            <span>{selectedVisit.modality[lang]}</span>
+                          </div>
+                        </div>
+                        <span className="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-800 font-bold text-xs shrink-0">
+                          {selectedVisit.priceDisplay[lang]}
+                        </span>
+                      </div>
+
+                      {/* Date & Time Slot */}
+                      <div className="pt-3 border-t border-slate-100 flex items-start justify-between gap-3">
+                        <div>
+                          <div className="text-xs font-medium text-slate-400">
+                            {t.leftPanel.dateAndTimeLabel}
+                          </div>
+                          <div className="font-semibold text-slate-900 mt-0.5">
+                            {formattedSelectedDate}
+                          </div>
+                          <div className="text-xs font-semibold text-sky-700 mt-0.5">
+                            ⏰ {selectedSlot ? selectedSlot.label : t.leftPanel.chooseDatePrompt} (CT)
+                          </div>
+                        </div>
+                        {step > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => setStep(2)}
+                            className="text-xs font-semibold text-sky-600 hover:text-sky-800 underline"
+                          >
+                            {lang === "es" ? "Cambiar" : "Edit"}
+                          </button>
+                        )}
+                      </div>
+
+                      {/* Patient & Joint Selection */}
+                      <div className="pt-3 border-t border-slate-100">
+                        <div className="text-xs font-medium text-slate-400">
+                          {t.leftPanel.patientDetailsLabel}
+                        </div>
+                        <div className="mt-1 flex flex-wrap items-center gap-1.5">
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-sky-50 text-sky-800 border border-sky-200 text-xs font-semibold">
+                            <span>{selectedJointObj.icon}</span>
+                            <span>{selectedJointObj.label[lang]} ({sideDisplayLabel})</span>
+                          </span>
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-xs font-medium">
+                            {selectedInsuranceObj.label[lang]}
+                          </span>
+                        </div>
+                        <div className="mt-1.5 text-xs text-slate-700 font-medium">
+                          {patientForm.fullName
+                            ? `👤 ${patientForm.fullName} ${patientForm.phone ? `• ${patientForm.phone}` : ""}`
+                            : t.leftPanel.patientNotEntered}
+                        </div>
+                      </div>
+
+                      {/* Prep Note Box */}
+                      <div className="pt-3 border-t border-slate-100">
+                        <div className="text-xs font-medium text-slate-400 mb-1">
+                          {t.leftPanel.prepNoteLabel}
+                        </div>
+                        <p className="text-xs text-amber-900 bg-amber-50/90 border border-amber-200/80 rounded-xl p-2.5 leading-relaxed">
+                          📋 {selectedVisit.prepInstructions[lang]}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </aside>
+
+                {/* RIGHT PANEL: Interactive 4-Step Booking Wizard */}
+                <div className="lg:col-span-7 xl:col-span-8">
+                  <div className="bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden">
+                    {/* Wizard Step Progress Bar */}
+                    <nav
+                      aria-label="Booking Progress"
+                      className="bg-slate-50 border-b border-slate-200 px-4 sm:px-6 py-3.5"
+                    >
+                      <ol className="grid grid-cols-4 gap-2">
+                        {[
+                          { num: 1, label: t.wizard.step1Short },
+                          { num: 2, label: t.wizard.step2Short },
+                          { num: 3, label: t.wizard.step3Short },
+                          { num: 4, label: t.wizard.step4Short }
+                        ].map((item) => {
+                          const isCurrent = step === item.num;
+                          const isCompleted = step > item.num;
+                          return (
+                            <li key={item.num} className="flex items-center">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  if (item.num < 4 || step === 4) {
+                                    setStep(item.num);
+                                  }
+                                }}
+                                aria-current={isCurrent ? "step" : undefined}
+                                className={`w-full text-left px-2.5 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 ${
+                                  isCurrent
+                                    ? "bg-sky-600 text-white shadow-sm"
+                                    : isCompleted
+                                    ? "bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100"
+                                    : "bg-white text-slate-500 border border-slate-200/80 hover:text-slate-800"
+                                }`}
+                              >
+                                <span
+                                  className={`w-5 h-5 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0 ${
+                                    isCurrent
+                                      ? "bg-white text-sky-700"
+                                      : isCompleted
+                                      ? "bg-emerald-600 text-white"
+                                      : "bg-slate-100 text-slate-600"
+                                  }`}
+                                >
+                                  {isCompleted ? "✓" : item.num}
+                                </span>
+                                <span className="truncate">{item.label.replace(/^\d+\.\s*/, "")}</span>
+                              </button>
+                            </li>
+                          );
+                        })}
+                      </ol>
+                    </nav>
+
+                    {/* STEP 1: Select Orthopedic Visit Type */}
+                    {step === 1 && (
+                      <section aria-labelledby="step1-heading" className="p-5 sm:p-7 space-y-5">
+                        <div>
+                          <h2 id="step1-heading" className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+                            {t.wizard.step1Title}
+                          </h2>
+                          <p className="text-sm text-slate-600 mt-1">
+                            {t.wizard.step1Subtitle}
+                          </p>
+                        </div>
+
+                        <div className="space-y-3.5">
+                          {clinicData.appointmentTypes.map((visit) => {
+                            const isSelected = selectedVisitId === visit.id;
+                            const isPrepOpen = expandedPrepId === visit.id;
+                            const prepRegionId = `prep-panel-${visit.id}`;
+
+                            return (
+                              <div
+                                key={visit.id}
+                                className={`rounded-2xl border-2 transition-all p-4 sm:p-5 ${
+                                  isSelected
+                                    ? "border-sky-600 bg-sky-50/30 shadow-sm"
+                                    : "border-slate-200 hover:border-slate-300 bg-white"
+                                }`}
+                              >
+                                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+                                  <div className="space-y-1.5 flex-1">
+                                    <div className="flex flex-wrap items-center gap-2">
+                                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-100 text-sky-800">
+                                        {visit.badge[lang]}
+                                      </span>
+                                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded-md">
+                                        <Icons.Clock className="w-3.5 h-3.5 text-sky-600" />
+                                        {visit.durationMinutes} min
+                                      </span>
+                                      <span className="inline-flex items-center gap-1 text-xs font-medium text-slate-600 bg-slate-100 px-2.5 py-0.5 rounded-md">
+                                        {visit.modalityType === "virtual" ? (
+                                          <Icons.Video className="w-3.5 h-3.5 text-violet-600" />
+                                        ) : (
+                                          <Icons.MapPin className="w-3.5 h-3.5 text-emerald-600" />
+                                        )}
+                                        {visit.modality[lang]}
+                                      </span>
+                                      <span className="inline-flex items-center text-xs font-bold text-slate-900 bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-md">
+                                        {visit.priceDisplay[lang]}
+                                      </span>
+                                    </div>
+
+                                    <h3 className="text-base sm:text-lg font-bold text-slate-900">
+                                      {visit.title[lang]}
+                                    </h3>
+
+                                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                      {visit.summary[lang]}
+                                    </p>
+                                  </div>
+
+                                  <div className="flex sm:flex-col items-stretch sm:items-end justify-between gap-2 shrink-0">
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        setSelectedVisitId(visit.id);
+                                        setExpandedPrepId(visit.id);
+                                        setStep(2);
+                                      }}
+                                      className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all shadow-sm ${
+                                        isSelected
+                                          ? "bg-sky-600 hover:bg-sky-700 text-white"
+                                          : "bg-slate-900 hover:bg-slate-800 text-white"
+                                      }`}
+                                    >
+                                      {isSelected ? t.wizard.selectedVisitBtn : t.wizard.selectVisitBtn} →
+                                    </button>
+                                  </div>
+                                </div>
+
+                                {/* Expandable Orthopedic Prep Instructions */}
+                                <div className="mt-3.5 pt-3 border-t border-slate-200/70">
+                                  <button
+                                    type="button"
+                                    aria-expanded={isPrepOpen}
+                                    aria-controls={prepRegionId}
+                                    onClick={() =>
+                                      setExpandedPrepId(isPrepOpen ? null : visit.id)
+                                    }
+                                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-sky-700 hover:text-sky-900"
+                                  >
+                                    <Icons.Info className="w-3.5 h-3.5" />
+                                    <span>
+                                      {isPrepOpen ? t.wizard.prepToggleHide : t.wizard.prepToggleShow}
+                                    </span>
+                                    <Icons.ChevronDown
+                                      className={`w-3.5 h-3.5 transition-transform ${
+                                        isPrepOpen ? "rotate-180" : ""
+                                      }`}
+                                    />
+                                  </button>
+
+                                  {isPrepOpen && (
+                                    <div
+                                      id={prepRegionId}
+                                      className="mt-2.5 p-3.5 rounded-xl bg-amber-50/70 border border-amber-200/80 text-xs text-slate-800 space-y-2"
+                                    >
+                                      <div className="font-bold text-amber-950">
+                                        📋 {t.wizard.prepHeader}
+                                      </div>
+                                      <p className="text-amber-900 font-medium">
+                                        {visit.prepInstructions[lang]}
+                                      </p>
+                                      <ul className="space-y-1 pl-4 list-disc text-slate-700">
+                                        {visit.prepChecklist[lang].map((item, idx) => (
+                                          <li key={idx}>{item}</li>
+                                        ))}
+                                      </ul>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </section>
+                    )}
+
+                    {/* STEP 2: Interactive Monthly Calendar + Morning/Afternoon Time Slot Pills */}
+                    {step === 2 && (
+                      <section aria-labelledby="step2-heading" className="p-5 sm:p-7 space-y-6">
+                        <div className="flex flex-wrap items-center justify-between gap-3">
+                          <div>
+                            <h2 id="step2-heading" className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+                              {t.wizard.step2Title}
+                            </h2>
+                            <p className="text-sm text-slate-600 mt-0.5">
+                              {t.wizard.step2Subtitle}
+                            </p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setStep(1)}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200"
+                          >
+                            <Icons.ChevronLeft className="w-3.5 h-3.5" />
+                            <span>{t.wizard.backToStep1}</span>
+                          </button>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+                          {/* Monthly Calendar Column */}
+                          <div className="md:col-span-6 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                            <div className="flex items-center justify-between mb-3">
+                              <h3 className="text-sm font-bold text-slate-900">
+                                {t.months[calMonth]} {calYear}
+                              </h3>
+                              <div className="flex items-center gap-1">
+                                <button
+                                  type="button"
+                                  onClick={handlePrevMonth}
+                                  aria-label={lang === "es" ? "Mes anterior" : "Previous month"}
+                                  className="p-1.5 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-100"
+                                >
+                                  <Icons.ChevronLeft className="w-4 h-4" />
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={handleNextMonth}
+                                  aria-label={lang === "es" ? "Mes siguiente" : "Next month"}
+                                  className="p-1.5 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-100"
+                                >
+                                  <Icons.ChevronRight className="w-4 h-4" />
+                                </button>
+                              </div>
+                            </div>
+
+                            <div className="grid grid-cols-7 gap-1 text-center text-[11px] font-bold text-slate-500 pb-2">
+                              {t.weekdaysShort.map((wd) => (
+                                <div key={wd}>{wd}</div>
+                              ))}
+                            </div>
+
+                            <div className="grid grid-cols-7 gap-1">
+                              {monthCells.map((cell, idx) => {
+                                if (!cell) {
+                                  return <div key={`empty-${idx}`} className="h-9" />;
+                                }
+                                const isSelected = selectedDateIso === cell.iso;
+                                return (
+                                  <button
+                                    key={cell.iso}
+                                    type="button"
+                                    disabled={!cell.available}
+                                    onClick={() => setSelectedDateIso(cell.iso)}
+                                    aria-pressed={isSelected}
+                                    className={`h-9 rounded-lg text-xs font-semibold transition-all flex items-center justify-center ${
+                                      isSelected
+                                        ? "bg-sky-600 text-white shadow-sm font-bold"
+                                        : cell.available
+                                        ? "bg-white text-slate-800 border border-slate-200/80 hover:border-sky-400 hover:bg-sky-50"
+                                        : "text-slate-300 bg-slate-100/60 cursor-not-allowed line-through"
+                                    }`}
+                                  >
+                                    {cell.day}
+                                  </button>
+                                );
+                              })}
+                            </div>
+
+                            <p className="mt-3 text-[11px] text-slate-500 leading-snug">
+                              🗓 {t.wizard.calendarHint}
+                            </p>
+                          </div>
+
+                          {/* Morning & Afternoon Time Slot Pills Column */}
+                          <div className="md:col-span-6 space-y-5">
+                            <div>
+                              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5 mb-2.5">
+                                <span aria-hidden="true">☀️</span>
+                                <span>{t.wizard.morningHeader}</span>
+                              </h3>
+                              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                                {clinicData.timeSlots.morning.map((slot) => {
+                                  const isSelected = selectedSlotId === slot.id;
+                                  return (
+                                    <button
+                                      key={slot.id}
+                                      type="button"
+                                      disabled={!slot.available}
+                                      onClick={() => setSelectedSlotId(slot.id)}
+                                      aria-pressed={isSelected}
+                                      className={`px-3 py-2.5 rounded-xl text-xs font-semibold border transition-all flex flex-col items-center justify-center ${
+                                        isSelected
+                                          ? "bg-sky-600 text-white border-sky-600 shadow-sm ring-2 ring-sky-600/20"
+                                          : slot.available
+                                          ? "bg-white text-slate-800 border-slate-200 hover:border-sky-400 hover:bg-sky-50/50"
+                                          : "bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed line-through"
+                                      }`}
+                                    >
+                                      <span>{slot.label}</span>
+                                      {slot.tag && slot.available && (
+                                        <span
+                                          className={`text-[10px] mt-0.5 ${
+                                            isSelected ? "text-sky-100" : "text-sky-600"
+                                          }`}
+                                        >
+                                          {slot.tag[lang]}
+                                        </span>
+                                      )}
+                                      {!slot.available && (
+                                        <span className="text-[10px] mt-0.5 no-underline">
+                                          {t.wizard.bookedLabel}
+                                        </span>
+                                      )}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            </div>
+
+                            <div>
+                              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5 mb-2.5">
+                                <span aria-hidden="true">🌤️</span>
+                                <span>{t.wizard.afternoonHeader}</span>
+                              </h3>
+                              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                                {clinicData.timeSlots.afternoon.map((slot) => {
+                                  const isSelected = selectedSlotId === slot.id;
+                                  return (
+                                    <button
+                                      key={slot.id}
+                                      type="button"
+                                      disabled={!slot.available}
+                                      onClick={() => setSelectedSlotId(slot.id)}
+                                      aria-pressed={isSelected}
+                                      className={`px-3 py-2.5 rounded-xl text-xs font-semibold border transition-all flex flex-col items-center justify-center ${
+                                        isSelected
+                                          ? "bg-sky-600 text-white border-sky-600 shadow-sm ring-2 ring-sky-600/20"
+                                          : slot.available
+                                          ? "bg-white text-slate-800 border-slate-200 hover:border-sky-400 hover:bg-sky-50/50"
+                                          : "bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed line-through"
+                                      }`}
+                                    >
+                                      <span>{slot.label}</span>
+                                      {slot.tag && slot.available && (
+                                        <span
+                                          className={`text-[10px] mt-0.5 ${
+                                            isSelected ? "text-sky-100" : "text-sky-600"
+                                          }`}
+                                        >
+                                          {slot.tag[lang]}
+                                        </span>
+                                      )}
+                                      {!slot.available && (
+                                        <span className="text-[10px] mt-0.5 no-underline">
+                                          {t.wizard.bookedLabel}
+                                        </span>
+                                      )}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-sky-50/60 p-4 rounded-xl">
+                          <div className="text-xs sm:text-sm text-slate-800">
+                            <span className="font-medium text-slate-500">{t.wizard.selectedSlotBanner} </span>
+                            <span className="font-bold text-slate-900">
+                              {formattedSelectedDate} • {selectedSlot.label}
+                            </span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setStep(3)}
+                            className="px-5 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-semibold text-sm shadow-sm transition-colors"
+                          >
+                            {t.wizard.continueToIntakeBtn} →
+                          </button>
+                        </div>
+                      </section>
+                    )}
+
+                    {/* STEP 3: Orthopedic Patient Intake Form */}
+                    {step === 3 && (
+                      <section aria-labelledby="step3-heading" className="p-5 sm:p-7 space-y-6">
+                        <div className="flex flex-wrap items-start justify-between gap-3 border-b border-slate-200 pb-4">
+                          <div>
+                            <h2 id="step3-heading" className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+                              {t.wizard.step3Title}
+                            </h2>
+                            <p className="text-sm text-slate-600 mt-0.5">
+                              {t.wizard.step3Subtitle}
+                            </p>
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={handleAutoFill}
+                              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-950 border border-amber-300 text-xs font-bold shadow-sm transition-all"
+                            >
+                              <span>{t.wizard.autoFillBtn}</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setStep(2)}
+                              className="inline-flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200"
+                            >
+                              <Icons.ChevronLeft className="w-3.5 h-3.5" />
+                              <span>{t.wizard.backToStep2}</span>
+                            </button>
+                          </div>
+                        </div>
+
+                        <form
+                          ref={formRef}
+                          action="#confirm-booking"
+                          method="POST"
+                          noValidate
+                          onSubmit={handleIntakeSubmit}
+                          className="space-y-6"
+                        >
+                          <fieldset className="space-y-4">
+                            <legend className="text-xs font-bold uppercase tracking-wider text-sky-800 bg-sky-50 px-3 py-1 rounded-md border border-sky-200">
+                              {t.wizard.contactLegend}
+                            </legend>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                              <div className="sm:col-span-2">
+                                <label
+                                  htmlFor="patient-full-name"
+                                  className="block text-xs font-bold text-slate-800 mb-0.5"
+                                >
+                                  {t.wizard.fullNameLabel} <span className="text-rose-600">*</span>
+                                </label>
+                                <span id="full-name-hint" className="block text-[11px] text-slate-500 mb-1.5">
+                                  {t.wizard.fullNameHint}
+                                </span>
+                                <input
+                                  id="patient-full-name"
+                                  name="full_name"
+                                  type="text"
+                                  required
+                                  minLength={2}
+                                  autoComplete="name"
+                                  enterKeyHint="next"
+                                  aria-describedby="full-name-hint"
+                                  value={patientForm.fullName}
+                                  onChange={(e) => {
+                                    setPatientForm({ ...patientForm, fullName: e.target.value });
+                                    syncInputAriaAndFallback(e.target, "input");
+                                  }}
+                                  onBlur={(e) => syncInputAriaAndFallback(e.target, "blur")}
+                                  placeholder="Mateo Rivera"
+                                  className="ortho-input w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-base text-slate-900 bg-white focus:border-sky-600"
+                                />
+                              </div>
+
+                              <div>
+                                <label
+                                  htmlFor="patient-email"
+                                  className="block text-xs font-bold text-slate-800 mb-0.5"
+                                >
+                                  {t.wizard.emailLabel} <span className="text-rose-600">*</span>
+                                </label>
+                                <span id="email-hint" className="block text-[11px] text-slate-500 mb-1.5">
+                                  {t.wizard.emailHint}
+                                </span>
+                                <input
+                                  id="patient-email"
+                                  name="email"
+                                  type="email"
+                                  required
+                                  autoComplete="email"
+                                  autoCorrect="off"
+                                  autoCapitalize="off"
+                                  spellCheck="false"
+                                  enterKeyHint="next"
+                                  aria-describedby="email-hint"
+                                  aria-errormessage="email-error-msg"
+                                  value={patientForm.email}
+                                  onChange={(e) => {
+                                    setPatientForm({ ...patientForm, email: e.target.value });
+                                    syncInputAriaAndFallback(e.target, "input");
+                                  }}
+                                  onBlur={(e) => syncInputAriaAndFallback(e.target, "blur")}
+                                  placeholder="mateo.rivera@example.com"
+                                  className="ortho-input w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-base text-slate-900 bg-white focus:border-sky-600"
+                                />
+                                <div
+                                  id="email-error-msg"
+                                  className="ortho-error-msg items-center gap-1.5 text-xs text-rose-600 font-medium mt-1"
+                                >
+                                  <span aria-hidden="true">❌</span>
+                                  <span>{t.wizard.emailError}</span>
+                                </div>
+                              </div>
+
+                              <div>
+                                <label
+                                  htmlFor="patient-phone"
+                                  className="block text-xs font-bold text-slate-800 mb-0.5"
+                                >
+                                  {t.wizard.phoneLabel} <span className="text-rose-600">*</span>
+                                </label>
+                                <span id="phone-hint" className="block text-[11px] text-slate-500 mb-1.5">
+                                  {t.wizard.phoneHint}
+                                </span>
+                                <input
+                                  id="patient-phone"
+                                  name="phone"
+                                  type="tel"
+                                  required
+                                  inputMode="tel"
+                                  autoComplete="tel"
+                                  enterKeyHint="next"
+                                  pattern="[\d\+\-\(\)\s]{7,20}"
+                                  aria-describedby="phone-hint"
+                                  aria-errormessage="phone-error-msg"
+                                  value={patientForm.phone}
+                                  onChange={(e) => {
+                                    setPatientForm({ ...patientForm, phone: e.target.value });
+                                    syncInputAriaAndFallback(e.target, "input");
+                                  }}
+                                  onBlur={(e) => syncInputAriaAndFallback(e.target, "blur")}
+                                  placeholder="(713) 555-0148"
+                                  className="ortho-input w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-base text-slate-900 bg-white focus:border-sky-600"
+                                />
+                                <div
+                                  id="phone-error-msg"
+                                  className="ortho-error-msg items-center gap-1.5 text-xs text-rose-600 font-medium mt-1"
+                                >
+                                  <span aria-hidden="true">❌</span>
+                                  <span>{t.wizard.phoneError}</span>
+                                </div>
+                              </div>
+
+                              <div>
+                                <label
+                                  htmlFor="patient-insurance"
+                                  className="block text-xs font-bold text-slate-800 mb-1.5"
+                                >
+                                  {t.wizard.insuranceLabel}
+                                </label>
+                                <select
+                                  id="patient-insurance"
+                                  name="insurance_id"
+                                  value={patientForm.insuranceId}
+                                  onChange={(e) =>
+                                    setPatientForm({ ...patientForm, insuranceId: e.target.value })
+                                  }
+                                  className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-base text-slate-900 bg-white focus:border-sky-600"
+                                >
+                                  {clinicData.insurances.map((ins) => (
+                                    <option key={ins.id} value={ins.id}>
+                                      {ins.label[lang]} ({ins.badge[lang]})
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+
+                              <div>
+                                <label
+                                  htmlFor="patient-member-id"
+                                  className="block text-xs font-bold text-slate-800 mb-1.5"
+                                >
+                                  {t.wizard.memberIdLabel}
+                                </label>
+                                <input
+                                  id="patient-member-id"
+                                  name="member_id"
+                                  type="text"
+                                  autoCorrect="off"
+                                  autoCapitalize="characters"
+                                  spellCheck="false"
+                                  enterKeyHint="next"
+                                  value={patientForm.memberId}
+                                  onChange={(e) =>
+                                    setPatientForm({ ...patientForm, memberId: e.target.value })
+                                  }
+                                  placeholder={t.wizard.memberIdPlaceholder}
+                                  className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-base text-slate-900 bg-white focus:border-sky-600"
+                                />
+                              </div>
+                            </div>
+                          </fieldset>
+
+                          <fieldset className="space-y-4 pt-2 border-t border-slate-200">
+                            <legend className="text-xs font-bold uppercase tracking-wider text-sky-800 bg-sky-50 px-3 py-1 rounded-md border border-sky-200">
+                              {t.wizard.orthoLegend}
+                            </legend>
+
+                            <div>
+                              <div
+                                id="injured-joint-group-label"
+                                className="block text-xs font-bold text-slate-800 mb-2"
+                              >
+                                {t.wizard.injuredJointLabel} <span className="text-rose-600">*</span>
+                              </div>
+                              <div
+                                role="group"
+                                aria-labelledby="injured-joint-group-label"
+                                className="grid grid-cols-2 sm:grid-cols-3 gap-2.5"
+                              >
+                                {clinicData.injuredJoints.map((joint) => {
+                                  const isSelected = patientForm.injuredJoint === joint.id;
+                                  return (
+                                    <button
+                                      key={joint.id}
+                                      type="button"
+                                      aria-pressed={isSelected}
+                                      onClick={() =>
+                                        setPatientForm({ ...patientForm, injuredJoint: joint.id })
+                                      }
+                                      className={`p-3 rounded-xl border text-left transition-all flex items-start gap-2.5 ${
+                                        isSelected
+                                          ? "border-sky-600 bg-sky-50/90 text-sky-950 shadow-sm ring-2 ring-sky-600/20"
+                                          : "border-slate-200 bg-white hover:border-slate-300 text-slate-800"
+                                      }`}
+                                    >
+                                      <span className="text-xl shrink-0" aria-hidden="true">
+                                        {joint.icon}
+                                      </span>
+                                      <div className="min-w-0">
+                                        <div className="text-xs font-bold leading-snug">
+                                          {joint.bilingualTag}
+                                        </div>
+                                        <div className="text-[11px] text-slate-500 truncate mt-0.5">
+                                          {joint.commonIssues[lang]}
+                                        </div>
+                                      </div>
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            </div>
+
+                            <div>
+                              <span className="block text-xs font-bold text-slate-800 mb-1.5">
+                                {t.wizard.sideLabel}
+                              </span>
+                              <div className="inline-flex flex-wrap gap-3">
+                                {[
+                                  { val: "Right", label: t.wizard.sideRight },
+                                  { val: "Left", label: t.wizard.sideLeft },
+                                  { val: "Bilateral", label: t.wizard.sideBilateral }
+                                ].map((sideOpt) => (
+                                  <label
+                                    key={sideOpt.val}
+                                    htmlFor={`side-${sideOpt.val}`}
+                                    className="inline-flex items-center gap-2 text-xs font-semibold text-slate-800 bg-slate-50 px-3 py-2 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-100"
+                                  >
+                                    <input
+                                      id={`side-${sideOpt.val}`}
+                                      type="radio"
+                                      name="injury_side"
+                                      value={sideOpt.val}
+                                      checked={patientForm.injurySide === sideOpt.val}
+                                      onChange={(e) =>
+                                        setPatientForm({ ...patientForm, injurySide: e.target.value })
+                                      }
+                                    />
+                                    <span>{sideOpt.label}</span>
+                                  </label>
+                                ))}
+                              </div>
+                            </div>
+
+                            <div>
+                              <label
+                                htmlFor="patient-clinical-notes"
+                                className="block text-xs font-bold text-slate-800 mb-1.5"
+                              >
+                                {t.wizard.notesLabel}
+                              </label>
+                              <textarea
+                                id="patient-clinical-notes"
+                                name="clinical_notes"
+                                rows={3}
+                                value={patientForm.clinicalNotes}
+                                onChange={(e) =>
+                                  setPatientForm({ ...patientForm, clinicalNotes: e.target.value })
+                                }
+                                placeholder={t.wizard.notesPlaceholder}
+                                className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-base text-slate-900 bg-white focus:border-sky-600"
+                              />
+                            </div>
+
+                            <div className="space-y-3 pt-1">
+                              <label
+                                htmlFor="check-has-imaging"
+                                className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer hover:bg-slate-100/80 transition-colors"
+                              >
+                                <input
+                                  id="check-has-imaging"
+                                  name="has_imaging"
+                                  type="checkbox"
+                                  checked={patientForm.hasImaging}
+                                  onChange={(e) =>
+                                    setPatientForm({ ...patientForm, hasImaging: e.target.checked })
+                                  }
+                                  className="mt-0.5 w-4 h-4 rounded"
+                                />
+                                <div className="text-xs">
+                                  <span className="font-bold text-slate-900 block">
+                                    💿 {t.wizard.hasImagingCheckbox}
+                                  </span>
+                                  <span className="text-slate-600 mt-0.5 block">
+                                    {t.wizard.hasImagingSubtext}
+                                  </span>
+                                </div>
+                              </label>
+
+                              <label
+                                htmlFor="check-sms-reminders"
+                                className="flex items-start gap-3 p-3.5 rounded-xl bg-emerald-50/60 border border-emerald-200 cursor-pointer hover:bg-emerald-50 transition-colors"
+                              >
+                                <input
+                                  id="check-sms-reminders"
+                                  name="sms_opt_in"
+                                  type="checkbox"
+                                  checked={patientForm.smsOptIn}
+                                  onChange={(e) =>
+                                    setPatientForm({ ...patientForm, smsOptIn: e.target.checked })
+                                  }
+                                  className="mt-0.5 w-4 h-4 rounded"
+                                />
+                                <div className="text-xs">
+                                  <span className="font-bold text-emerald-950 block">
+                                    💬 {t.wizard.smsCheckbox}
+                                  </span>
+                                  <span className="text-emerald-800 mt-0.5 block">
+                                    {t.wizard.smsSubtext}
+                                  </span>
+                                </div>
+                              </label>
+                            </div>
+                          </fieldset>
+
+                          <div className="pt-4 border-t border-slate-200 flex items-center justify-end">
+                            <button
+                              type="submit"
+                              disabled={isSubmitting}
+                              enterKeyHint="done"
+                              className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-sky-600 hover:bg-sky-700 disabled:bg-sky-400 text-white font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2"
+                            >
+                              <Icons.CheckCircle className="w-4 h-4" />
+                              <span>{t.wizard.confirmBookingBtn}</span>
+                            </button>
+                          </div>
+                        </form>
+                      </section>
+                    )}
+
+                    {/* STEP 4: Confirmation Screen */}
+                    {step === 4 && (
+                      <section aria-labelledby="step4-heading" className="p-5 sm:p-7 space-y-6">
+                        <div className="bg-gradient-to-br from-emerald-50 via-sky-50 to-white rounded-2xl border border-emerald-200 p-5 sm:p-6">
+                          <div className="flex flex-wrap items-center justify-between gap-3">
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-600 text-white text-xs font-bold">
+                              <Icons.CheckCircle className="w-4 h-4" />
+                              {t.wizard.step4Badge}
+                            </span>
+                            <div className="text-xs font-mono bg-white px-3 py-1.5 rounded-lg border border-emerald-300 text-slate-800">
+                              <span className="text-slate-500">{t.wizard.bookingRefLabel}: </span>
+                              <strong className="text-emerald-800 font-bold">#MON-4092</strong>
+                            </div>
+                          </div>
+
+                          <h2 id="step4-heading" className="mt-3 text-xl sm:text-2xl font-bold text-slate-900">
+                            {t.wizard.step4Title}
+                          </h2>
+                          <p className="text-sm text-slate-600 mt-1">
+                            {t.wizard.step4Subtitle}
+                          </p>
+
+                          <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3 bg-white p-4 rounded-xl border border-slate-200/80 text-xs">
+                            <div>
+                              <div className="text-slate-400 font-medium">{t.leftPanel.visitTypeLabel}</div>
+                              <div className="font-bold text-slate-900 mt-0.5">
+                                {selectedVisit.title[lang]}
+                              </div>
+                              <div className="text-sky-700 font-medium mt-0.5">
+                                {selectedJointObj.icon} {selectedJointObj.bilingualTag} ({sideDisplayLabel})
+                              </div>
+                            </div>
+                            <div>
+                              <div className="text-slate-400 font-medium">{t.leftPanel.dateAndTimeLabel}</div>
+                              <div className="font-bold text-slate-900 mt-0.5">
+                                {formattedSelectedDate}
+                              </div>
+                              <div className="text-emerald-700 font-semibold mt-0.5">
+                                {selectedSlot.label} CT ({selectedVisit.durationMinutes} min)
+                              </div>
+                            </div>
+                            <div>
+                              <div className="text-slate-400 font-medium">{t.leftPanel.clinicHeading}</div>
+                              <div className="font-bold text-slate-900 mt-0.5">
+                                {doctor.clinic.name}
+                              </div>
+                              <div className="text-slate-600 mt-0.5">
+                                {doctor.clinic.addressLine1}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="mt-4 flex flex-wrap items-center gap-2.5">
+                            <button
+                              type="button"
+                              onClick={handleDownloadIcs}
+                              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-sm transition-colors"
+                            >
+                              <Icons.Calendar className="w-4 h-4 text-sky-400" />
+                              <span>{t.wizard.addToGoogleCal}</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={handleDownloadIcs}
+                              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 text-xs font-semibold transition-colors"
+                            >
+                              <span>📥 {t.wizard.downloadIcs}</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => window.print()}
+                              className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-xs font-semibold transition-colors"
+                            >
+                              <span>🖨️ {t.wizard.printSummary}</span>
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="space-y-3">
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <div>
+                              <h3 className="text-sm font-bold text-slate-900">
+                                📱 {t.wizard.iphonePreviewTitle}
+                              </h3>
+                              <p className="text-xs text-slate-500">
+                                {t.wizard.iphonePreviewSubtitle}
+                              </p>
+                            </div>
+                            <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+                              <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                              {lang === "es" ? "Idioma Activo: Español" : "Active Language: English"}
+                            </span>
+                          </div>
+
+                          <div className="max-w-md mx-auto bg-slate-900 rounded-[2.25rem] p-3 shadow-xl border-4 border-slate-800">
+                            <div className="w-28 h-4 bg-black rounded-full mx-auto mb-2.5 flex items-center justify-end px-2">
+                              <span className="w-2 h-2 rounded-full bg-emerald-500/80" />
+                            </div>
+
+                            <div className="bg-[#efeae2] rounded-[1.75rem] overflow-hidden text-slate-900">
+                              <div className="bg-[#075e54] text-white px-4 py-3 flex items-center gap-3">
+                                <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center font-bold text-xs shrink-0">
+                                  LM
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                  <div className="text-xs font-bold truncate flex items-center gap-1">
+                                    <span>Dr. Luis Montes, MD, FAAOS</span>
+                                    <span aria-hidden="true" className="text-emerald-300">✔</span>
+                                  </div>
+                                  <div className="text-[10px] text-emerald-100 truncate">
+                                    {t.wizard.iphoneHeaderStatus}
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="p-3.5 space-y-3 text-xs">
+                                <div className="bg-white rounded-2xl rounded-tl-sm p-3 shadow-sm border border-slate-200/70 whitespace-pre-line leading-relaxed text-slate-800">
+                                  {t.wizard.iphoneMessageBody({
+                                    patientName: patientForm.fullName || "Mateo Rivera",
+                                    dateStr: formattedSelectedDate,
+                                    timeStr: selectedSlot.label,
+                                    visitTitle: selectedVisit.title[lang],
+                                    jointLabel: `${selectedJointObj.label[lang]} - ${sideDisplayLabel}`,
+                                    prepText: selectedVisit.prepInstructions[lang]
+                                  })}
+                                  <div className="text-[10px] text-slate-400 text-right mt-1">
+                                    Just now • Automated Clinic SMS/WhatsApp
+                                  </div>
+                                </div>
+
+                                <div className="bg-[#dcf8c6] rounded-2xl rounded-tr-sm p-2.5 shadow-sm border border-emerald-200/80 ml-12 text-slate-900">
+                                  <div className="font-medium">{t.wizard.iphonePatientReply}</div>
+                                  <div className="text-[10px] text-emerald-700 text-right mt-0.5">
+                                    ✓✓
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="pt-4 border-t border-slate-200 flex items-center justify-between">
+                          <button
+                            type="button"
+                            onClick={() => setStep(3)}
+                            className="text-xs font-semibold text-slate-600 hover:text-slate-900 underline"
+                          >
+                            ← {lang === "es" ? "Editar datos del paciente" : "Edit patient details"}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setStep(1)}
+                            className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold transition-colors"
+                          >
+                            {t.wizard.bookAnotherBtn}
+                          </button>
+                        </div>
+                      </section>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+          </main>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<App />);
+  </script>
+</body>
+</html>

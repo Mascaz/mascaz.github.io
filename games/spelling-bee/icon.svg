@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FDE68A" />
+      <stop offset="100%" stop-color="#F59E0B" />
+    </linearGradient>
+    <linearGradient id="wingGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.95" />
+      <stop offset="100%" stop-color="#BAE6FD" stop-opacity="0.85" />
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="56" fill="url(#bgGrad)" />
+  <!-- Honeycomb Hexagon Border -->
+  <polygon points="128,24 218,76 218,180 128,232 38,180 38,76" fill="#FEF3C7" stroke="#D97706" stroke-width="8" stroke-linejoin="round" />
+  <!-- Wings -->
+  <ellipse cx="95" cy="96" rx="34" ry="22" transform="rotate(-25 95 96)" fill="url(#wingGrad)" stroke="#0284C7" stroke-width="5" />
+  <ellipse cx="161" cy="96" rx="34" ry="22" transform="rotate(25 161 96)" fill="url(#wingGrad)" stroke="#0284C7" stroke-width="5" />
+  <!-- Bee Body -->
+  <ellipse cx="128" cy="142" rx="54" ry="42" fill="#FBBF24" stroke="#1E293B" stroke-width="7" />
+  <!-- Stripes -->
+  <path d="M105,103 C102,128 102,156 105,181" stroke="#1E293B" stroke-width="14" stroke-linecap="round" fill="none" />
+  <path d="M135,101 C133,128 133,156 135,183" stroke="#1E293B" stroke-width="14" stroke-linecap="round" fill="none" />
+  <!-- Cute Face -->
+  <circle cx="156" cy="134" r="6" fill="#1E293B" />
+  <circle cx="158" cy="132" r="2" fill="#FFFFFF" />
+  <path d="M150,148 Q158,156 166,148" stroke="#1E293B" stroke-width="5" stroke-linecap="round" fill="none" />
+  <circle cx="146" cy="145" r="5" fill="#FB7185" opacity="0.7" />
+  <!-- Antennae -->
+  <path d="M148,104 Q158,82 170,84" stroke="#1E293B" stroke-width="5" stroke-linecap="round" fill="none" />
+  <circle cx="171" cy="84" r="5" fill="#1E293B" />
+  <!-- Stinger -->
+  <polygon points="74,136 56,142 74,148" fill="#1E293B" />
+</svg>

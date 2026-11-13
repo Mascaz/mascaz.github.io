@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1c0b36"/>
+      <stop offset="52%" stop-color="#110824"/>
+      <stop offset="100%" stop-color="#070510"/>
+    </linearGradient>
+    <radialGradient id="pinkGlow" cx="25%" cy="20%" r="65%">
+      <stop offset="0%" stop-color="#ff2e93" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#ff2e93" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="cyanGlow" cx="82%" cy="82%" r="60%">
+      <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="camBody" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ff5db1"/>
+      <stop offset="55%" stop-color="#e6147a"/>
+      <stop offset="100%" stop-color="#880846"/>
+    </linearGradient>
+    <linearGradient id="lensRing" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#67e8f9"/>
+      <stop offset="50%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
+    </linearGradient>
+    <linearGradient id="coinGold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="55%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Base Arcade Cabinet Dark Background -->
+  <rect width="256" height="256" rx="56" fill="url(#bg)"/>
+  <rect width="256" height="256" rx="56" fill="url(#pinkGlow)"/>
+  <rect width="256" height="256" rx="56" fill="url(#cyanGlow)"/>
+
+  <!-- Neon Outer Arcade Bezel -->
+  <rect x="14" y="14" width="228" height="228" rx="44" fill="none" stroke="#ff2e93" stroke-width="3" stroke-opacity="0.55"/>
+
+  <!-- Tilted 3-Frame Glossy Photo-Booth Film Strip Emerging Behind Camera -->
+  <g transform="translate(152 38) rotate(13)">
+    <rect x="0" y="0" width="64" height="154" rx="10" fill="#f8f5ff" stroke="#ffffff" stroke-width="2"/>
+    <rect x="7" y="8" width="50" height="40" rx="5" fill="#1e1b4b"/>
+    <circle cx="32" cy="28" r="11" fill="#fbbf24"/>
+    <rect x="7" y="55" width="50" height="40" rx="5" fill="#0f172a"/>
+    <polygon points="24,65 44,75 24,85" fill="#22d3ee"/>
+    <rect x="7" y="102" width="50" height="40" rx="5" fill="#3b0764"/>
+    <circle cx="32" cy="122" r="11" fill="#ff2e93"/>
+  </g>
+
+  <!-- Glossy Arcade Booth Camera Housing -->
+  <g transform="translate(30 74)">
+    <!-- Top Flash Prism -->
+    <rect x="22" y="-16" width="52" height="20" rx="7" fill="#2b224b" stroke="#67e8f9" stroke-width="2.5"/>
+    <rect x="30" y="-11" width="36" height="10" rx="4" fill="#fef9c3"/>
+
+    <!-- Main Pink Acrylic Camera Body -->
+    <rect x="0" y="0" width="154" height="116" rx="26" fill="url(#camBody)" stroke="#fbcfe8" stroke-width="2.5"/>
+    <!-- Top Specular Gloss Highlight -->
+    <rect x="10" y="7" width="134" height="24" rx="12" fill="#ffffff" fill-opacity="0.28"/>
+
+    <!-- Camera Lens Barrel -->
+    <circle cx="77" cy="60" r="40" fill="#090514" stroke="url(#lensRing)" stroke-width="6"/>
+    <circle cx="77" cy="60" r="26" fill="#130d2e" stroke="#22d3ee" stroke-width="2" stroke-opacity="0.7"/>
+    <!-- Clapperboard / Play Glint Inside Lens -->
+    <polygon points="70,47 91,60 70,73" fill="#67e8f9"/>
+    <circle cx="65" cy="46" r="6" fill="#ffffff" fill-opacity="0.75"/>
+
+    <!-- Xenon Flash Sparkle -->
+    <path d="M128 20 L132 30 L142 34 L132 38 L128 48 L124 38 L114 34 L124 30 Z" fill="#fef08a"/>
+  </g>
+
+  <!-- Arcade Gold Token Badge (Bottom Right) -->
+  <g transform="translate(168 168)">
+    <circle cx="30" cy="30" r="26" fill="url(#coinGold)" stroke="#fef9c3" stroke-width="2.5"/>
+    <circle cx="30" cy="30" r="19" fill="none" stroke="#92400e" stroke-width="2" stroke-dasharray="4 3"/>
+    <rect x="27" y="18" width="6" height="24" rx="3" fill="#78350f"/>
+  </g>
+</svg>

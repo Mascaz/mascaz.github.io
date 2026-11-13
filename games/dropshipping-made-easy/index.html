@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dropshipping Made Easy | Plain-English AI Launchpad & Profit Simulator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+
+:root {
+  --brand-accent-light: #059669;
+  --brand-accent-dark: #34d399;
+  --accent-color: var(--brand-accent-light);
+
+  @media (prefers-color-scheme: dark) {
+    --accent-color: var(--brand-accent-dark);
+  }
+
+  @supports (color: light-dark(white, black)) {
+    --accent-color: light-dark(var(--brand-accent-light), var(--brand-accent-dark));
+  }
+
+  /* MANDATORY: Automatically adapt native UI to user system preferences */
+  color-scheme: light dark;
+  accent-color: var(--accent-color);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100dvh;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+/* Target specific short heading elements for balanced wrapping */
+h1,
+h2,
+h3,
+h4 {
+  text-wrap: balance;
+}
+
+/* Apply to multi-line text blocks to prevent orphaned words */
+p,
+blockquote,
+li,
+.pretty-text {
+  text-wrap: pretty;
+}
+
+/* Fluid responsive hero heading with max <= 2.5x min for WCAG 1.4.4 zoom accessibility */
+.hero-fluid-title {
+  font-size: clamp(1.75rem, 1.2rem + 2.5vw, 3.25rem);
+  line-height: 1.12;
+}
+
+/* Natural interactions: hover, press, and keyboard focus-visible feedback */
+:where(button) {
+  transition: box-shadow 150ms ease-out, scale 150ms ease-out, background-color 150ms ease-out;
+}
+
+button:active:not(:disabled) {
+  scale: 0.97;
+}
+
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid CanvasText;
+  outline-offset: 3px;
+}
+
+/* Swipeable horizontal step/niche scroller on mobile */
+.snap-scroller {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.snap-scroller > * {
+  scroll-snap-align: start;
+}
+
+/* Clean Print / PDF Blueprint Styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #ffffff !important;
+    color: #111827 !important;
+  }
+  .print-card {
+    break-inside: avoid;
+    border: 1px solid #d1d5db !important;
+    box-shadow: none !important;
+  }
+}
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 antialiased">
+  <div id="root"></div>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

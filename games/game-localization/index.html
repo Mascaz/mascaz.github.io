@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game-to-Spanish Localization Pipeline — Control-Tag Safe Translation Workbench</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at 15% 0%, #1e1b4b 0%, #090d16 65%);
+      color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+      padding: 18px;
+    }
+    .shell { max-width: 1120px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+    .header {
+      padding: 14px 18px; border-radius: 20px;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.16);
+      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px;
+    }
+    .lang-toggle {
+      display: inline-flex; gap: 6px; padding: 4px; border-radius: 999px; background: rgba(0,0,0,0.38);
+    }
+    .lang-btn {
+      border: none; background: transparent; color: #94a3b8;
+      padding: 7px 14px; border-radius: 999px; font-size: 12px; font-weight: 700; cursor: pointer;
+    }
+    .lang-btn.active { background: #fbbf24; color: #0f172a; }
+
+    .grid-2 { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 16px; }
+    @media (max-width: 860px) { .grid-2 { grid-template-columns: 1fr; } }
+
+    .card {
+      background: rgba(15, 23, 42, 0.78);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 22px; padding: 16px;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th, td {
+      padding: 9px 10px; border-bottom: 1px solid rgba(255,255,255,0.08); text-align: left; vertical-align: top;
+    }
+    th { color: #93c5fd; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
+    tr.row-item { cursor: pointer; transition: background 0.14s ease; }
+    tr.row-item:hover { background: rgba(255,255,255,0.05); }
+    tr.row-item.active { background: rgba(99, 102, 241, 0.22); }
+
+    .tag-token {
+      display: inline-block; padding: 1px 5px; border-radius: 5px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px;
+      background: rgba(56, 189, 248, 0.2); border: 1px solid rgba(56, 189, 248, 0.45); color: #bae6fd;
+    }
+    .status-ok { color: #34d399; font-weight: 700; font-size: 11px; }
+    .status-warn { color: #fbbf24; font-weight: 700; font-size: 11px; }
+
+    /* Live In-Engine Dialogue & UI Box Simulator */
+    .game-preview-stage {
+      height: 210px; border-radius: 18px; position: relative;
+      background: linear-gradient(160deg, #1e293b 0%, #0f172a 100%);
+      border: 2px solid rgba(255,255,255,0.2);
+      padding: 18px; display: flex; flex-direction: column; justify-content: flex-end;
+      overflow: hidden;
+    }
+    .dialogue-box {
+      background: rgba(9, 13, 24, 0.92);
+      border: 2px solid #fbbf24;
+      border-radius: 14px; padding: 14px 16px;
+      min-height: 92px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+      transition: transform 0.08s ease;
+    }
+    .dialogue-box.shake {
+      animation: shakeAnim 0.28s ease;
+    }
+    @keyframes shakeAnim {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
+    .speaker-pill {
+      display: inline-block; font-size: 11px; font-weight: 800;
+      padding: 2px 9px; border-radius: 6px; background: #fbbf24; color: #0f172a;
+      margin-bottom: 6px;
+    }
+    .typewriter-text { font-size: 15px; line-height: 1.5; color: #f8fafc; white-space: pre-line; }
+
+    .editor-area {
+      width: 100%; min-height: 68px; border-radius: 12px; padding: 10px;
+      background: #060911; border: 1px solid rgba(255,255,255,0.2);
+      color: #fef08a; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12.5px;
+    }
+    .btn-row { display: flex; flex-wrap: wrap; gap: 8px; }
+    .btn {
+      padding: 8px 13px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer;
+      background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.22); color: #fff;
+    }
+    .btn:hover { background: rgba(255,255,255,0.18); }
+    .qa-checks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .qa-box {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px; padding: 8px 10px; font-size: 11.5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="header">
+      <div>
+        <div style="font-size:11px;color:#93c5fd;font-weight:700;letter-spacing:0.06em">SPREADSHEET (.ODS / CSV / JSON) &rarr; ENGINE-SAFE SPANISH PIPELINE</div>
+        <h1 style="font-size:18px;margin-top:2px">General-Purpose Game Localization Pipeline (English &rarr; Español)</h1>
+      </div>
+      <div class="lang-toggle" role="group" aria-label="Preview Language">
+        <button type="button" class="lang-btn" id="btnLangEn">Preview: English</button>
+        <button type="button" class="lang-btn active" id="btnLangEs">Preview: Español</button>
+      </div>
+    </header>
+
+    <div class="grid-2">
+      <!-- Left: Multi-Sheet String Table with Automated Tag & Overflow QA -->
+      <div class="card">
+        <h2 style="font-size:14.5px">1. Structured String Table &amp; Automated Token QA</h2>
+        <p style="font-size:12.5px;line-height:1.55;color:#cbd5e1">
+          Ingests multi-sheet game localization tables (<code>.ods</code>, <code>.csv</code>, or <code>.json</code>), locks inline engine control codes (pause <code>%c</code>, camera shake <code>%ws</code>, line breaks <code>%n</code>, runtime variables <code>{player}</code>), enforces glossary terms, and validates Spanish text expansion (~20–28% longer than English) against UI box limits.
+        </p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>String Key</th>
+                <th>Source (EN)</th>
+                <th>Localized (ES)</th>
+                <th>QA</th>
+              </tr>
+            </thead>
+            <tbody id="stringRows"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Right: Live In-Game Control-Tag Playback & Custom String Tester -->
+      <div class="card">
+        <h2 style="font-size:14.5px">2. Live Engine Control-Tag &amp; Box-Fit Simulator</h2>
+        <div class="game-preview-stage">
+          <div style="position:absolute;top:12px;right:14px;font-size:11px;color:#94a3b8" id="activeKeyLabel">Key: HUD/Tutorial_Dash</div>
+          <div class="dialogue-box" id="dialogueBox">
+            <span class="speaker-pill" id="speakerName">SYSTEM</span>
+            <div class="typewriter-text" id="typewriterOut"></div>
+          </div>
+        </div>
+
+        <label style="font-size:12px;font-weight:600;color:#cbd5e1" for="liveEsInput">
+          Edit Localized Spanish String (Try removing a tag like <code>%ws</code> or <code>{player}</code> to test QA alerts!):
+        </label>
+        <textarea id="liveEsInput" class="editor-area"></textarea>
+
+        <div class="qa-checks">
+          <div class="qa-box">Control Tags: <div id="qaTags" class="status-ok">✓ 100% Matched</div></div>
+          <div class="qa-box">Variables: <div id="qaVars" class="status-ok">✓ Preserved</div></div>
+          <div class="qa-box">Box Expansion: <div id="qaLen" class="status-ok">✓ Fits UI Limit</div></div>
+        </div>
+
+        <div class="btn-row">
+          <button type="button" class="btn" id="btnReplayLine">&#9654; Replay Typewriter &amp; Tags</button>
+          <button type="button" class="btn" id="btnExportJson">&#11015; Export Clean JSON Bundle</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const SAMPLE_STRINGS = [
+      {
+        key: 'Scene_01/Bridge_Alert',
+        speakerEn: 'DISPATCH',
+        speakerEs: 'CENTRAL',
+        maxChars: 110,
+        en: 'Watch out, {player}! %c %wsThe north bridge is collapsing! %n Move to the safe zone now.',
+        es: '¡Cuidado, {player}! %c %ws¡El puente norte se está derrumbando! %n Avanza a la zona segura ahora.'
+      },
+      {
+        key: 'UI/Inventory_Unlock',
+        speakerEn: 'SYSTEM',
+        speakerEs: 'SISTEMA',
+        maxChars: 95,
+        en: 'You crafted {item_count}x Grapple Hook! %c Press [RB] to swing across gaps.',
+        es: '¡Fabricaste {item_count}x Gancho de Agarre! %c Pulsa [RB] para cruzar abismos.'
+      },
+      {
+        key: 'Dialog/Mechanic_Greeting',
+        speakerEn: 'ENGINEER',
+        speakerEs: 'INGENIERA',
+        maxChars: 115,
+        en: 'Hold on... %wsDid you hear that turbine? %c Something is draining the main generator.',
+        es: 'Espera un segundo... %ws¿Escuchaste esa turbina? %c Algo está drenando el generador principal.'
+      },
+      {
+        key: 'Menu/Save_Confirm',
+        speakerEn: 'CHECKPOINT',
+        speakerEs: 'PUNTO DE CONTROL',
+        maxChars: 90,
+        en: 'Progress saved! %n Do not power off your device while the indicator is flashing.',
+        es: '¡Progreso guardado! %n No apagues el dispositivo mientras el indicador esté parpadeando.'
+      },
+      {
+        key: 'Coop/Revive_Prompt',
+        speakerEn: 'TEAMMATE',
+        speakerEs: 'COMPAÑERO',
+        maxChars: 100,
+        en: "I'm down! %wsHold [E] for {seconds}s to get me back in the match!",
+        es: '¡Caí herido! %ws¡Mantén [E] durante {seconds}s para volver a levantarme!'
+      }
+    ];
+
+    let activeIdx = 0;
+    let previewLang = 'es';
+    let animTimer = null;
+
+    function highlightTokens(str) {
+      return str
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/(%ws|%c|%n|\{[a-z_]+\}|\[[A-Z]+\])/g, '<span class="tag-token">$1</span>');
+    }
+
+    function extractTokens(str, regex) {
+      return (str.match(regex) || []).sort().join('|');
+    }
+
+    function validateRow(row) {
+      const tagsOk = extractTokens(row.en, /%(?:ws|c|n)/g) === extractTokens(row.es, /%(?:ws|c|n)/g);
+      const varsOk = extractTokens(row.en, /\{[a-z_]+\}/g) === extractTokens(row.es, /\{[a-z_]+\}/g);
+      const cleanEs = row.es.replace(/%(?:ws|c|n)/g, '');
+      const lenOk = cleanEs.length <= row.maxChars;
+      return { tagsOk, varsOk, lenOk, cleanLen: cleanEs.length };
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('stringRows');
+      tbody.innerHTML = '';
+      SAMPLE_STRINGS.forEach((row, i) => {
+        const qa = validateRow(row);
+        const allOk = qa.tagsOk && qa.varsOk && qa.lenOk;
+        const tr = document.createElement('tr');
+        tr.className = `row-item ${i === activeIdx ? 'active' : ''}`;
+        tr.innerHTML = `
+          <td style="font-family:monospace;color:#cbd5e1">${row.key}</td>
+          <td>${highlightTokens(row.en)}</td>
+          <td>${highlightTokens(row.es)}</td>
+          <td><span class="${allOk ? 'status-ok' : 'status-warn'}">${allOk ? '✓ PASS' : '⚠ CHECK'}</span></td>
+        `;
+        tr.onclick = () => {
+          activeIdx = i;
+          document.getElementById('liveEsInput').value = row.es;
+          renderTable();
+          updateQA();
+          playDialogue();
+        };
+        tbody.appendChild(tr);
+      });
+    }
+
+    function updateQA() {
+      const row = SAMPLE_STRINGS[activeIdx];
+      const qa = validateRow(row);
+      const qT = document.getElementById('qaTags');
+      const qV = document.getElementById('qaVars');
+      const qL = document.getElementById('qaLen');
+
+      qT.className = qa.tagsOk ? 'status-ok' : 'status-warn';
+      qT.textContent = qa.tagsOk ? '✓ 100% Matched' : '⚠ Missing % tag!';
+
+      qV.className = qa.varsOk ? 'status-ok' : 'status-warn';
+      qV.textContent = qa.varsOk ? '✓ Preserved' : '⚠ {var} mismatch!';
+
+      qL.className = qa.lenOk ? 'status-ok' : 'status-warn';
+      qL.textContent = `${qa.lenOk ? '✓' : '⚠'} ${qa.cleanLen}/${row.maxChars} chars`;
+    }
+
+    function playDialogue() {
+      clearTimeout(animTimer);
+      const row = SAMPLE_STRINGS[activeIdx];
+      const raw = previewLang === 'es' ? row.es : row.en;
+      document.getElementById('activeKeyLabel').textContent = `Key: ${row.key}`;
+      document.getElementById('speakerName').textContent = previewLang === 'es' ? row.speakerEs : row.speakerEn;
+
+      const resolved = raw
+        .replace('{player}', 'Alex')
+        .replace('{item_count}', '2')
+        .replace('{seconds}', '3.0');
+
+      const outEl = document.getElementById('typewriterOut');
+      const boxEl = document.getElementById('dialogueBox');
+      outEl.textContent = '';
+
+      // Parse control tags (%c = 380ms beat pause, %ws = camera screen shake, %n = newline)
+      const tokens = [];
+      let i = 0;
+      while (i < resolved.length) {
+        if (resolved.startsWith('%ws', i)) { tokens.push({ type: 'shake' }); i += 3; }
+        else if (resolved.startsWith('%c', i)) { tokens.push({ type: 'pause' }); i += 2; }
+        else if (resolved.startsWith('%n', i)) { tokens.push({ type: 'char', ch: '\n' }); i += 2; }
+        else { tokens.push({ type: 'char', ch: resolved[i] }); i++; }
+      }
+
+      let idx = 0;
+      function step() {
+        if (idx >= tokens.length) return;
+        const tk = tokens[idx++];
+        if (tk.type === 'shake') {
+          boxEl.classList.remove('shake');
+          void boxEl.offsetWidth;
+          boxEl.classList.add('shake');
+          animTimer = setTimeout(step, 40);
+        } else if (tk.type === 'pause') {
+          animTimer = setTimeout(step, 360);
+        } else {
+          outEl.textContent += tk.ch;
+          animTimer = setTimeout(step, 20);
+        }
+      }
+      step();
+    }
+
+    document.getElementById('liveEsInput').addEventListener('input', (e) => {
+      SAMPLE_STRINGS[activeIdx].es = e.target.value;
+      renderTable();
+      updateQA();
+    });
+
+    document.getElementById('btnLangEn').onclick = () => {
+      previewLang = 'en';
+      document.getElementById('btnLangEn').classList.add('active');
+      document.getElementById('btnLangEs').classList.remove('active');
+      playDialogue();
+    };
+    document.getElementById('btnLangEs').onclick = () => {
+      previewLang = 'es';
+      document.getElementById('btnLangEs').classList.add('active');
+      document.getElementById('btnLangEn').classList.remove('active');
+      playDialogue();
+    };
+
+    document.getElementById('btnReplayLine').onclick = playDialogue;
+    document.getElementById('btnExportJson').onclick = () => {
+      const payload = {
+        pipeline: 'game-localization-es',
+        locale: 'es-419',
+        strings: Object.fromEntries(SAMPLE_STRINGS.map(r => [r.key, { en: r.en, es: r.es }]))
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.download = 'localized-strings-es.json';
+      a.href = URL.createObjectURL(blob);
+      a.click();
+    };
+
+    document.getElementById('liveEsInput').value = SAMPLE_STRINGS[0].es;
+    renderTable();
+    updateQA();
+    playDialogue();
+  </script>
+</body>
+</html>
